@@ -1,0 +1,8 @@
+{
+  "require": {
+    "phpmd/phpmd": "^2.15.0"
+  },
+  "config": {
+    "bin-dir": "../../bin"
+  }
+}

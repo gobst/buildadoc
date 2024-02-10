@@ -1,0 +1,1 @@
+  - private string **testConst** = testval1  - public integer **testConst2** = 2  - public string **VAR1** = testVal1  - public string **VAR2** = testVal2  - public string **VAR1_1** = testVal1_1  - public string **VAR2_2** = testVal2_2

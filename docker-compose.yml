@@ -1,0 +1,28 @@
+############################################################################
+#
+# This file is part of BuildADoc.
+#
+# (c) Guido Obst
+#
+# For the full copyright and license information, please view the LICENSE
+# file that was distributed with this source code.
+#
+############################################################################
+
+version: "3"
+
+services:
+  buildadoc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: buildadoc:1.0
+    working_dir: /var/www/html/BuildADoc
+  buildadoc-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    image: buildadoc-dev:1.0
+    working_dir: /var/www/html/BuildADoc
+    environment:
+      - "PHP_IDE_CONFIG=serverName=docker_buildadoc"

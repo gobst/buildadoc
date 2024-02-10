@@ -1,0 +1,8 @@
+/.idea
+/vendor
+/bin
+/tools/*/vendor
+/testData
+.env
+dbgpClient
+.php-cs-fixer.cache

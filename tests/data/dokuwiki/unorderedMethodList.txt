@@ -1,0 +1,1 @@
+  * public testMethodWithoutPHPDoc (string $testString = 'test'):string  * public testMethodWithPHPDoc (int $testInt = 0):int // this is a test method

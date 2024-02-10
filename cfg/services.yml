@@ -1,0 +1,46 @@
+parameters:
+  tag: 'param'
+  dataPath: 'src'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+  Command\:
+    resource: '../src/Command/*'
+  Generator\:
+    resource: '../src/Generator/*'
+  Service\:
+    resource: '../src/Service/*'
+  Exception\:
+    resource: '../src/Exception/*'
+  Dto\:
+    resource: '../src/Dto/*'
+  Collection\:
+    resource: '../src/Collection/*'
+  Formatter\:
+    resource: '../src/Formatter/*'
+  Contract\:
+    resource: '../src/Contract/*'
+  Service\Class\Filter\TagFilter:
+    arguments:
+      $tag: "%tag%"
+  Service\File\Filter\FileNameFilter:
+    arguments:
+      $fileName: File $file
+  Service\Class\Filter\ClassNameFilter:
+    arguments:
+      $className: ClassDto $class
+  Service\Class\Filter\ParentClassNameFilter:
+    arguments:
+      $parentClassName: ClassDto $class
+  Service\Class\Filter\PageTitleFilter:
+    arguments:
+      $title: DocPage $page
+  Service\Class\Filter\MethodNameFilter:
+    arguments:
+      $name: Method $method
+  Service\Class\Filter\ModifierFilter:
+    arguments:
+      $modifiers: []

@@ -1,0 +1,12 @@
+{
+  "require": {
+    "phpcompatibility/php-compatibility": "^9.3.5"
+  },
+  "config": {
+    "bin-dir": "../../bin"
+  },
+  "scripts": {
+    "dev-post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths vendor/phpcompatibility/php-compatibility",
+    "dev-post-update-cmd" : "\"vendor/bin/phpcs\" --config-set installed_paths vendor/phpcompatibility/php-compatibility"
+  }
+}
