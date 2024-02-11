@@ -10,21 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Login to GitHub Packages
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+      - name: Login to GitHub packages
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.USER }} --password-stdin
 
-      - name: Build image
-        uses: isbang/compose-action@v1.5.1
-        with:
-          compose-file: "./docker-compose.yml"
-          services: |
-            buildadoc
-            buildadoc-dev
-
-      - name: Push Docker Image to GitHub Packages
+      - name: Build and push docker images
         run: |
-          docker push docker.pkg.github.com/${{ github.repository }}/buildadoc:latest
-          docker push docker.pkg.github.com/${{ github.repository }}/buildadoc-dev:latest
+          docker-compose build
+          docker-compose push
+          
+      - name: List images
+        run: docker images
