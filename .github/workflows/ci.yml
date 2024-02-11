@@ -23,12 +23,18 @@ jobs:
 
       - name: Pull images
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev up -d buildadoc-dev
+          docker-compose -f docker-compose.yml -p buildadoc-dev up
 
-      - name: Run code analysis
+      - name: Run psalm
         run: |
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh
+
+      - name: Run cs-fixer
+        run: |
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/csfixer.sh dry-run
+
+      - name: Run codesniffer
+        run: |
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/phpcs
 
       - name: Run unit tests and generate code coverage

@@ -17,9 +17,8 @@ bin/psalm --config=cfg/dev/psalm.xml --output-format=text > bin/output/psalm-rep
 psalm_status=$?
 if [[ $((psalm_status)) == 0 ]]; then
     echo "PHP Psalm result: Success!"
+    exit 0
 else
     echo "PHP Psalm result: Failed! See bin/output/psalm-report.log for details."
+    exit 1
 fi
-
-# Return code should only be zero if CS and MD returned 0
-exit $((psalm_status))
