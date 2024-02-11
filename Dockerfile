@@ -67,7 +67,6 @@ RUN mkdir /home/files \
 
 # copy files
 COPY res/docker/config /home/files/config
-COPY bin/console.php ${buildadoc_path}/bin
 COPY src ${buildadoc_path}/src
 COPY res ${buildadoc_path}/res
 COPY cfg/services.yml ${buildadoc_path}/cfg
@@ -75,6 +74,9 @@ COPY composer.json ${buildadoc_path}
 
 # run composer
 RUN composer install --no-dev -d ${buildadoc_path}
+
+# copy console
+COPY bin/console.php ${buildadoc_path}/bin
 
 EXPOSE 8080
 
