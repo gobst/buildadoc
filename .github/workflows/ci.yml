@@ -23,7 +23,7 @@ jobs:
 
       - name: Pull images
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev up -d buildadoc-dev --build
+          docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
 
       - name: Run psalm
         run: |
