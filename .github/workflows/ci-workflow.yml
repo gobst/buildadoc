@@ -22,7 +22,9 @@ jobs:
         uses: isbang/compose-action@v1.5.1
         with: 
           compose-file: "./docker-compose.yml"
-          services: buildadoc-dev
+          services: |
+            buildadoc
+            buildadoc-dev
 
       - name: run code analysis
         run: |
