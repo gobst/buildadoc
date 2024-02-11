@@ -13,9 +13,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout repository
@@ -31,17 +28,18 @@ jobs:
 
       - name: Run code analysis
         run: |
-          ./scripts/analysis/psalm.sh
-          ./scripts/analysis/csfixer.sh dry-run
-          ./scripts/analysis/phpcs
+          docker-compose -f docker-compose.yml -p buildadoc-dev up -d buildadoc-dev
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/csfixer.sh dry-run
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/phpcs
 
       - name: Run unit tests and generate code coverage
         run: |
-          ./scripts/test/phpunit.sh coverage
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/phpunit.sh coverage
 
       - name: Run mutation tests with msi score
         run: |
-          ./scripts/test/infectionPHP.sh
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/infectionPHP.sh
 
       - name: Check if Code Coverage and Mutation Score improved
         run: |
