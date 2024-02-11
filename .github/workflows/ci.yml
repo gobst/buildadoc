@@ -23,11 +23,12 @@ jobs:
 
       - name: Pull images
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev up --exit-code-from=buildadoc-dev --abort-on-container-exit -d buildadoc-dev
+          docker-compose -f docker-compose.yml -p buildadoc-dev up -d buildadoc-dev
 
       - name: Run psalm
         run: |
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh
+          echo $?
 
       - name: Run cs-fixer
         run: |
