@@ -15,28 +15,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: build image
+
+      - name: Pull images
         uses: isbang/compose-action@v1.5.1
-        with: 
+        with:
           compose-file: "./docker-compose.yml"
           services: |
             buildadoc
             buildadoc-dev
 
-      - name: run code analysis
+      - name: Run code analysis
         run: |
           ./scripts/analysis/psalm.sh
           ./scripts/analysis/csfixer.sh dry-run
           ./scripts/analysis/phpcs
 
-      - name: run unit tests and generate code coverage
+      - name: Run unit tests and generate code coverage
         run: |
           ./scripts/test/phpunit.sh coverage
 
-      - name: run mutation tests with msi score
+      - name: Run mutation tests with msi score
         run: |
           ./scripts/test/infectionPHP.sh
 

@@ -1,0 +1,30 @@
+name: Docker Build and Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Packages
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Build image
+        uses: isbang/compose-action@v1.5.1
+        with:
+          compose-file: "./docker-compose.yml"
+          services: |
+            buildadoc
+            buildadoc-dev
+
+      - name: Push Docker Image to GitHub Packages
+        run: |
+          docker push docker.pkg.github.com/${{ github.repository }}/buildadoc:latest
+          docker push docker.pkg.github.com/${{ github.repository }}/buildadoc-dev:latest
