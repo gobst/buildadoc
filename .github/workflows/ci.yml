@@ -1,0 +1,64 @@
+name: "CI Workflow"
+
+on:
+  pull_request:
+    branches:
+      - "main"
+      - "develop"
+  push:
+    branches:
+      - "main"
+      - "develop"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Pull images
+        uses: isbang/compose-action@v1.5.1
+        with:
+          compose-file: "./docker-compose.yml"
+          services: |
+            buildadoc
+            buildadoc-dev
+
+      - name: Run code analysis
+        run: |
+          docker-compose -f docker-compose.yml -p buildadoc-dev up -d buildadoc-dev
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/csfixer.sh dry-run
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/phpcs
+
+      - name: Run unit tests and generate code coverage
+        run: |
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/phpunit.sh coverage
+
+      - name: Run mutation tests with msi score
+        run: |
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/infectionPHP.sh
+
+      - name: Check if Code Coverage and Mutation Score improved
+        run: |
+          # Get the previous coverage and mutation score
+          previous_coverage=$(cat previous_coverage.txt)
+          previous_mutation_score=$(cat previous_mutation_score.txt)
+
+          # Get the current coverage and mutation score
+          current_coverage=$(grep lines-total coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/')
+          current_mutation_score=$(grep 'MSI for the codebase is' infection-log.txt | sed -E 's/.*is ([0-9]+)%/\1/')
+
+          # Check if coverage or mutation score got worse
+          if [ $current_coverage -lt $previous_coverage ] || [ $current_mutation_score -lt $previous_mutation_score ]; then
+            echo "Code coverage or mutation score got worse."
+            exit 1
+          fi
+
+      - name: Save Current Code Coverage and Mutation Score
+        run: |
+          # Save the current coverage and mutation score for the next run
+          grep lines-total coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/' > previous_coverage.txt
+          grep 'MSI for the codebase is' infection-log.txt | sed -E 's/.*is ([0-9]+)%/\1/' > previous_mutation_score.txt

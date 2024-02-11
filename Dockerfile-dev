@@ -9,7 +9,7 @@
 #
 ############################################################################
 
-FROM buildadoc:1.0.0
+FROM ghcr.io/gobst/buildadoc/buildadoc:1.0.0
 
 LABEL maintainer="Guido Obst" \
 	  description="BuildADoc develop image" \
@@ -28,7 +28,6 @@ RUN aptitude install -y php${php_version}-xdebug
 
 # create folder
 RUN mkdir ${buildadoc_path}/tests \
-    ${buildadoc_path}/testData \
     ${buildadoc_path}/scripts \
     ${buildadoc_path}/tools \
     ${buildadoc_path}/tools/php-compatibility \
@@ -42,7 +41,6 @@ RUN chmod 755 ${buildadoc_path}/bin/output
 
 # copy files
 COPY tests ${buildadoc_path}/tests
-COPY testData ${buildadoc_path}/testData
 COPY cfg/dev ${buildadoc_path}/cfg/dev
 COPY scripts ${buildadoc_path}/scripts
 COPY res/docker/config/xdebug/xdebug.ini /etc/php/${php_version}/mods-available/xdebug.ini
