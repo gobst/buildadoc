@@ -1,0 +1,61 @@
+name: "CI Workflow"
+
+on:
+  pull_request:
+    branches:
+      - "main"
+      - "develop"
+  push:
+    branches:
+      - "main"
+      - "develop"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+        
+      - name: build image
+        uses: isbang/compose-action@v1.5.1
+        with: 
+          compose-file: "./docker-compose.yml"
+          services: buildadoc-dev
+
+      - name: run code analysis
+        run: |
+          ./scripts/analysis/psalm.sh
+          ./scripts/analysis/csfixer.sh dry-run
+          ./scripts/analysis/phpcs
+
+      - name: run unit tests and generate code coverage
+        run: |
+          ./scripts/test/phpunit.sh coverage
+
+      - name: run mutation tests with msi score
+        run: |
+          ./scripts/test/infectionPHP.sh
+
+      - name: Check if Code Coverage and Mutation Score improved
+        run: |
+          # Get the previous coverage and mutation score
+          previous_coverage=$(cat previous_coverage.txt)
+          previous_mutation_score=$(cat previous_mutation_score.txt)
+
+          # Get the current coverage and mutation score
+          current_coverage=$(grep lines-total coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/')
+          current_mutation_score=$(grep 'MSI for the codebase is' infection-log.txt | sed -E 's/.*is ([0-9]+)%/\1/')
+
+          # Check if coverage or mutation score got worse
+          if [ $current_coverage -lt $previous_coverage ] || [ $current_mutation_score -lt $previous_mutation_score ]; then
+            echo "Code coverage or mutation score got worse."
+            exit 1
+          fi
+
+      - name: Save Current Code Coverage and Mutation Score
+        run: |
+          # Save the current coverage and mutation score for the next run
+          grep lines-total coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/' > previous_coverage.txt
+          grep 'MSI for the codebase is' infection-log.txt | sed -E 's/.*is ([0-9]+)%/\1/' > previous_mutation_score.txt
