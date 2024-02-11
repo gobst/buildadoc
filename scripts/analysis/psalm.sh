@@ -14,11 +14,12 @@
 # check files with PHP PSALM
 echo "Checking code with: PHP PSALM"
 bin/psalm --config=cfg/dev/psalm.xml --output-format=text > bin/output/psalm-report.log
-psalm_status=$?
-if [[ $((psalm_status)) == 0 ]]; then
+if [ $? -eq 0 ]; then
     echo "PHP Psalm result: Success!"
+    cat ./bin/output/psalm-report.log
     exit 0
 else
     echo "PHP Psalm result: Failed! See bin/output/psalm-report.log for details."
+    cat ./bin/output/psalm-report.log
     exit 1
 fi
