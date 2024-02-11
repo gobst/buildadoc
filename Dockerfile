@@ -76,7 +76,7 @@ COPY composer.json ${buildadoc_path}
 RUN composer install --no-dev -d ${buildadoc_path}
 
 # copy console
-COPY bin/console.php ${buildadoc_path}/bin
+#COPY bin/console.php ${buildadoc_path}/bin
 
 EXPOSE 8080
 
