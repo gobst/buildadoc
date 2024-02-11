@@ -28,7 +28,6 @@ jobs:
       - name: Run psalm
         run: |
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh
-          echo $?
 
       - name: Run cs-fixer
         run: |
