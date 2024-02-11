@@ -18,17 +18,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Login to GitHub packages
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Pull images
-        uses: isbang/compose-action@v1.5.1
-        with:
-          compose-file: "./docker-compose.yml"
-          services: |
-            buildadoc
-            buildadoc-dev
+        run: |
+          docker-compose -f docker-compose.yml -p buildadoc-dev up -d buildadoc-dev
 
       - name: Run code analysis
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev up -d buildadoc-dev
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/csfixer.sh dry-run
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/phpcs
