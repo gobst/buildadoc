@@ -16,13 +16,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ghcr.io/${OWNER}/buildadoc/buildadoc:1.0.0
+    image: ghcr.io/gobst/buildadoc/buildadoc:1.0.0
     working_dir: /var/www/html/BuildADoc
   buildadoc-dev:
     build:
       context: .
       dockerfile: Dockerfile-dev
-    image: ghcr.io/${OWNER}/buildadoc/buildadoc-dev:1.0.0
+    image: ghcr.io/gobst/buildadoc/buildadoc-dev:1.0.0
     working_dir: /var/www/html/BuildADoc
     environment:
       - "PHP_IDE_CONFIG=serverName=docker_buildadoc"
