@@ -12,4 +12,5 @@
 ############################################################################
 
 # Run mutation tests
+mkdir -p bin/coutput/mutation
 bin/infection --threads=4

@@ -63,6 +63,7 @@ jobs:
           path: ./artifacts
 
       - name: Run unit tests
+        id: unit-tests
         if: always()
         run: |
           mkdir -p artifacts/unit
@@ -79,6 +80,8 @@ jobs:
           path: ./artifacts/unit
 
       - name: Run mutation tests
+        if: always()
+        needs: unit-tests
         run: |
           mkdir -p artifacts/mutation
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/infectionPHP.sh
