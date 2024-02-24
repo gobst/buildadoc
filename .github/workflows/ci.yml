@@ -28,7 +28,8 @@ jobs:
       - name: Check code
         run: |
           # Run Psalm
-          psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev sh -c "scripts/analysis/psalm.sh")
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"
+          $psalmExitCode=$?
           echo "Psalm result = $psalmExitCode"
 
           # Run PHP-CS-Fixer
