@@ -79,8 +79,8 @@ jobs:
       - name: Run unit tests
         run: |
           mkdir -p artifacts
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev ./scripts/test/phpunit.sh coverage > bin/output/phpunit.log
-          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpunit.log artifacts
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/test/phpunit.sh coverage"
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/junit.xml artifacts
         if: always()
 
       - name: Upload artifacts from unit tests
