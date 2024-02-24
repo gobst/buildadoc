@@ -15,9 +15,7 @@
 bin/psalm --config=./cfg/dev/psalm.xml --output-format=text > bin/output/psalm-report.log
 status=$?
 if [[ $((status)) == 0 ]]; then
-    # Psalm result: Success!
     exit 0
 else
-    # Psalm result: Failed! See bin/output/psalm-report.log for details
     exit 1
 fi
