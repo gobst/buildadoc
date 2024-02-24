@@ -33,7 +33,7 @@ jobs:
             echo "Psalm analysis successful"
           else
             echo "Psalm analysis failed with exit code $exit_code"
-            exit $exit_code
+            exit $exit_code 
           fi
 
       - name: Run cs-fixer
