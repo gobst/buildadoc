@@ -32,7 +32,7 @@ RUN aptitude install -y php8.3-xdebug
 # create folder
 RUN mkdir ${buildadoc_path}/tests \
     ${buildadoc_path}/scripts \
-    ${buildadoc_path}/tools \
+    ${buildadoc_path}/tools
     #${buildadoc_path}/tools/php-compatibility \
     #${buildadoc_path}/tools/php-cs-fixer \
     #${buildadoc_path}/tools/php_codesniffer \
