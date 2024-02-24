@@ -29,6 +29,7 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh --abort-on-container-exit
           exit_code=$?
+          echo "$exit_code"
           if [ -z "$exit_code" ]; then
             echo "Exit code not available"
             exit 1
