@@ -30,37 +30,38 @@ RUN aptitude update
 RUN aptitude install -y php8.3-xdebug
 
 # create folder
-RUN mkdir /tests \
-    /scripts \
-    /tools \
-    /tools/php-compatibility \
-    /tools/php-cs-fixer \
-    /tools/php_codesniffer \
-    /tools/phpmd \
-    /tools/psalm \
-    /bin \
-    /bin/output
+RUN mkdir ${buildadoc_path}/tests \
+    ${buildadoc_path}/scripts \
+    ${buildadoc_path}/tools \
+    #${buildadoc_path}/tools/php-compatibility \
+    #${buildadoc_path}/tools/php-cs-fixer \
+    #${buildadoc_path}/tools/php_codesniffer \
+    #${buildadoc_path}/tools/phpmd \
+    #${buildadoc_path}/tools/psalm \
+    #${buildadoc_path}/bin \
+    #${buildadoc_path}/bin/output
 
-RUN chmod 755 /bin/output
+#RUN chmod 755 /bin/output
 
-# copy files
+# copy directories and files
 COPY tests tests
 COPY cfg/dev cfg/dev
 COPY scripts scripts
+COPY tools tools
 COPY res/docker/config/xdebug/xdebug.ini etc/php/${php_version}/mods-available/xdebug.ini
 COPY res/docker/config/xdebug/xdebug.ini etc/php/${php_version}/cli/conf.d/20-xdebug.ini
 
 ## tools
-COPY tools/php-compatibility/composer.json ${phpCompatibilityPath}
-COPY tools/php-compatibility/composer.lock ${phpCompatibilityPath}
-COPY tools/php-cs-fixer/composer.json ${phpCsFixerPath}
-COPY tools/php-cs-fixer/composer.lock ${phpCsFixerPath}
-COPY tools/php_codesniffer/composer.json ${phpCodesnifferPath}
-COPY tools/php_codesniffer/composer.lock ${phpCodesnifferPath}
-COPY tools/phpmd/composer.json ${PhpmdPath}
-COPY tools/phpmd/composer.lock ${PhpmdPath}
-COPY tools/psalm/composer.json ${psalmPath}
-COPY tools/psalm/composer.lock ${psalmPath}
+#COPY tools/php-compatibility/composer.json ${phpCompatibilityPath}
+#COPY tools/php-compatibility/composer.lock ${phpCompatibilityPath}
+#COPY tools/php-cs-fixer/composer.json ${phpCsFixerPath}
+#COPY tools/php-cs-fixer/composer.lock ${phpCsFixerPath}
+#COPY tools/php_codesniffer/composer.json ${phpCodesnifferPath}
+#COPY tools/php_codesniffer/composer.lock ${phpCodesnifferPath}
+#COPY tools/phpmd/composer.json ${PhpmdPath}
+#COPY tools/phpmd/composer.lock ${PhpmdPath}
+#COPY tools/psalm/composer.json ${psalmPath}
+#COPY tools/psalm/composer.lock ${psalmPath}
 
 COPY phpunit.xml .
 COPY infection.json5 .
