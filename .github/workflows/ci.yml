@@ -25,21 +25,33 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
 
-      - name: Run psalm
+      - name: Check code
         run: |
+          # Run Psalm
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"
-          exitCode=$?
-          if [ "$exitCode" -ne 0 ]; then
+          psalmExitCode=$?
+
+          # Run PHP-CS-Fixer
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"
+          csFixerExitCode=$?
+          
+          # Run codesniffer
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev sh -c "./scripts/analysis/phpcs"
+          codesnifferExitCode=$?
+          
+          if [ "psalmExitCode" -ne 0 || "csFixerExitCode" -ne 0 || "codesnifferExitCode" -ne 0]; then
+            mkdir -p artifacts
+            cp -r bin/output/
             exit $exitCode
           fi
+        if: always()
 
-      - name: Run cs-fixer
-        run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/csfixer.sh dry-run
-
-      - name: Run codesniffer
-        run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/phpcs
+      - name: Upload artifacts from code analysis
+        if: failure()
+        uses: actions/upload-artifacts@v2
+        with:
+          name: artifacts
+          path: artifacts/
 
       - name: Run unit tests and generate code coverage
         run: |
