@@ -31,14 +31,14 @@ jobs:
           psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
 
           # Run PHP-CS-Fixer
-          csFixerExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh"; echo $?)
+          csFixerExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
           
           # Run codesniffer
           codesnifferExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev sh -c "./scripts/analysis/phpcs"; echo $?)
           
-          if [ "psalmExitCode" -ne 0 || "csFixerExitCode" -ne 0 || "codesnifferExitCode" -ne 0]; then
+          if [ $psalmExitCode -ne 0 ] || [ $csFixerExitCode -ne 0 ] || [ $codesnifferExitCode -ne 0 ]; then
             mkdir -p artifacts
-            cp -r bin/output/
+            cp -r bin/output/ artifacts/
             exit 1
           fi
         if: always()
