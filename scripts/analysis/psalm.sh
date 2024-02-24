@@ -17,5 +17,8 @@ status=$?
 if [[ $((status)) == 0 ]]; then
     exit 0
 else
+    cd bin/output
+    ls -l
+    cat psalm-report.log
     exit 1
 fi
