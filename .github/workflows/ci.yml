@@ -84,7 +84,7 @@ jobs:
         if: always()
         run: |
           mkdir -p artifacts/mutation
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/infectionPHP.sh
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.log artifacts/mutation
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.html artifacts/mutation
 
