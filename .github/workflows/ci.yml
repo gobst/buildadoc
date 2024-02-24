@@ -23,12 +23,12 @@ jobs:
 
       - name: Pull images
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build --force-recreate buildadoc-dev
+          docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build uildadoc-dev
 
       - name: Run psalm
         run: |
-          docker-compose -f docker-compose.yml -p --abort-on-container-exit
-          exit_code=$? buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh --abort-on-container-exit
+          exit_code=$?
 
       - name: Check Exit Code
         run: |
