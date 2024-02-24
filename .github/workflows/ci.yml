@@ -44,13 +44,13 @@ jobs:
           #codesnifferExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev sh -c "./scripts/analysis/phpcs"; echo $?)
           codesnifferExitCode=0
           
-         # if [ $psalmExitCode -ne 0 ] || [ $csFixerExitCode -ne 0 ] || [ $codesnifferExitCode -ne 0 ]; then
+          if [ $psalmExitCode -ne 0 ] || [ $csFixerExitCode -ne 0 ] || [ $codesnifferExitCode -ne 0 ]; then
             # Create artifacts directory
-            #docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "mkdir -p artifacts"
+            docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "mkdir -p artifacts"
             # Copy bin/output to artifacts
-            #docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cp -r bin/output/* artifacts/"
-            #exit 1
-          #fi
+            docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cp -r bin/output/* artifacts/"
+            exit 1
+          fi
         if: always()
 
       - name: Upload artifacts from code analysis
