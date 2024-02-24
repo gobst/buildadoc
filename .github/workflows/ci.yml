@@ -49,8 +49,6 @@ jobs:
             docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cp -r bin/output/* /artifacts"
             cd artifacts
             ls -l
-            output=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cd bin/output; ls -l")
-            echo "output = $output"
             exit 1
           fi
         if: always()
