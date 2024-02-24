@@ -30,8 +30,8 @@ jobs:
           # Run composer
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/psalm"
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php-cs-fixer"
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php_codesniffer"
+          #docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php-cs-fixer"
+          #docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php_codesniffer"
           
           # Run Psalm
           psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
@@ -49,7 +49,7 @@ jobs:
             #docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cp -r bin/output/psalm-report.log /artifacts/psalm-report.log"
             #docker ps
             #docker cp buildadoc-dev_buildadoc-dev_1:bin/output/psalm-report.log artifacts/psalm-report.log
-            docker cp buildadoc-dev_buildadoc-dev_1:./bin/output/psalm-report.log ./artifacts
+            docker cp buildadoc-dev_buildadoc-dev_1:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts
             exit 1
           fi
         if: always()
