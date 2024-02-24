@@ -25,17 +25,19 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
 
-      - name: Check code
+      - name: Run composer
         run: |
-          mkdir -p artifacts
-
-          # Run composer
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/psalm"
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php-cs-fixer"
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php_codesniffer"
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/phpmd"
-          
+
+      - name: Check code
+        if: always()
+        run: |
+          mkdir -p artifacts
+ 
           # Run PHP-CS-Fixer
           csFixerExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
           
@@ -52,7 +54,6 @@ jobs:
             exit 0
           fi
           exit 0
-        if: always()
 
       - name: Upload artifacts from code check
         if: failure()
@@ -62,13 +63,13 @@ jobs:
           path: ./artifacts
 
       - name: Run unit tests
+        if: always()
         run: |
           mkdir -p artifacts/unit
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh coverage" > artifacts/unit/phpunit.log
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/junit.xml artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage-xml artifacts/unit
-        if: always()
 
       - name: Upload artifacts from unit tests
         if: always()
