@@ -48,7 +48,7 @@ jobs:
 
       - name: Upload artifacts from code analysis
         if: failure()
-        uses: actions/upload-artifacts@v2
+        uses: actions/upload-artifacts@v4
         with:
           name: artifacts
           path: artifacts/
