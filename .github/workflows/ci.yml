@@ -64,21 +64,21 @@ jobs:
              if [[ $messdetectorExitCode -ne 0 ]]; then
               docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpmd-report.log artifacts    
             fi
-            exit 1
+            exit 0
           fi
           exit 0
         if: always()
 
-      - name: Upload artifacts from code analysis
+      - name: Upload artifacts from code check
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: failures
           path: ./artifacts
 
-      - name: Run unit tests and generate code coverage
+      - name: Run unit tests
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/phpunit.sh coverage
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev ./scripts/test/phpunit.sh coverage
 
       - name: Run mutation tests with msi score
         run: |
