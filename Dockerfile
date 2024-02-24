@@ -15,7 +15,7 @@ LABEL maintainer="Guido Obst" \
 	  description="BuildADoc production image" \
 	  version="1.0.0"
 
-ARG buildadoc_path=/var/www/html/BuildADoc
+WORKDIR /var/www/html/BuildADoc
 
 # install misc tools
 RUN apt-get  \update && \
@@ -59,24 +59,20 @@ RUN rm -R composer-setup.php
 RUN mkdir /home/files \
     /home/files/config \
     /home/files/scripts \
-    ${buildadoc_path} \
-    ${buildadoc_path}/bin \
-    ${buildadoc_path}/res \
-    ${buildadoc_path}/cfg \
-    ${buildadoc_path}/src
+    bin \
+    res \
+    cfg \
+    src
 
 # copy files
 COPY res/docker/config /home/files/config
-COPY src ${buildadoc_path}/src
-COPY res ${buildadoc_path}/res
-COPY cfg/services.yml ${buildadoc_path}/cfg
-COPY composer.json ${buildadoc_path}
+COPY src src
+COPY res res
+COPY cfg/services.yml cfg
+COPY composer.json composer.json
 
 # run composer
-RUN composer install --no-dev -d ${buildadoc_path}
-
-# copy console
-#COPY bin/console.php ${buildadoc_path}/bin
+RUN composer install --no-dev
 
 EXPOSE 8080
 
