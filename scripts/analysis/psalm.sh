@@ -18,7 +18,5 @@ if [ $? -eq 0 ]; then
     exit 0
 else
     # Psalm result: Failed! See bin/output/psalm-report.log for details
-    cd bin/output
-    ls -l
     exit 1
 fi
