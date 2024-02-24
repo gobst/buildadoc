@@ -46,10 +46,7 @@ jobs:
           
           if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0  || $codesnifferExitCode -ne 0 ]]; then
             mkdir -p artifacts
-            # Create a temporary container and copy files
-            docker create --name temp_container buildadoc-dev
-            docker cp temp_container:bin/output/. artifacts
-            docker rm temp_container
+            docker compose cp buildadoc-dev:bin/output/. artifacts
             exit $exitCode
           fi
         if: always()
