@@ -81,7 +81,6 @@ jobs:
 
       - name: Run mutation tests
         if: always()
-        needs: unit-tests
         run: |
           mkdir -p artifacts/mutation
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/infectionPHP.sh
