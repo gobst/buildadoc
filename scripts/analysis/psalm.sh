@@ -18,7 +18,6 @@ if [[ $((status)) == 0 ]]; then
     # Psalm result: Success!
     exit 0
 else
-    ls -l
     # Psalm result: Failed! See bin/output/psalm-report.log for details
     exit 1
 fi
