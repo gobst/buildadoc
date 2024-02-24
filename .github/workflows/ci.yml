@@ -45,10 +45,10 @@ jobs:
           codesnifferExitCode=0
           
           if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0  || $codesnifferExitCode -ne 0 ]]; then
-            mkdir -p artifacts
+            #mkdir -p artifacts
             #docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cp -r bin/output/psalm-report.log /artifacts/psalm-report.log"
-            docker ps
-            docker cp buildadoc-dev_buildadoc-dev_1:bin/output/psalm-report.log artifacts/psalm-report.log
+            #docker ps
+            #docker cp buildadoc-dev_buildadoc-dev_1:bin/output/psalm-report.log artifacts/psalm-report.log
             cd artifacts
             ls -l
             exit 1
