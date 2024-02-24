@@ -85,7 +85,8 @@ jobs:
         run: |
           mkdir -p artifacts/mutation
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/infectionPHP.sh
-          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation artifacts/mutation
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.log artifacts/mutation
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.html artifacts/mutation
 
       - name: Upload artifacts from mutation tests
         if: always()
