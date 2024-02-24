@@ -46,7 +46,7 @@ jobs:
           
           if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0  || $codesnifferExitCode -ne 0 ]]; then
             mkdir -p artifacts
-            docker compose cp buildadoc-dev:bin/output/. artifacts
+            docker compose cp -f docker-compose.yml -p buildadoc-dev buildadoc-dev:bin/output/. artifacts
             exit $exitCode
           fi
         if: always()
