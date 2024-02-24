@@ -33,6 +33,7 @@ RUN aptitude install -y php8.3-xdebug
 RUN mkdir tests \
     scripts \
     tools \
+    bin \
     bin/output
 
 RUN chmod 755 bin/output

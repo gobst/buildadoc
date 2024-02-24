@@ -39,7 +39,7 @@ jobs:
           if [ $psalmExitCode -ne 0 ] || [ $csFixerExitCode -ne 0 ] || [ $codesnifferExitCode -ne 0 ]; then
             mkdir -p artifacts
             ls -l
-            cp -r bin/output/ artifacts/
+            cp -r /var/www/html/BuildADoc/bin/output/ artifacts/
             exit 1
           fi
         if: always()
