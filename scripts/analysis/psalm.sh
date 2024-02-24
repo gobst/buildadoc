@@ -13,8 +13,7 @@
 
 # check files with PHP PSALM
 echo "Checking code with: PHP PSALM"
-exit 1
-bin/psalm --config=./cfg/dev/psalxgcxvm.xml --output-format=text > bin/output/psalm-report.log
+bin/psalm --config=./cfg/dev/psalm.xml --output-format=text > bin/output/psalm-report.log
 if [ $? -eq 0 ]; then
     echo "PHP Psalm result: Success!"
     cat ./bin/output/psalm-report.log
