@@ -28,7 +28,7 @@ jobs:
       - name: Check code
         run: |
           cd /
-          ls -ls
+          ls -l
         
           # Run Psalm
           psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
