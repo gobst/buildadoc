@@ -48,7 +48,7 @@ jobs:
             mkdir -p artifacts
             #docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cp -r bin/output/psalm-report.log /artifacts/psalm-report.log"
             docker ps
-            docker cp buildadoc-dev_buildadoc-dev_1:bin/output/* /artifacts
+            docker cp buildadoc-dev_buildadoc-dev_1:bin/output/psalm-report.log /artifacts/psalm-report.log
             cd artifacts
             ls -l
             exit 1
