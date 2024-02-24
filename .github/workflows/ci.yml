@@ -27,9 +27,10 @@ jobs:
 
       - name: Check code
         run: |
-          cd /
-          ls -l
-        
+          composer install -d tools/psalm
+          composer install -d tools/php-cs-fixer
+          composer install -d tools/php_codesniffer
+          
           # Run Psalm
           psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
 
@@ -42,7 +43,7 @@ jobs:
           if [ $psalmExitCode -ne 0 ] || [ $csFixerExitCode -ne 0 ] || [ $codesnifferExitCode -ne 0 ]; then
             mkdir -p artifacts
             ls -l
-            cp -r /var/www/html/BuildADoc/bin/output/ artifacts/
+            cp -r bin/output/ artifacts/
             exit 1
           fi
         if: always()

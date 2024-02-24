@@ -50,14 +50,14 @@ COPY infection.json5 .
 COPY rector.php .
 
 # run composer
-RUN composer install
+#RUN composer install
 
 # run composer for tools
-RUN composer install -d ${phpCompatibilityPath}
-RUN composer install -d ${phpCsFixerPath}
-RUN composer install -d ${phpCodesnifferPath}
-RUN composer install -d ${PhpmdPath}
-RUN composer install -d ${psalmPath}
+#RUN composer install -d ${phpCompatibilityPath}
+#RUN composer install -d ${phpCsFixerPath}
+#RUN composer install -d ${phpCodesnifferPath}
+#RUN composer install -d ${PhpmdPath}
+#RUN composer install -d ${psalmPath}
 
 EXPOSE 8081
 
