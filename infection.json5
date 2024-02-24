@@ -6,7 +6,8 @@
         ]
     },
     "logs": {
-        "text": "bin/output/infection.log"
+        "text": "bin/output/mutation/infection.log",
+        "html": "bin/output/mutation/infection.html"
     },
     "mutators": {
         "@default": true

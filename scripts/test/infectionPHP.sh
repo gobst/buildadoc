@@ -11,6 +11,5 @@
 #
 ############################################################################
 
-# run mutation tests
-echo "Run mutation tests"
+# Run mutation tests
 bin/infection --threads=4

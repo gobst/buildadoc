@@ -77,9 +77,18 @@ jobs:
           name: unit-test-artifacts
           path: ./artifacts/unit
 
-      - name: Run mutation tests with msi score
+      - name: Run mutation tests
         run: |
+          mkdir -p artifacts/mutation
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/infectionPHP.sh
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation artifacts/mutation
+
+      - name: Upload artifacts from mutation tests
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-test-artifacts
+          path: ./artifacts/mutation
 
       - name: Check if Code Coverage and Mutation Score improved
         run: |
@@ -102,3 +111,6 @@ jobs:
           # Save the current coverage and mutation score for the next run
           grep lines-total coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/' > previous_coverage.txt
           grep 'MSI for the codebase is' infection-log.txt | sed -E 's/.*is ([0-9]+)%/\1/' > previous_mutation_score.txt
+
+bin/output/mutation/infection:
+  log:
