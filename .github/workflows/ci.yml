@@ -27,11 +27,12 @@ jobs:
 
       - name: Run psalm
         run: |
-          exit_code=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh)
-          if [ $exit_code -eq 0 ]; then
-            echo "Script executed successfully"
+          exit_code=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev ./scripts/analysis/psalm.sh; echo \$?")
+          echo "Psalm analysis exit code: $exit_code"
+          if [ "$exit_code" -eq 0 ]; then
+            echo "Psalm analysis successful"
           else
-            echo "Script failed with exit code $exit_code"
+            echo "Psalm analysis failed with exit code $exit_code"
             exit $exit_code
           fi
 
