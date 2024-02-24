@@ -19,11 +19,11 @@ WORKDIR /var/www/html/BuildADoc
 
 ARG php_version=8.3
 ARG buildadoc_path=/var/www/html/BuildADoc
-ARG phpCompatibilityPath=./tools/php-compatibility
-ARG phpCsFixerPath=./tools/php-cs-fixer
-ARG phpCodesnifferPath=./tools/php_codesniffer
-ARG PhpmdPath=./tools/phpmd
-ARG psalmPath=./tools/psalm
+ARG phpCompatibilityPath=tools/php-compatibility
+ARG phpCsFixerPath=tools/php-cs-fixer
+ARG phpCodesnifferPath=tools/php_codesniffer
+ARG PhpmdPath=tools/phpmd
+ARG psalmPath=tools/psalm
 
 # install xdebug
 RUN aptitude update
@@ -33,24 +33,25 @@ RUN aptitude install -y php8.3-xdebug
 RUN composer install
 
 # create folder
-RUN mkdir ./tests \
-    ./scripts \
-    ./tools \
-    ./tools/php-compatibility \
-    ./tools/php-cs-fixer \
-    ./tools/php_codesniffer \
-    ./tools/phpmd \
-    ./tools/psalm \
-    ./bin/output
+RUN mkdir tests \
+    scripts \
+    tools \
+    tools/php-compatibility \
+    tools/php-cs-fixer \
+    tools/php_codesniffer \
+    tools/phpmd \
+    tools/psalm \
+    bin \
+    bin/output
 
-RUN chmod 755 ./bin/output
+RUN chmod 755 bin/output
 
 # copy files
-COPY tests ./tests
-COPY cfg/dev ./cfg/dev
-COPY scripts ./scripts
-COPY res/docker/config/xdebug/xdebug.ini /etc/php/${php_version}/mods-available/xdebug.ini
-COPY res/docker/config/xdebug/xdebug.ini /etc/php/${php_version}/cli/conf.d/20-xdebug.ini
+COPY tests tests
+COPY cfg/dev cfg/dev
+COPY scripts scripts
+COPY res/docker/config/xdebug/xdebug.ini etc/php/${php_version}/mods-available/xdebug.ini
+COPY res/docker/config/xdebug/xdebug.ini etc/php/${php_version}/cli/conf.d/20-xdebug.ini
 
 ## tools
 COPY tools/php-compatibility/composer.json ${phpCompatibilityPath}
@@ -75,9 +76,7 @@ RUN composer install -d ${phpCodesnifferPath}
 RUN composer install -d ${PhpmdPath}
 RUN composer install -d ${psalmPath}
 
-RUN ls -l \
-    cd bin \
-    ls -l
+RUN ls -l
 
 EXPOSE 8081
 
