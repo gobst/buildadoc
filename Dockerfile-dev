@@ -43,6 +43,8 @@ RUN mkdir ${buildadoc_path}/tests \
 
 #RUN chmod 755 /bin/output
 
+RUN ls -l
+
 # copy directories and files
 COPY tests tests
 COPY cfg/dev cfg/dev
