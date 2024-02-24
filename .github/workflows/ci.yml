@@ -11,7 +11,7 @@ on:
       - "develop"
 
 jobs:
-  test:
+  run-ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -73,6 +73,7 @@ jobs:
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage-xml artifacts/unit
 
       - name: Upload artifacts from unit tests
+        id: upload-unit-artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
