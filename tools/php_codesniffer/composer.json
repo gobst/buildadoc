@@ -3,6 +3,6 @@
     "squizlabs/php_codesniffer": "^3.8.0"
   },
   "config": {
-    "bin-dir": "bin"
+    "bin-dir": "../../bin"
   }
 }
