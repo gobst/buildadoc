@@ -17,6 +17,6 @@ status=$?
 if [[ $((status)) == 0 ]]; then
     exit 0
 else
-    cat bin/output/psalm-report.log
+    cp bin/output/psalm-report.log artifacts/
     exit 1
 fi
