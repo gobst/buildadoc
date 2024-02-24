@@ -23,6 +23,5 @@ services:
       context: .
       dockerfile: Dockerfile-dev
     image: ghcr.io/gobst/buildadoc/buildadoc-dev:1.0.0
-    working_dir: /var/www/html/BuildADoc
     environment:
       - "PHP_IDE_CONFIG=serverName=docker_buildadoc"
