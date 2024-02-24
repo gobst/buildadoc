@@ -44,7 +44,7 @@ jobs:
           #codesnifferExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev sh -c "./scripts/analysis/phpcs"; echo $?)
           codesnifferExitCode=0
           
-          if [[ $psalmExitCode -ne 0 ] || [ $csFixerExitCode" -ne 0 ] || [ $codesnifferExitCode -ne 0 ]]; then
+          if [[ $psalmExitCode -ne 0 || $csFixerExitCode" -ne 0  || $codesnifferExitCode -ne 0 ]]; then
             mkdir -p artifacts
             docker cp buildadoc-dev:bin/output/* artifacts
             exit $exitCode
