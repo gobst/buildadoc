@@ -33,7 +33,7 @@
   },
   "prefer-stable": true,
   "config": {
-    "bin-dir": "bin",
+    "bin-dir": "./bin",
     "allow-plugins": {
       "infection/extension-installer": true
     }
