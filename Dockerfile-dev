@@ -27,6 +27,9 @@ ARG psalmPath=/var/www/html/BuildADoc/tools/psalm
 RUN aptitude update
 RUN aptitude install -y php8.3-xdebug
 
+# run composer
+RUN composer install -d ${buildadoc_path}
+
 # create folder
 RUN mkdir ${buildadoc_path}/tests \
     ${buildadoc_path}/scripts \
@@ -63,8 +66,7 @@ COPY phpunit.xml ${buildadoc_path}
 COPY infection.json5 ${buildadoc_path}
 COPY rector.php ${buildadoc_path}
 
-# run composer
-RUN composer install -d ${buildadoc_path}
+# run composer for tools
 RUN composer install -d ${phpCompatibilityPath}
 RUN composer install -d ${phpCsFixerPath}
 RUN composer install -d ${phpCodesnifferPath}
