@@ -3,6 +3,6 @@
     "vimeo/psalm": "^5.19.0"
   },
   "config": {
-    "bin-dir": "../../bin"
+    "bin-dir": "bin"
   }
 }
