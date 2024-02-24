@@ -30,18 +30,12 @@ RUN aptitude update
 RUN aptitude install -y php8.3-xdebug
 
 # create folder
-RUN mkdir ${buildadoc_path}/tests \
-    ${buildadoc_path}/scripts \
-    ${buildadoc_path}/tools
-    #${buildadoc_path}/tools/php-compatibility \
-    #${buildadoc_path}/tools/php-cs-fixer \
-    #${buildadoc_path}/tools/php_codesniffer \
-    #${buildadoc_path}/tools/phpmd \
-    #${buildadoc_path}/tools/psalm \
-    #${buildadoc_path}/bin \
-    #${buildadoc_path}/bin/output
+RUN mkdir tests \
+    scripts \
+    tools \
+    bin/output
 
-#RUN chmod 755 /bin/output
+RUN chmod 755 bin/output
 
 RUN cd bin \
     ls -l
