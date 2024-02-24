@@ -28,7 +28,6 @@ jobs:
       - name: Run psalm
         run: |
           exit_code=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev ./scripts/analysis/psalm.sh; echo \$?")
-          echo "Psalm analysis exit code: $exit_code"
 
       - name: Run cs-fixer
         run: |
