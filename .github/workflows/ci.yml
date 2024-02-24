@@ -29,21 +29,6 @@ jobs:
         run: |
           # Run Psalm
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"
-          psalmExitCode=$?
-
-          # Run PHP-CS-Fixer
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"
-          csFixerExitCode=$?
-          
-          # Run codesniffer
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev sh -c "./scripts/analysis/phpcs"
-          codesnifferExitCode=$?
-          
-          if [ "psalmExitCode" -ne 0 || "csFixerExitCode" -ne 0 || "codesnifferExitCode" -ne 0]; then
-            mkdir -p artifacts
-            cp -r bin/output/
-            #exit $exitCode
-          fi
         if: always()
 
       - name: Upload artifacts from code analysis
