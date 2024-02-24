@@ -24,6 +24,7 @@ ARG PhpmdPath=/var/www/html/BuildADoc/tools/phpmd
 ARG psalmPath=/var/www/html/BuildADoc/tools/psalm
 
 # install xdebug
+RUN aptitude update
 RUN aptitude install -y php8.3-xdebug
 
 # create folder
