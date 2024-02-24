@@ -27,7 +27,8 @@ jobs:
 
       - name: Run psalm
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh --abort-on-container-exit
+          exit_code=$? exit $exit_code
 
       - name: Run cs-fixer
         run: |
