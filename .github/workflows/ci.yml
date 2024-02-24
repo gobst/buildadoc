@@ -38,6 +38,7 @@ jobs:
           
           if [ $psalmExitCode -ne 0 ] || [ $csFixerExitCode -ne 0 ] || [ $codesnifferExitCode -ne 0 ]; then
             mkdir -p artifacts
+            echo ls -l
             cp -r bin/output/ artifacts/
             exit 1
           fi
