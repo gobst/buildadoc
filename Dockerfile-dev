@@ -19,11 +19,11 @@ WORKDIR /var/www/html/BuildADoc
 
 ARG php_version=8.3
 ARG buildadoc_path=/var/www/html/BuildADoc
-ARG phpCompatibilityPath=/var/www/html/BuildADoc/tools/php-compatibility
-ARG phpCsFixerPath=/var/www/html/BuildADoc/tools/php-cs-fixer
-ARG phpCodesnifferPath=/var/www/html/BuildADoc/tools/php_codesniffer
-ARG PhpmdPath=/var/www/html/BuildADoc/tools/phpmd
-ARG psalmPath=/var/www/html/BuildADoc/tools/psalm
+ARG phpCompatibilityPath=./tools/php-compatibility
+ARG phpCsFixerPath=./tools/php-cs-fixer
+ARG phpCodesnifferPath=./tools/php_codesniffer
+ARG PhpmdPath=./tools/phpmd
+ARG psalmPath=./tools/psalm
 
 # install xdebug
 RUN aptitude update
@@ -33,22 +33,22 @@ RUN aptitude install -y php8.3-xdebug
 RUN composer install
 
 # create folder
-RUN mkdir ${buildadoc_path}/tests \
-    ${buildadoc_path}/scripts \
-    ${buildadoc_path}/tools \
-    ${buildadoc_path}/tools/php-compatibility \
-    ${buildadoc_path}/tools/php-cs-fixer \
-    ${buildadoc_path}/tools/php_codesniffer \
-    ${buildadoc_path}/tools/phpmd \
-    ${buildadoc_path}/tools/psalm \
-    ${buildadoc_path}/bin/output
+RUN mkdir ./tests \
+    ./scripts \
+    ./tools \
+    ./tools/php-compatibility \
+    ./tools/php-cs-fixer \
+    ./tools/php_codesniffer \
+    ./tools/phpmd \
+    ./tools/psalm \
+    ./bin/output
 
-RUN chmod 755 ${buildadoc_path}/bin/output
+RUN chmod 755 ./bin/output
 
 # copy files
-COPY tests ${buildadoc_path}/tests
-COPY cfg/dev ${buildadoc_path}/cfg/dev
-COPY scripts ${buildadoc_path}/scripts
+COPY tests ./tests
+COPY cfg/dev ./cfg/dev
+COPY scripts ./scripts
 COPY res/docker/config/xdebug/xdebug.ini /etc/php/${php_version}/mods-available/xdebug.ini
 COPY res/docker/config/xdebug/xdebug.ini /etc/php/${php_version}/cli/conf.d/20-xdebug.ini
 
@@ -64,9 +64,9 @@ COPY tools/phpmd/composer.lock ${PhpmdPath}
 COPY tools/psalm/composer.json ${psalmPath}
 COPY tools/psalm/composer.lock ${psalmPath}
 
-COPY phpunit.xml ${buildadoc_path}
-COPY infection.json5 ${buildadoc_path}
-COPY rector.php ${buildadoc_path}
+COPY phpunit.xml .
+COPY infection.json5 .
+COPY rector.php .
 
 # run composer for tools
 RUN composer install -d ${phpCompatibilityPath}
@@ -75,6 +75,8 @@ RUN composer install -d ${phpCodesnifferPath}
 RUN composer install -d ${PhpmdPath}
 RUN composer install -d ${psalmPath}
 
+RUN ls -l
+RUN cd bin
 RUN ls -l
 
 EXPOSE 8081
