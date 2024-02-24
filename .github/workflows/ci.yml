@@ -64,9 +64,7 @@ jobs:
         run: |
           mkdir -p artifacts
           mkdir -p artifacts/unit
-          phpUnitOutput=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/test/phpunit.sh coverage"; echo $?)
-          cat /bin/output/phpunit.log > $phpUnitOutput
-          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpunit.log artifacts
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/test/phpunit.sh coverage") > artifacts/unit/phpunit.log
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/junit.xml artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage-xml artifacts/unit
