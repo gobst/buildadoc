@@ -33,18 +33,18 @@ RUN aptitude install -y php8.3-xdebug
 RUN composer install
 
 # create folder
-RUN mkdir tests \
-    scripts \
-    tools \
-    tools/php-compatibility \
-    tools/php-cs-fixer \
-    tools/php_codesniffer \
-    tools/phpmd \
-    tools/psalm \
-    bin \
-    bin/output
+RUN mkdir /tests \
+    /scripts \
+    /tools \
+    /tools/php-compatibility \
+    /tools/php-cs-fixer \
+    /tools/php_codesniffer \
+    /tools/phpmd \
+    /tools/psalm \
+    /bin \
+    /bin/output
 
-RUN chmod 755 bin/output
+RUN chmod 755 /bin/output
 
 # copy files
 COPY tests tests
