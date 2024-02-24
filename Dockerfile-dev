@@ -75,8 +75,8 @@ RUN composer install -d ${phpCodesnifferPath}
 RUN composer install -d ${PhpmdPath}
 RUN composer install -d ${psalmPath}
 
-RUN ls -l
-RUN cd bin \
+RUN ls -l \
+    cd bin \
     ls -l
 
 EXPOSE 8081
