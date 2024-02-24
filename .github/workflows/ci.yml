@@ -29,15 +29,16 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh --abort-on-container-exit
           exit_code=$?
+          echo "::set-output name=exit_code::$exit_code"
 
       - name: Check Exit Code
         run: |
           echo ${exit_code}
-          if [ ${exit_code} -eq 0 ]; then
+          if [ "${{ steps.execute_docker_compose.outputs.exit_code }}" -eq 0 ]; then
             echo "Script executed successfully"
           else
-            echo "Script failed with exit code $exit_code"
-            exit $exit_code
+            echo "Script failed with exit code ${{ steps.execute_docker_compose.outputs.exit_code }}"
+            exit ${{ steps.execute_docker_compose.outputs.exit_code }}
           fi 
 
       - name: Run cs-fixer
