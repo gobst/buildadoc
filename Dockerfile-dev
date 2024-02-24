@@ -73,6 +73,8 @@ RUN composer install -d ${phpCodesnifferPath}
 RUN composer install -d ${PhpmdPath}
 RUN composer install -d ${psalmPath}
 
+RUN ls -l
+
 EXPOSE 8081
 
 CMD tail -f /dev/null
