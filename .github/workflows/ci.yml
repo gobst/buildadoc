@@ -31,7 +31,8 @@ jobs:
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/psalm"
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php-cs-fixer"
-          #docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php_codesniffer"
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php_codesniffer"
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/phpmd"
           
           # Run PHP-CS-Fixer
           csFixerExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
@@ -39,27 +40,32 @@ jobs:
           # Run Psalm
           psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
 
-          # Run codesniffer
+          # Run CodeSniffer
           codesnifferExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/codesniffer.sh"; echo $?)
           
-          if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0 || $codesnifferExitCode -ne 0 ]]; then
+           # Run Mess Detector
+          messdetectorExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
+          
+          if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0 || $codesnifferExitCode -ne 0  || $messdetectorExitCode -ne 0 ]]; then
             mkdir -p artifacts
 
             if [[ $csFixerExitCode -ne 0 ]]; then
-              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcsfixer-report.log artifacts            
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcsfixer-report.log artifacts      
             fi
           
             if [[ $psalmExitCode -ne 0 ]]; then
-              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts            
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts       
             fi
           
             if [[ $codesnifferExitCode -ne 0 ]]; then
               docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcs-report.log artifacts            
             fi
 
+             if [[ $messdetectorExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpmd-report.log artifacts    
+            fi
             exit 1
           fi
-
           exit 0
         if: always()
 
