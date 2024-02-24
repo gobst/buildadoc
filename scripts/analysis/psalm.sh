@@ -17,7 +17,7 @@ bin/psalm --config=./cfg/dev/psalm.xml --output-format=text > bin/output/psalm-r
 if [ $? -eq 0 ]; then
     echo "PHP Psalm result: Success!"
     cat ./bin/output/psalm-report.log
-    exit 0
+    exit 1
 else
     cat ./bin/output/psalm-report.log
     echo "PHP Psalm result: Failed! See bin/output/psalm-report.log for details."
