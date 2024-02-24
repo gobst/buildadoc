@@ -34,7 +34,7 @@ jobs:
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php_codesniffer"
           
           # Run Psalm
-          psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "bin/psalm --config=./cfg/dev/psalm.xml --output-format=text > bin/output/psalm-report.log"; echo $?)
+          psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
 
           # Run PHP-CS-Fixer
           #csFixerExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
