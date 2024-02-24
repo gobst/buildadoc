@@ -21,4 +21,3 @@ else
     echo "PHP Psalm result: Failed! See bin/output/psalm-report.log for details."
     exit 1
 fi
-
