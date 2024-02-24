@@ -13,12 +13,12 @@
 
 # Check files with PHP Psalm
 bin/psalm --config=./cfg/dev/psalm.xml --output-format=text > bin/output/psalm-report.log
-cd bin/output
-ls -l
 if [ $? -eq 0 ]; then
     # Psalm result: Success!
     exit 0
 else
     # Psalm result: Failed! See bin/output/psalm-report.log for details
+    cd bin/output
+    ls -l
     exit 1
 fi
