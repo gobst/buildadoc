@@ -15,6 +15,8 @@ LABEL maintainer="Guido Obst" \
 	  description="BuildADoc develop image" \
 	  version="1.0.0"
 
+WORKDIR /var/www/html/BuildADoc
+
 ARG php_version=8.3
 ARG buildadoc_path=/var/www/html/BuildADoc
 ARG phpCompatibilityPath=/var/www/html/BuildADoc/tools/php-compatibility
@@ -28,7 +30,7 @@ RUN aptitude update
 RUN aptitude install -y php8.3-xdebug
 
 # run composer
-RUN composer install -d ${buildadoc_path}
+RUN composer install
 
 # create folder
 RUN mkdir ${buildadoc_path}/tests \
