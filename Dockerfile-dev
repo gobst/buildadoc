@@ -35,7 +35,7 @@ RUN mkdir tests \
     tools \
     bin/output
 
-RUN chmod 755 bin/output
+RUN chmod 777 bin/output
 
 # copy directories and files
 COPY tests tests
