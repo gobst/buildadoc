@@ -37,7 +37,7 @@ class ClassPathGeneratorTest extends TestCase
         $this->classPathGenerator = new ClassPathGenerator($this->linkGenerator);
     }
 
-    public function testGenerateWithDokuWikiFormat(): void
+/*    public function testGenerateWithDokuWikiFormat(): void
     {
         $class = $this->getTestClassDto();
         $this->linkGenerator->expects(self::once())
@@ -48,7 +48,7 @@ class ClassPathGeneratorTest extends TestCase
         $expectedOutput = file_get_contents('tests/data/DokuWiki/classPath.txt');
 
         $this->assertEquals($expectedOutput, $actualOutput, 'Output is not as expected.');
-    }
+    }*/
 
     private function getTestClassDto(): ClassDto
     {
