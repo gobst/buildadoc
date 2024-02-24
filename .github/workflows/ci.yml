@@ -50,19 +50,19 @@ jobs:
             mkdir -p artifacts
 
             if [[ $csFixerExitCode -ne 0 ]]; then
-              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcsfixer-report.log artifacts      
+              #docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcsfixer-report.log artifacts      
             fi
           
             if [[ $psalmExitCode -ne 0 ]]; then
-              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts       
+              #docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts       
             fi
           
             if [[ $codesnifferExitCode -ne 0 ]]; then
-              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcs-report.log artifacts            
+              #docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcs-report.log artifacts            
             fi
 
              if [[ $messdetectorExitCode -ne 0 ]]; then
-              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpmd-report.log artifacts    
+              #docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpmd-report.log artifacts    
             fi
             exit 0
           fi
