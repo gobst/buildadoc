@@ -23,7 +23,6 @@ jobs:
 
       - name: Pull images
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build buildadoc
           docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
 
       - name: Check code
@@ -31,32 +30,44 @@ jobs:
           # Run composer
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/psalm"
-          #docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php-cs-fixer"
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php-cs-fixer"
           #docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php_codesniffer"
+          
+          # Run PHP-CS-Fixer
+          csFixerExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
           
           # Run Psalm
           psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
 
-          # Run PHP-CS-Fixer
-          #csFixerExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
-          csFixerExitCode=0
-          
           # Run codesniffer
-          #codesnifferExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev sh -c "./scripts/analysis/phpcs"; echo $?)
-          codesnifferExitCode=0
+          codesnifferExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev sh -c "./scripts/analysis/phpcs"; echo $?)
           
-          if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0  || $codesnifferExitCode -ne 0 ]]; then
+          if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0 || $codesnifferExitCode -ne 0 ]]; then
             mkdir -p artifacts
-            docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts
+
+            if [[ $csFixerExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcsfixer-report.log artifacts            
+            fi
+          
+            if [[ $psalmExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts            
+            fi
+          
+            if [[ $codesnifferExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcs-report.log artifacts            
+            fi
+
             exit 1
           fi
+
+          exit 0
         if: always()
 
       - name: Upload artifacts from code analysis
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: artifacts
+          name: failures
           path: ./artifacts
 
       - name: Run unit tests and generate code coverage

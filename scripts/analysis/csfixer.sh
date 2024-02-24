@@ -12,7 +12,7 @@
 ############################################################################
 
 if [[ $1 == 'dry-run' ]]; then
-    #echo "Checking code style with: PHP Coding Standards Fixer (dry-run)"
+    # "Checking code style with: PHP Coding Standards Fixer (dry-run)"
     bin/php-cs-fixer fix -v --dry-run --config=cfg/dev/.php-cs-fixer.php > bin/output/phpcsfixer-report.log
     csfixer_status=$?
     if [[ $((csfixer_status)) == 0 ]]; then
@@ -25,7 +25,7 @@ if [[ $1 == 'dry-run' ]]; then
 fi
 
 if [[ $1 == 'fix' ]]; then
-    #echo "Fix code style with: PHP Coding Standards Fixer"
+    # "Fix code style with: PHP Coding Standards Fixer"
     bin/php-cs-fixer fix -v --config=cfg/dev/.php-cs-fixer.php > bin/output/phpcsfixer-report.log
     csfixer_status=$?
     if [[ $((csfixer_status)) == 0 ]]; then
