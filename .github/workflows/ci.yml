@@ -45,18 +45,23 @@ jobs:
           codesnifferExitCode=0
           
           if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0  || $codesnifferExitCode -ne 0 ]]; then
-            cd artifacts
-            ls -l
+            mkdir -p artifacts
+            #docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cp -r bin/output/psalm-report.log /artifacts/psalm-report.log"
+            #docker ps
+            #docker cp buildadoc-dev_buildadoc-dev_1:bin/output/psalm-report.log artifacts/psalm-report.log
             exit 1
           fi
         if: always()
+
+      - name: Copy artifacts from container
+        run: docker cp buildadoc-dev_buildadoc-dev_1:bin/output/psalm-report.log artifacts
 
       - name: Upload artifacts from code analysis
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: artifacts
-          path: artifacts/
+          path: ./artifacts
 
       - name: Run unit tests and generate code coverage
         run: |

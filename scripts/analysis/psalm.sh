@@ -17,7 +17,5 @@ status=$?
 if [[ $((status)) == 0 ]]; then
     exit 0
 else
-    mkdir -p artifacts
-    cp bin/output/psalm-report.log artifacts/psalm-report-failed.log
     exit 1
 fi
