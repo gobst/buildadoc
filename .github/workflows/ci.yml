@@ -27,6 +27,8 @@ jobs:
 
       - name: Check code
         run: |
+          mkdir -p artifacts
+
           # Run composer
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/psalm"
@@ -47,7 +49,6 @@ jobs:
           messdetectorExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
           
           if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0 || $codesnifferExitCode -ne 0  || $messdetectorExitCode -ne 0 ]]; then
-            mkdir -p artifacts
             exit 0
           fi
           exit 0
@@ -57,14 +58,13 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: artifacts
+          name: code-check-artifacts
           path: ./artifacts
 
       - name: Run unit tests
         run: |
-          mkdir -p artifacts
           mkdir -p artifacts/unit
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh coverage" > artifacts/phpunit.log
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh coverage" > artifacts/unit/phpunit.log
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/junit.xml artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage-xml artifacts/unit
@@ -74,8 +74,8 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: artifacts
-          path: ./artifacts
+          name: unit-test-artifacts
+          path: ./artifacts/unit
 
       - name: Run mutation tests with msi score
         run: |
