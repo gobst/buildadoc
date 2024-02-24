@@ -41,7 +41,7 @@ jobs:
           if [ "psalmExitCode" -ne 0 || "csFixerExitCode" -ne 0 || "codesnifferExitCode" -ne 0]; then
             mkdir -p artifacts
             cp -r bin/output/
-            exit $exitCode
+            exit 1
           fi
         if: always()
 
