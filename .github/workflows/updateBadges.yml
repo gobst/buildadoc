@@ -49,6 +49,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
+            const gith = require('@actions/github');
       
             // Lesen des aktuellen Inhalts der README-Datei
             let readme = fs.readFileSync('README.md', 'utf8');
