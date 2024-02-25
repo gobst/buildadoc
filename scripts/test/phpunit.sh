@@ -20,5 +20,5 @@ fi
 
 # run unit tests
 if [[ $1 == 'run' ]]; then
-    bin/phpunit --color
+    bin/phpunit
 fi
