@@ -35,7 +35,7 @@ jobs:
           # Extract the coverage percentage from the coverage.xml file
           COVERAGE=$(grep -oP 'Lines:\s+\K[0-9.]+%' bin/output/coverage.txt)
           # Generate the badge link
-          BADGE="[![Code Coverage](https://img.shields.io/badge/Code-Coverage-${COVERAGE}25-brightgreen)]"
+          BADGE="[![Code Coverage](https://img.shields.io/badge/Code-Coverage-${COVERAGE}25-brightgreen)](https://img.shields.io/badge/Code-Coverage-${COVERAGE}25-brightgreen)"
           # Check if the README.md file is empty
           if [ ! -s README.md ]; then
             echo "$BADGE" >> README.md
