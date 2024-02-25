@@ -1,0 +1,54 @@
+name: Update Code Coverage Badge
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub packages
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Pull image
+        run: |
+          docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
+
+      - name: Run composer
+        run: |
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
+
+      - name: Run unit tests
+        run: |
+          mkdir -p coverage/unit
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh coverage"
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.xml coverage/unit
+
+      - name: Extract coverage percentage
+        id: extract-coverage
+        run: |
+          # Extract the coverage percentage from the coverage.xml file
+          COVERAGE=$(grep lines-total coverage/unit/coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/')
+          echo "::set-output name=coverage::$COVERAGE"
+
+      - name: Update README with coverage badge
+        run: |
+          COVERAGE=${{ steps.extract-coverage.outputs.coverage }}
+          # Generate the badge link
+          BADGE="[![Code Coverage](https://img.shields.io/badge/Coverage-${COVERAGE}%25-brightgreen)]"
+          # Replace the existing badge if it exists, otherwise append the badge to the end of the file
+          sed -i "s/\[!\[Code Coverage\].*]/$BADGE/g" README.md || echo "$BADGE" >> README.md
+
+      - name: Commit and push changes
+        run: |
+          #git config --global user.email "github-actions@example.com"
+          #git config --global user.name "GitHub Actions"
+          #git add README.md
+          #git commit -m "Update code coverage badge [skip ci]"
+          #git push
