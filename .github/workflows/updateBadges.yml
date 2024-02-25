@@ -65,9 +65,23 @@ jobs:
       
             // Schreiben der aktualisierten README-Datei
             fs.writeFileSync('README.md', newReadme);
-      
-            // Commit- und Push-Änderungen
-            await github.git.createCommit({
+            
+            // Definieren von Variablen für den Commit
+            const { context, github } = require('@actions/github');
+            const tree = github.git.getTree({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tree_sha: context.sha,
+              recursive: true
+            });
+
+            const head = github.git.getRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'heads/develop'
+            });
+
+            const commit = github.git.createCommit({
               owner: context.repo.owner,
               repo: context.repo.repo,
               message: 'Update code coverage badge',
@@ -79,10 +93,12 @@ jobs:
               }
             });
 
-            // Pushing changes
-            await github.git.updateRef({
+            const updateRef = github.git.updateRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: 'heads/develop',
               sha: commit.data.sha
             });
+
+            // Ausführen von Commit- und Push-Aktionen
+            await Promise.all([tree, head, commit, updateRef]);
