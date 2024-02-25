@@ -42,7 +42,7 @@ jobs:
           # Generate the badge link
           BADGE="[![Code Coverage](https://img.shields.io/badge/Coverage-${COVERAGE}%25-brightgreen)]"
           # Replace the existing badge if it exists, otherwise append the badge to the end of the file
-          sed -i "s/\[!\[Code Coverage\].*]/$BADGE/g" README.md || echo "$BADGE" >> README.md
+          sed -i "s|\[!\[Code Coverage\].*]|$BADGE|g" README.md || echo "$BADGE" >> README.md
 
       - name: Commit and push changes
         run: |
