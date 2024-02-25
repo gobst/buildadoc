@@ -5,7 +5,17 @@
       <directory>tests</directory>
     </testsuite>
   </testsuites>
-  <coverage/>
+  <coverage>
+    <report>
+    <clover outputFile="bin/output/unit/coverage.xml" />
+    <html outputDirectory="bin/output/unit/coverage" />
+    <text outputFile="bin/output/unit/coverage.txt" showUncoveredFiles="false" showOnlySummary="true" />
+    <xml outputDirectory="bin/output/unit/coverage-xml" />
+    </report>
+  </coverage>
+  <logging>
+    <junit outputFile="bin/output/unit/junit.xml"/>
+  </logging>
   <source>
     <include>
       <directory suffix=".php">src</directory>

@@ -14,15 +14,11 @@
 echo $1
 
 # run unit tests with testdox
-if [[ $1 == 'testdox' ]]; then
+if [[ $1 == 'run-testdox' ]]; then
     bin/phpunit --testdox --color
 fi
 
-# run unit tests without testdox
+# run unit tests
 if [[ $1 == 'run' ]]; then
     bin/phpunit --color
-fi
-
-if [[ $1 == 'coverage' ]]; then
-    bin/phpunit --coverage-text --coverage-html bin/output/unit/coverage/ --coverage-xml bin/output/unit/coverage-xml  --log-junit bin/output/unit/junit.xml --coverage-clover bin/output/unit/coverage.xml
 fi

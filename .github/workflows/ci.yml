@@ -83,9 +83,10 @@ jobs:
         if: always()
         run: |
           mkdir -p artifacts/unit
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh coverage" > artifacts/unit/phpunit.log
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run" > artifacts/unit/phpunit.log
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/junit.xml artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.xml artifacts/unit
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.txt artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage-xml artifacts/unit
 

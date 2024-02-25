@@ -27,13 +27,13 @@ jobs:
       - name: Run unit tests
         run: |
           mkdir -p coverage/unit
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh coverage"
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run"
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.xml coverage/unit
 
-      - name: Update README with coverage badge
+      - name: Update coverage badge in README file
         run: |
           # Extract the coverage percentage from the coverage.xml file
-          COVERAGE=$(grep lines-total coverage/unit/coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/')
+          COVERAGE=$(grep Lines coverage/unit/coverage.txt | sed -E 's/.*>([0-9]+)%<.*/\1/')
           # Generate the badge link
           BADGE="[![Code Coverage](https://img.shields.io/badge/Coverage-${COVERAGE}%25-brightgreen)]"
           # Replace the existing badge if it exists, otherwise append the badge to the end of the file
