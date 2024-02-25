@@ -44,5 +44,5 @@ jobs:
           #git config --global user.email "github-actions@example.com"
           #git config --global user.name "GitHub Actions"
           #git add README.md
-          #git commit -m "Update code coverage badge [skip ci]"
-          #git push
+          git commit -m "Update code coverage badge"
+          git push
