@@ -35,11 +35,10 @@ jobs:
         run: |
           # Extract the coverage percentage from the coverage.xml file
           COVERAGE=$(grep lines-total coverage/unit/coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/')
-          echo "::set-output name=coverage::$COVERAGE"
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
 
       - name: Update README with coverage badge
         run: |
-          COVERAGE=${{ steps.extract-coverage.outputs.coverage }}
           # Generate the badge link
           BADGE="[![Code Coverage](https://img.shields.io/badge/Coverage-${COVERAGE}%25-brightgreen)]"
           # Replace the existing badge if it exists, otherwise append the badge to the end of the file
