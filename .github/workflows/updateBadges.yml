@@ -67,23 +67,23 @@ jobs:
             fs.writeFileSync('README.md', newReadme);
             
             // Definieren von Variablen für den Commit
-            const { context, github } = require('@actions/github');
+            const { ctx, github } = require('@actions/github');
             const tree = github.git.getTree({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner: ctx.repo.owner,
+              repo: ctx.repo.repo,
               tree_sha: context.sha,
               recursive: true
             });
 
             const head = github.git.getRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner: ctx.repo.owner,
+              repo: ctx.repo.repo,
               ref: 'heads/develop'
             });
 
             const commit = github.git.createCommit({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner: ctx.repo.owner,
+              repo: ctx.repo.repo,
               message: 'Update code coverage badge',
               tree: tree.data.tree,
               parents: [head.data.object.sha],
@@ -94,8 +94,8 @@ jobs:
             });
 
             const updateRef = github.git.updateRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner: ctx.repo.owner,
+              repo: ctx.repo.repo,
               ref: 'heads/develop',
               sha: commit.data.sha
             });
