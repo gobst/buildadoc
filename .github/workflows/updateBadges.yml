@@ -33,20 +33,56 @@ jobs:
       - name: Update coverage badge in README file
         run: |
           # Extract the coverage percentage from the coverage.xml file
-          COVERAGE=$(grep -oP 'Lines:\s+\K[0-9.]+%' bin/output/coverage.txt)
+          #COVERAGE=$(grep -oP 'Lines:\s+\K[0-9.]+%' bin/output/coverage.txt)
           # Generate the badge link
-          BADGE="[![Code Coverage](https://img.shields.io/badge/Coverage-${COVERAGE}25-brightgreen)](https://img.shields.io/badge/Code-Coverage-${COVERAGE}25-brightgreen)"
+          #BADGE="[![Code Coverage](https://img.shields.io/badge/Coverage-${COVERAGE}25-brightgreen)](https://img.shields.io/badge/Code-Coverage-${COVERAGE}25-brightgreen)"
           # Check if the README.md file is empty
-          if [ ! -s README.md ]; then
-            echo "$BADGE" >> README.md
-          else
-            sed -i "s|\[!\[Code Coverage\].*](.*)|$BADGE|g" README.md || echo "$BADGE" >> README.md
-          fi
+          #if [ ! -s README.md ]; then
+          #  echo "$BADGE" >> README.md
+          #else
+          #  sed -i "s|\[!\[Code Coverage\].*](.*)|$BADGE|g" README.md || echo "$BADGE" >> README.md
+          #fi
 
       - name: Commit and push changes
-        run: |
-          git config --global user.email "github@sourcegate.de"
-          git config --global user.name "gobst"
-          git add README.md
-          git commit -m "Update code coverage badge"
-          git push
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+      
+            // Lesen des aktuellen Inhalts der README-Datei
+            let readme = fs.readFileSync('README.md', 'utf8');
+      
+            // Extrahieren des Coverage-Badges
+            let COVERAGE = fs.readFileSync('bin/output/coverage.txt', 'utf8');
+            COVERAGE = COVERAGE.match(/Lines:\s+(\d+\.\d+)%/)[1];
+      
+            // Erstellen des Badge-Links
+            let BADGE = `[![Code Coverage](https://img.shields.io/badge/Coverage-${COVERAGE}%25-brightgreen)](https://img.shields.io/badge/Code-Coverage-${COVERAGE}%25-brightgreen)`;
+      
+            // Überprüfen, ob bereits ein Badge im README vorhanden ist und ihn aktualisieren oder hinzufügen
+            let newReadme = readme.replace(/\[!\[Code Coverage\].*?\]\(.*?\)/, BADGE);
+      
+            // Schreiben der aktualisierten README-Datei
+            fs.writeFileSync('README.md', newReadme);
+      
+            // Commit- und Push-Änderungen
+            await github.git.createCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              message: 'Update code coverage badge',
+              tree: tree.data.tree,
+              parents: [head.data.object.sha],
+              author: {
+                name: 'gobst',
+                email: 'github@sourcegate.de'
+              }
+            });
+
+            // Pushing changes
+            await github.git.updateRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'heads/develop',
+              sha: commit.data.sha
+            });
