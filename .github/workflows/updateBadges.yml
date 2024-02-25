@@ -28,7 +28,7 @@ jobs:
         run: |
           mkdir -p coverage/unit
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run"
-          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.xml coverage/unit
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.txt coverage/unit
 
       - name: Update coverage badge in README file
         run: |
