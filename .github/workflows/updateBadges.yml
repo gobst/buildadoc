@@ -26,6 +26,7 @@ jobs:
 
       - name: Run unit tests
         run: |
+          mkdir -p bin/output
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run"
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.txt bin/output
 
