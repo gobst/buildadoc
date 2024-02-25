@@ -24,5 +24,5 @@ if [[ $1 == 'run' ]]; then
 fi
 
 if [[ $1 == 'coverage' ]]; then
-    bin/phpunit --coverage-text --coverage-html bin/output/unit/coverage/ --coverage-xml bin/output/unit/coverage-xml  --log-junit bin/output/unit/junit.xml
+    bin/phpunit --coverage-text --coverage-html bin/output/unit/coverage/ --coverage-xml bin/output/unit/coverage-xml  --log-junit bin/output/unit/junit.xml --coverage-clover bin/output/unit/coverage.xml
 fi
