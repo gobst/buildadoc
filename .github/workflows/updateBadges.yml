@@ -33,7 +33,7 @@ jobs:
       - name: Update coverage badge in README file
         run: |
           # Extract the coverage percentage from the coverage.xml file
-          COVERAGE=$(grep Lines bin/output/unit/coverage.txt | sed -E 's/.*>([0-9]+)%<.*/\1/')
+          COVERAGE=$(grep Lines coverage/unit/coverage.txt | sed -E 's/.*>([0-9]+)%<.*/\1/')
           # Generate the badge link
           BADGE="[![Code Coverage](https://img.shields.io/badge/Coverage-${COVERAGE}%25-brightgreen)]"
           # Replace the existing badge if it exists, otherwise append the badge to the end of the file
