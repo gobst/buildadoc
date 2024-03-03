@@ -1,2 +1,2 @@
-[![Code Coverage](https://img.shields.io/badge/Code_Coverage-20.30%25-brightgreen)](https://img.shields.io/badge/Code_Coverage-20.30%25-brightgreen)
+[![Code Coverage](https://img.shields.io/badge/Code_Coverage-20.29%25-brightgreen)](https://img.shields.io/badge/Code_Coverage-20.29%25-brightgreen)
 [![Mutation Score](https://img.shields.io/badge/Mutation_Score-13.20%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-13.20%25-brightgreen)
