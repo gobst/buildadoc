@@ -42,3 +42,11 @@ jobs:
           else
             sed -i "s|\[!\[Code Coverage\].*](.*)|$BADGE|g" README.md || echo "$BADGE" >> README.md
           fi
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "github@sourcegate.de"
+          git config --global user.name "gobst"
+          git add README.md
+          it commit -m "Update code coverage badge"
+          git push
