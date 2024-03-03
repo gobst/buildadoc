@@ -36,7 +36,7 @@ jobs:
           COVERAGE=$(grep -oP 'Lines:\s+\K[0-9.]+%' bin/output/coverage.txt)
           # Generate the badge link
           BADGE="[![Code Coverage](https://img.shields.io/badge/Coverage-${COVERAGE}25-brightgreen)](https://img.shields.io/badge/Code-Coverage-${COVERAGE}25-brightgreen)"
-          # Check if the README.md file is empty
+          # Update README file
           if [ ! -s README.md ]; then
             echo "$BADGE" >> README.md
           else
@@ -48,14 +48,5 @@ jobs:
           git config --global user.email "github@sourcegate.de"
           git config --global user.name "gobst"
           git add README.md
-          git commit -m "Update code coverage badge"
+          git commit -m "Update code coverage badge. This commit was created automatically."
           git push
-
-      - name: Create pull request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.TOKEN }}
-          branch: update-readme
-          commit-message: "Update code coverage badge"
-          title: "Update Code Coverage Badge"
-          body: "This PR updates the code coverage badge in the README file."
