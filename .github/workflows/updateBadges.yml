@@ -47,10 +47,9 @@ jobs:
         run: |
           git config --global user.email "github@sourcegate.de"
           git config --global user.name "gobst"
-          git config --global user.password "${{ secrets.TOKEN }}"
           git add README.md
           git commit -m "Update code coverage badge"
-          git push
+          git push https://github.com/${{ github.repository }}.git HEAD:${{ github.ref }} --follow-tags --force
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
