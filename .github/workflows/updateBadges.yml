@@ -51,7 +51,7 @@ jobs:
           git commit -m "Update code coverage badge"
           git push
 
-      - name: Create Pull Request
+      - name: Create pull request
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.TOKEN }}
