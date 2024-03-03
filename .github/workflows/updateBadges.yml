@@ -45,8 +45,8 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          #git config --global user.email "github@sourcegate.de"
-          #git config --global user.name "gobst"
+          git config --global user.email "github@sourcegate.de"
+          git config --global user.name "Guido Obst"
           git add README.md
           git commit -m "Update code coverage badge"
           git push
