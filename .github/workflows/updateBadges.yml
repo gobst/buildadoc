@@ -71,7 +71,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          if git diff --quiet --exit-code HEAD^ -- README.md; then
+          if git diff --quiet --exit-code HEAD~1 -- README.md; then
             git config --global user.email "github@sourcegate.de"
             git config --global user.name "gobst"
             git add README.md
