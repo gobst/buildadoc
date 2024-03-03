@@ -1,4 +1,4 @@
-name: Update Code Coverage Badge
+name: Update badges
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - develop
 
 jobs:
-  update-readme:
+  update-badges:
     runs-on: ubuntu-latest
 
     steps:
@@ -41,7 +41,7 @@ jobs:
           # Extract the coverage percentage from the coverage.xml file
           COVERAGE=$(grep -oP 'Lines:\s+\K[0-9.]+%' bin/output/coverage.txt)
           # Generate the badge link
-          BADGE="[![Code Coverage](https://img.shields.io/badge/Coverage-${COVERAGE}25-brightgreen)](https://img.shields.io/badge/Code-Coverage-${COVERAGE}25-brightgreen)"
+          BADGE="[![Code Coverage](https://img.shields.io/badge/Code_Coverage-${COVERAGE}25-brightgreen)](https://img.shields.io/badge/Code_Coverage-${COVERAGE}25-brightgreen)"
           # Update README file
           if [ ! -s README.md ]; then
             echo "$BADGE" >> README.md
@@ -55,12 +55,12 @@ jobs:
           TOTAL=$(grep -E 'Total' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
           KILLED=$(grep -E 'Killed' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
   
-          # Calculate the MSI
+          # Calculate MSI
           MSI=$(echo "scale=4; $KILLED / $TOTAL * 100" | bc)
           MSI=$(printf "%.2f\n" $MSI)
   
           # Generate badge link
-          BADGE="[![Mutation Score](https://img.shields.io/badge/MSI-${MSI}%25-brightgreen)](https://img.shields.io/badge/MSI-${MSI}%25-brightgreen)"
+          BADGE="[![Mutation Score](https://img.shields.io/badge/Mutation_Score-${MSI}%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-${MSI}%25-brightgreen)"
   
           # Update README file
           if [ ! -s README.md ]; then
