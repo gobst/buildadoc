@@ -30,7 +30,13 @@ jobs:
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run"
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.txt bin/output
 
-      - name: Update coverage badge in README file
+      - name: Run mutation tests
+        run: |
+          mkdir -p bin/output/mutation
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/summary.log bin/output/mutation
+
+      - name: Update code coverage badge in README file
         run: |
           # Extract the coverage percentage from the coverage.xml file
           COVERAGE=$(grep -oP 'Lines:\s+\K[0-9.]+%' bin/output/coverage.txt)
@@ -43,10 +49,30 @@ jobs:
             sed -i "s|\[!\[Code Coverage\].*](.*)|$BADGE|g" README.md || echo "$BADGE" >> README.md
           fi
 
+      - name: Update MSI badge in README file
+        run: |
+          # Extract values from summary.log file
+          TOTAL=$(grep -E 'Total' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
+          KILLED=$(grep -E 'Killed' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
+  
+          # Calculate the MSI
+          MSI=$(echo "scale=4; $KILLED / $TOTAL * 100" | bc)
+          MSI=$(printf "%.2f\n" $MSI)
+  
+          # Generate badge link
+          BADGE="[![Mutation score](https://img.shields.io/badge/MSI-${MSI}%25-brightgreen)](https://img.shields.io/badge/MSI-${MSI}%25-brightgreen)"
+  
+          # Update README file
+          if [ ! -s README.md ]; then
+            echo "$BADGE" >> README.md
+          else
+            sed -i "s|\[!\[Mutation score\].*](.*)|$BADGE|g" README.md || echo "$BADGE" >> README.md
+          fi
+
       - name: Commit and push changes
         run: |
-          git config --global user.email "github@sourcegate.de"
-          git config --global user.name "gobst"
-          git add README.md
-          git commit -m "Update code coverage badge. This commit was created automatically."
-          git push
+          #git config --global user.email "github@sourcegate.de"
+          #git config --global user.name "gobst"
+          #git add README.md
+          #git commit -m "Update MSI badge. This commit was created automatically."
+          #git push
