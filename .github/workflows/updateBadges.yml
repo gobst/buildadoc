@@ -48,5 +48,5 @@ jobs:
           git config --global user.email "github@sourcegate.de"
           git config --global user.name "gobst"
           git add README.md
-          it commit -m "Update code coverage badge"
+          git commit -m "Update code coverage badge"
           git push
