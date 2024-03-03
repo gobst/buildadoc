@@ -49,12 +49,14 @@ jobs:
           git config --global user.name "gobst"
           git add README.md
           git commit -m "Update code coverage badge"
-          git push https://github.com/${{ github.repository }}.git HEAD:${{ github.ref }} --follow-tags --force
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           branch: update-readme
           commit-message: "Update code coverage badge"
           title: "Update Code Coverage Badge"
