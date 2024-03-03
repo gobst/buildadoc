@@ -43,18 +43,13 @@ jobs:
             sed -i "s|\[!\[Code Coverage\].*](.*)|$BADGE|g" README.md || echo "$BADGE" >> README.md
           fi
 
-      - name: Set up Git
+      - name: Commit and push changes
         run: |
           git config --global user.email "github@sourcegate.de"
           git config --global user.name "gobst"
-
-      - name: Commit and push changes
-        run: | 
           git add README.md
           git commit -m "Update code coverage badge"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
