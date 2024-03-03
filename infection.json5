@@ -7,10 +7,7 @@
     },
     "logs": {
         "text": "bin/output/mutation/infection.log",
-        "html": "bin/output/mutation/infection.html",
-        "stryker": {
-            "badge": "develop"
-        }
+        "html": "bin/output/mutation/infection.html"
     },
     "mutators": {
         "@default": true
