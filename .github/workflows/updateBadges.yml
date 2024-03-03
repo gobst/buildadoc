@@ -71,8 +71,8 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          #git config --global user.email "github@sourcegate.de"
-          #git config --global user.name "gobst"
-          #git add README.md
-          #git commit -m "Update MSI badge. This commit was created automatically."
-          #git push
+          git config --global user.email "github@sourcegate.de"
+          git config --global user.name "gobst"
+          git add README.md
+          git commit -m "Update MSI badge. This commit was created automatically."
+          git push
