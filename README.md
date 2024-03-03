@@ -1,2 +1,2 @@
-[![Code Coverage](https://img.shields.io/badge/Coverage-20.31%25-brightgreen)](https://img.shields.io/badge/Code-Coverage-20.31%25-brightgreen)
-[![Mutation Score](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fgobst%2Fbuildadoc%2Fdevelop)](https://dashboard.stryker-mutator.io/reports/github.com/gobst/buildadoc/develop)
+[![Code Coverage](https://img.shields.io/badge/Code_Coverage-20.31%25-brightgreen)](https://img.shields.io/badge/Code_Coverage-20.31%25-brightgreen)
+[![Mutation Score](https://img.shields.io/badge/Mutation_Score-13.20%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-13.20%25-brightgreen)
