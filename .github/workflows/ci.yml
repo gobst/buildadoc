@@ -59,6 +59,7 @@ jobs:
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.log artifacts/mutation
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.html artifacts/mutation
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/summary.log artifacts/mutation
 
       - name: Upload artifacts from mutation tests
         uses: actions/upload-artifact@v4
