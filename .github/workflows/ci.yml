@@ -91,9 +91,9 @@ jobs:
           current_coverage_decimal=$(echo "$current_coverage_percent" | sed 's/%//')
 
           # Check if coverage or mutation score got worse
-          if (( $(echo "$current_coverage_decimal < $previous_coverage" | bc -l) )) || (( $(echo "$current_mutation_score < $previous_mutation_score" | bc -l) )); then
+          if awk 'BEGIN{exit !('$current_coverage' >= '$previous_coverage' && '$current_mutation_score' >= '$previous_mutation_score')}' ; then
+            echo "Code coverage and mutation score improved or remained the same."
+          else
             echo "Code coverage or mutation score got worse."
             exit 1
-          else
-            echo "Code coverage and mutation score improved or remained the same."
           fi
