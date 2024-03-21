@@ -71,8 +71,8 @@ jobs:
         run: |
           
           # Get previous coverage and mutation score
-          previous_coverage=$(grep -oPm1 '(?<=Code_Coverage-)[0-9.]+' README.md)
-          previous_mutation_score=$(grep -oPm1 '(?<=Mutation_Score-)[0-9.]+' README.md)
+          previous_coverage=$(grep -m 1 '(?<=Code_Coverage-)[0-9.]+' README.md)
+          previous_mutation_score=$(grep -m 1 '(?<=Mutation_Score-)[0-9.]+' README.md)
 
           echo $previous_coverage;
           echo $previous_mutation_score;
