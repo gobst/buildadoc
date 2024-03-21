@@ -85,16 +85,11 @@ jobs:
 
           # Convert floating point numbers to integers for comparison
           current_coverage_int=$(echo "($current_coverage * 100 + 0.5)/1" | bc)
-          echo $current_coverage_int;
-          #current_coverage_int=$(printf "%.0f\n" $current_coverage_int)
-          #echo $current_coverage_int;
-          previous_coverage_int=$(echo "$previous_coverage * 100" | bc)
-          previous_coverage_int=$(printf "%.0f\n" $previous_coverage_int)
-          current_mutation_score_int=$(echo "$current_mutation_score * 100" | bc)
-          current_mutation_score_int=$(printf "%.0f\n" $current_mutation_score_int)
-          previous_mutation_score_int=$(echo "previous_mutation_score * 100" | bc)
-          previous_mutation_score_int=$(printf "%.0f\n" $previous_mutation_score_int)
+          previous_coverage_int=$(echo "($previous_coverage * 100 + 0.5)/1" | bc)
+          current_mutation_score_int=$(echo "($current_mutation_score * 100 + 0.5)/1" | bc)
+          previous_mutation_score_int=$(echo "($previous_mutation_score * 100 + 0.5)/1" | bc)
           
+          echo $current_coverage_int;
           echo $previous_coverage_int;
           echo $current_mutation_score_int;
           echo $previous_mutation_score_int;
