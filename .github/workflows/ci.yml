@@ -75,7 +75,7 @@ jobs:
           previous_mutation_score=$(grep -oP '(?<=Mutation_Score-)[0-9.]+' README.md)
 
           # Get the current coverage and mutation score
-          current_coverage=$(grep lines-total artifacts/unit/coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/')
+          current_coverage=$(grep lines-total artifacts/unit/coverage.txt | sed -E 's/.*>([0-9]+)%<.*/\1/')
           current_mutation_score=$(grep 'MSI for the codebase is' artifacts/mutation/infection.log | sed -E 's/.*is ([0-9]+)%/\1/')
           
           echo $(cat artifacts/unit/coverage.xml)
