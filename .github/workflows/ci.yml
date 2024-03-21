@@ -86,7 +86,7 @@ jobs:
           current_mutation_score=$(printf "%.2f\n" $current_mutation_score)
 
           # Check if coverage or mutation score got worse
-          if awk -v current_coverage="$current_coverage" -v previous_coverage="$previous_coverage" -v current_mutation_score="$current_mutation_score" -v previous_mutation_score="$previous_mutation_score" 'BEGIN{exit ($current_coverage < $previous_coverage || $current_mutation_score < $previous_mutation_score)}'; then
+          if awk -v current_coverage="$current_coverage" -v previous_coverage="$previous_coverage" -v current_mutation_score="$current_mutation_score" -v previous_mutation_score="$previous_mutation_score" 'BEGIN{exit (current_coverage < previous_coverage || current_mutation_score < previous_mutation_score)}'; then
             echo "Code coverage or mutation score got worse."
             echo "Code Coverage: $current_coverage und $previous_coverage"
             echo "Mutation Score: $current_mutation_score und $previous_mutation_score"
