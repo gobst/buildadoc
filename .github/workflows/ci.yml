@@ -70,23 +70,27 @@ jobs:
       - name: Check if Code Coverage and Mutation Score improved
         run: |
           
-          # Get the previous coverage and mutation score
+          # Get previous coverage and mutation score
           previous_coverage=$(grep -oP '(?<=Code_Coverage-)[0-9.]+' README.md | tr -d ' ')
           previous_mutation_score=$(grep -oP '(?<=Mutation_Score-)[0-9.]+' README.md | tr -d ' ')
 
-          # Get the current coverage and mutation score
+          # Get current coverage
           current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+' artifacts/unit/coverage.txt | tr -d ' ')
 
-          # Extract values from summary.log file
+          # Get current mutation score
           total=$(grep -E 'Total' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
           killed=$(grep -E 'Killed' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
-          
-          # Calculate MSI
           current_mutation_score=$(echo "scale=4; $killed / $total * 100" | bc)
           current_mutation_score=$(printf "%.2f\n" $current_mutation_score)
 
+          # Convert floating point numbers to integers for comparison
+          current_coverage_int=$(echo "$current_coverage * 100" | bc)
+          previous_coverage_int=$(echo "$previous_coverage * 100" | bc)
+          current_mutation_score_int=$(echo "$current_mutation_score * 100" | bc)
+          previous_mutation_score_int=$(echo "$previous_mutation_score * 100" | bc)
+
           # Check if coverage or mutation score got worse
-          if (( $(echo "$current_coverage < $previous_coverage" | bc -l) )) || (( $(echo "$current_mutation_score < $previous_mutation_score" | bc -l) )); then
+          if (( $current_coverage_int < $previous_coverage_int )) || (( $current_mutation_score_int < $previous_mutation_score_int )); then
             echo "Code coverage or mutation score got worse."
             echo "Code Coverage: $current_coverage und $previous_coverage"
             echo "Mutation Score: $current_mutation_score und $previous_mutation_score"
