@@ -75,6 +75,6 @@ jobs:
             git config --global user.email "github@sourcegate.de"
             git config --global user.name "gobst"
             git add README.md
-            git commit -m "Update MSI badge. This commit was created automatically."
+            git commit -m "Update badges. This commit was created automatically."
             git push
           fi
