@@ -85,7 +85,7 @@ jobs:
 
           # Convert floating point numbers to integers for comparison
           current_coverage_int=$(echo "scale=0; $current_coverage * 100" | bc)
-          current_coverage_int=$(printf "%.0f\n" current_coverage_int)
+          current_coverage_int=$(printf "%.0f\n" $current_coverage_int)
           previous_coverage_int=$(echo "scale=0;$previous_coverage * 100" | bc)
           current_mutation_score_int=$(echo "scale=0; $current_mutation_score * 100" | bc)
           previous_mutation_score_int=$(echo "scale=0; $previous_mutation_score * 100" | bc)
