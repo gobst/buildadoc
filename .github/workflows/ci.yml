@@ -71,21 +71,26 @@ jobs:
         run: |
           
           # Get the previous coverage and mutation score
-          previous_coverage=$(cat previous_coverage.txt)
-          previous_mutation_score=$(cat previous_mutation_score.txt)
+          previous_coverage=$(grep -oP '(?<=Code_Coverage-)[0-9.]+' README.md)
+          previous_mutation_score=$(grep -oP '(?<=Mutation_Score-)[0-9.]+' README.md)
 
           # Get the current coverage and mutation score
           current_coverage=$(grep lines-total coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/')
           current_mutation_score=$(grep 'MSI for the codebase is' infection-log.txt | sed -E 's/.*is ([0-9]+)%/\1/')
 
+          # Extract values from summary.log file
+          TOTAL=$(grep -E 'Total' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
+          KILLED=$(grep -E 'Killed' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
+          
+          # Calculate MSI
+          MSI=$(echo "scale=4; $KILLED / $TOTAL * 100" | bc)
+          MSI=$(printf "%.2f\n" $MSI)
+
+          # Extract values from coverage.txt file
+          current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+%' bin/output/coverage.txt)
+
           # Check if coverage or mutation score got worse
-          if [ $current_coverage -lt $previous_coverage ] || [ $current_mutation_score -lt $previous_mutation_score ]; then
+          if [ $current_coverage -lt current_coverage ] || [ $current_mutation_score -lt $previous_coverage ]; then
             echo "Code coverage or mutation score got worse."
             exit 1
           fi
-
-      - name: Save Current Code Coverage and Mutation Score
-        run: |
-          # Save the current coverage and mutation score for the next run
-          grep lines-total coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/' > previous_coverage.txt
-          grep 'MSI for the codebase is' infection-log.txt | sed -E 's/.*is ([0-9]+)%/\1/' > previous_mutation_score.txt
