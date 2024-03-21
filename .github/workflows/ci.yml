@@ -79,8 +79,8 @@ jobs:
           current_mutation_score=$(grep 'MSI for the codebase is' artifacts/mutation/infection.log | sed -E 's/.*is ([0-9]+)%/\1/')
 
           # Extract values from summary.log file
-          TOTAL=$(grep -E 'Total' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
-          KILLED=$(grep -E 'Killed' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
+          TOTAL=$(grep -E 'Total' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
+          KILLED=$(grep -E 'Killed' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
           
           # Calculate MSI
           MSI=$(echo "scale=4; $KILLED / $TOTAL * 100" | bc)
