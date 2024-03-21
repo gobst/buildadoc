@@ -86,7 +86,7 @@ jobs:
           current_mutation_score=$(printf "%.2f\n" $current_mutation_score)
 
           # Check if coverage or mutation score got worse
-          if [ "$(echo "$current_coverage < $previous_coverage" | bc -l)" -eq 1 ]; then
+          if (( $(echo "$current_coverage < $previous_coverage" | bc -l) )) || (( $(echo "$current_mutation_score < $previous_mutation_score" | bc -l) )); then
             echo "Code coverage or mutation score got worse."
             echo "Code Coverage: $current_coverage und $previous_coverage"
             echo "Mutation Score: $current_mutation_score und $previous_mutation_score"
