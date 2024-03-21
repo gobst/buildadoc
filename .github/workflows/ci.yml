@@ -75,22 +75,15 @@ jobs:
           previous_mutation_score=$(grep -oP '(?<=Mutation_Score-)[0-9.]+' README.md)
 
           # Get the current coverage and mutation score
-          current_coverage=$(grep lines-total artifacts/unit/coverage.txt | sed -E 's/.*>([0-9]+)%<.*/\1/')
-          current_mutation_score=$(grep 'MSI for the codebase is' artifacts/mutation/infection.log | sed -E 's/.*is ([0-9]+)%/\1/')
-          
-          echo $(cat artifacts/unit/coverage.txt)
+          current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+' artifacts/unit/coverage.txt)
 
           # Extract values from summary.log file
-          TOTAL=$(grep -E 'Total' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
-          KILLED=$(grep -E 'Killed' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
+          total=$(grep -E 'Total' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
+          killed=$(grep -E 'Killed' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
           
           # Calculate MSI
-          MSI=$(echo "scale=4; $KILLED / $TOTAL * 100" | bc)
-          MSI=$(printf "%.2f\n" $MSI)
-
-          # Extract values from coverage.txt file
-          current_coverage_percent=$(grep -oP 'Lines:\s+\K[0-9.]+%' artifacts/unit/coverage.txt)
-          current_coverage_decimal=$(echo "$current_coverage_percent" | sed 's/%//')
+          current_mutation_score=$(echo "scale=4; $killed / $total * 100" | bc)
+          current_mutation_score=$(printf "%.2f\n" $current_mutation_score)
 
           # Check if coverage or mutation score got worse
           if awk -v current_coverage="$current_coverage" -v previous_coverage="$previous_coverage" -v current_mutation_score="$current_mutation_score" -v previous_mutation_score="$previous_mutation_score" 'BEGIN{exit !(current_coverage >= previous_coverage && current_mutation_score >= previous_mutation_score)}'; then
