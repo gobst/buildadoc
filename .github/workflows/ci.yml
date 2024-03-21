@@ -93,4 +93,6 @@ jobs:
             exit 1  
           else
             echo "Code coverage and mutation score improved or remained the same."
+            echo "Code Coverage: $current_coverage und $previous_coverage"
+            echo "Mutation Score: $current_mutation_score und $previous_mutation_score"
           fi
