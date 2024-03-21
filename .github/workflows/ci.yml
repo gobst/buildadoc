@@ -71,11 +71,14 @@ jobs:
         run: |
           
           # Get previous coverage and mutation score
-          previous_coverage=$(grep -oP '(?<=Code_Coverage-)[0-9.]+' README.md | tr -d ' ')
-          previous_mutation_score=$(grep -oP '(?<=Mutation_Score-)[0-9.]+' README.md | tr -d ' ')
+          previous_coverage=$(grep -oP '(?<=Code_Coverage-)[0-9.]+' README.md)
+          previous_mutation_score=$(grep -oP '(?<=Mutation_Score-)[0-9.]+' README.md)
+
+          echo $previous_coverage;
+          echo $previous_mutation_score;
 
           # Get current coverage
-          current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+' artifacts/unit/coverage.txt | tr -d ' ')
+          current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+' artifacts/unit/coverage.txt)
 
           # Get current mutation score
           total=$(grep -E 'Total' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
