@@ -78,7 +78,7 @@ jobs:
           echo $previous_mutation_score;
 
           # Get current coverage
-          current_coverage=$(grep -oPm1 'Lines:\s+\K[0-9.]+' artifacts/unit/coverage.txt)
+          current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+' artifacts/unit/coverage.txt)
           
           echo $current_coverage
 
