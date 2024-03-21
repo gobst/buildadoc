@@ -87,10 +87,13 @@ jobs:
           MSI=$(printf "%.2f\n" $MSI)
 
           # Extract values from coverage.txt file
-          current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+%' artifacts/unit/coverage.txt)
+          current_coverage_percent=$(grep -oP 'Lines:\s+\K[0-9.]+%' artifacts/unit/coverage.txt)
+          current_coverage_decimal=$(echo "$current_coverage_percent" | sed 's/%//')
 
           # Check if coverage or mutation score got worse
-          if [ $current_coverage -lt current_coverage ] || [ $current_mutation_score -lt $previous_coverage ]; then
+          if (( $(echo "$current_coverage_decimal < $previous_coverage" | bc -l) )) || (( $(echo "$current_mutation_score < $previous_mutation_score" | bc -l) )); then
             echo "Code coverage or mutation score got worse."
             exit 1
+          else
+            echo "Code coverage and mutation score improved or remained the same."
           fi
