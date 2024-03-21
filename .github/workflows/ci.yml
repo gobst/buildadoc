@@ -84,10 +84,10 @@ jobs:
           current_mutation_score=$(printf "%.2f\n" $current_mutation_score)
 
           # Convert floating point numbers to integers for comparison
-          current_coverage_int=$(echo "$current_coverage * 100" | bc)
-          previous_coverage_int=$(echo "$previous_coverage * 100" | bc)
-          current_mutation_score_int=$(echo "$current_mutation_score * 100" | bc)
-          previous_mutation_score_int=$(echo "$previous_mutation_score * 100" | bc)
+          current_coverage_int=$(echo "scale=0; $current_coverage * 100" | bc)
+          previous_coverage_int=$(echo "scale=0;$previous_coverage * 100" | bc)
+          current_mutation_score_int=$(echo "scale=0; $current_mutation_score * 100" | bc)
+          previous_mutation_score_int=$(echo "scale=0; $previous_mutation_score * 100" | bc)
 
           # Check if coverage or mutation score got worse
           if (( $current_coverage_int < $previous_coverage_int )) || (( $current_mutation_score_int < $previous_mutation_score_int )); then
