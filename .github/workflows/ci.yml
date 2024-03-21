@@ -78,7 +78,7 @@ jobs:
           current_coverage=$(grep lines-total artifacts/unit/coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/')
           current_mutation_score=$(grep 'MSI for the codebase is' artifacts/mutation/infection.log | sed -E 's/.*is ([0-9]+)%/\1/')
           
-          echo $current_coverage
+          echo $(cat artifacts/unit/coverage.xml)
 
           # Extract values from summary.log file
           TOTAL=$(grep -E 'Total' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
