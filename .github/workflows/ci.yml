@@ -87,7 +87,7 @@ jobs:
           MSI=$(printf "%.2f\n" $MSI)
 
           # Extract values from coverage.txt file
-          current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+%' bin/output/coverage.txt)
+          current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+%' artifacts/unit/coverage.txt)
 
           # Check if coverage or mutation score got worse
           if [ $current_coverage -lt current_coverage ] || [ $current_mutation_score -lt $previous_coverage ]; then
