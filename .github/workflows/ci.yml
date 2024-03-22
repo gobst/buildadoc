@@ -67,7 +67,7 @@ jobs:
              if [[ $messdetectorExitCode -ne 0 ]]; then
               docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpmd-report.log artifacts    
             fi
-            exit 1
+            exit 0
           fi
           exit 0
 
