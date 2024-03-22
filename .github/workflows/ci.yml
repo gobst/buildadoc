@@ -89,11 +89,6 @@ jobs:
           current_mutation_score_int=$(echo "($current_mutation_score * 100 + 0.5)/1" | bc)
           previous_mutation_score_int=$(echo "($previous_mutation_score * 100 + 0.5)/1" | bc)
 
-          echo $current_coverage_int;
-          echo $previous_coverage_int;
-          echo $current_mutation_score_int;
-          echo $previous_mutation_score_int;
-
           # Check if coverage or mutation score got worse
           if (( $current_coverage_int < $previous_coverage_int )) || (( $current_mutation_score_int < $previous_mutation_score_int )); then
             echo "Code coverage or mutation score got worse."
