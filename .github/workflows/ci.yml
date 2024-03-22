@@ -71,18 +71,11 @@ jobs:
         run: |
           
           # Get previous coverage and mutation score
-          # previous_coverage=$(grep -oP '(?<=Code_Coverage-)[0-9.]+' README.md)
           previous_coverage=$(grep -oP '(?<=\[Code Coverage\]\(https:\/\/img\.shields\.io\/badge\/Code_Coverage-)[0-9.]+' README.md)
           previous_mutation_score=$(grep -oP '(?<=\[Mutation Score\]\(https:\/\/img\.shields\.io\/badge\/Mutation_Score-)[0-9.]+' README.md)
-          #previous_mutation_score=$(grep -oP '(?<=Mutation_Score-)[0-9.]+' README.md)
-
-          echo $previous_coverage;
-          echo $previous_mutation_score;
 
           # Get current coverage
           current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+' artifacts/unit/coverage.txt)
-          
-          echo $current_coverage
 
           # Get current mutation score
           total=$(grep -E 'Total' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
@@ -104,11 +97,11 @@ jobs:
           # Check if coverage or mutation score got worse
           if (( $current_coverage_int < $previous_coverage_int )) || (( $current_mutation_score_int < $previous_mutation_score_int )); then
             echo "Code coverage or mutation score got worse."
-            echo "Code Coverage: $current_coverage und $previous_coverage"
-            echo "Mutation Score: $current_mutation_score und $previous_mutation_score"
+            echo "Current Code Coverage: $current_coverage %"
+            echo "Previous Code Coverage: $previous_coverage %"
+            echo "Current Mutation Score: $current_mutation_score %"
+            echo "Previous Mutation Score: $previous_mutation_score %"
             exit 1  
           else
             echo "Code coverage and mutation score improved or remained the same."
-            echo "Code Coverage: $current_coverage und $previous_coverage"
-            echo "Mutation Score: $current_mutation_score und $previous_mutation_score"
           fi
