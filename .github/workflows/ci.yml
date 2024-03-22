@@ -33,6 +33,51 @@ jobs:
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php_codesniffer"
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/phpmd"
 
+      - name: Check code
+        run: |
+          mkdir -p artifacts
+          
+          # Run PHP-CS-Fixer
+          csFixerExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
+          
+          # Run Psalm
+          psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
+
+          # Run CodeSniffer
+          codesnifferExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/codesniffer.sh"; echo $?)
+          
+           # Run Mess Detector
+          messdetectorExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
+          
+          if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0 || $codesnifferExitCode -ne 0  || $messdetectorExitCode -ne 0 ]]; then
+            mkdir -p artifacts
+
+            if [[ $csFixerExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcsfixer-report.log artifacts
+            fi
+          
+            if [[ $psalmExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts
+            fi
+          
+            if [[ $codesnifferExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcs-report.log artifacts            
+            fi
+
+             if [[ $messdetectorExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpmd-report.log artifacts    
+            fi
+            exit 1
+          fi
+          exit 0
+
+      - name: Upload artifacts from code check
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-check-artifacts
+          path: ./artifacts
+
       - name: Run unit tests
         id: unit-tests
         if: always()
@@ -46,7 +91,6 @@ jobs:
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage-xml artifacts/unit
 
       - name: Upload artifacts from unit tests
-        id: upload-unit-artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
