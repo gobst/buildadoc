@@ -80,7 +80,7 @@ jobs:
 
       - name: Run unit tests
         id: unit-tests
-        if: always()
+        if: success()
         run: |
           mkdir -p artifacts/unit
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run" > artifacts/unit/phpunit.log
@@ -91,14 +91,13 @@ jobs:
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage-xml artifacts/unit
 
       - name: Upload artifacts from unit tests
-        if: always()
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-artifacts
           path: ./artifacts/unit
 
       - name: Run mutation tests
-        if: success()
         run: |
           mkdir -p artifacts/mutation
           docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
