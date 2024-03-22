@@ -140,7 +140,8 @@ jobs:
             echo "Previous Code Coverage: $previous_coverage %"
             echo "Current Mutation Score: $current_mutation_score %"
             echo "Previous Mutation Score: $previous_mutation_score %"
-            exit 1  
+            exit 1
           else
             echo "Code coverage and mutation score improved or remained the same."
+            exit 0
           fi
