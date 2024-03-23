@@ -86,7 +86,6 @@ jobs:
           if git log -1 --pretty=format:'' --name-only | grep -q README.md; then
             gh pr create --title "Merge main into develop" \
                          --body "Automatically created pull request to merge changes from main into develop." \
-                         --label "automatic merge" \
                          --base develop \
                          --head main
           fi
