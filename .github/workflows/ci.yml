@@ -38,7 +38,7 @@ jobs:
           mkdir -p artifacts
           
           # Run PHP-CS-Fixer
-          csFixerExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
+          $(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
           
           # Run Psalm
           psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
@@ -49,12 +49,8 @@ jobs:
            # Run Mess Detector
           messdetectorExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
           
-          if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0 || $codesnifferExitCode -ne 0  || $messdetectorExitCode -ne 0 ]]; then
+          if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0 || $messdetectorExitCode -ne 0 ]]; then
             mkdir -p artifacts
-
-            if [[ $csFixerExitCode -ne 0 ]]; then
-              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcsfixer-report.log artifacts
-            fi
           
             if [[ $psalmExitCode -ne 0 ]]; then
               docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts

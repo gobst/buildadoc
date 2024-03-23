@@ -54,14 +54,14 @@ jobs:
           # Extract values from summary.log file
           TOTAL=$(grep -E 'Total' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
           KILLED=$(grep -E 'Killed' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
-  
+          
           # Calculate MSI
           MSI=$(echo "scale=4; $KILLED / $TOTAL * 100" | bc)
           MSI=$(printf "%.2f\n" $MSI)
-  
+          
           # Generate badge link
           BADGE="[![Mutation Score](https://img.shields.io/badge/Mutation_Score-${MSI}%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-${MSI}%25-brightgreen)"
-  
+          
           # Update README file
           if [ ! -s README.md ]; then
             echo "$BADGE" >> README.md
@@ -77,4 +77,14 @@ jobs:
             git add README.md
             git commit -m "Update badges. This commit was created automatically."
             git push
+          fi
+
+      - name: Create PR
+        run: |
+          if git log -1 --pretty=format:'' --name-only | grep -q README.md; then
+            gh pr create --title "Merge main into develop" \
+                         --body "Automatically created pull request to merge changes from main into develop." \
+                         --label "automatic merge" \
+                         --base develop \
+                         --head main
           fi
