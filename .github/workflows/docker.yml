@@ -3,7 +3,7 @@ name: "Build and publish docker images"
 on:
   push:
     branches:
-      - main
+      - "main"
 
 jobs:
   build_and_publish:
