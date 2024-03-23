@@ -16,10 +16,8 @@ if [[ $1 == 'dry-run' ]]; then
     bin/php-cs-fixer fix -v --dry-run --config=cfg/dev/.php-cs-fixer.php > bin/output/phpcsfixer-report.log
     csfixer_status=$?
     if [[ $((csfixer_status)) == 0 ]]; then
-        #echo -e "PHP Coding Standards Fixer result: Success!\n"
         exit 0
     else
-        #echo -e "PHP Coding Standards Fixer result: Failed! See bin/output/phpcsfixer-report.log for details.\n"
         exit 1
     fi
 fi
@@ -29,10 +27,8 @@ if [[ $1 == 'fix' ]]; then
     bin/php-cs-fixer fix -v --config=cfg/dev/.php-cs-fixer.php > bin/output/phpcsfixer-report.log
     csfixer_status=$?
     if [[ $((csfixer_status)) == 0 ]]; then
-      #echo -e "PHP Coding Standards Fixer result: Success!\n"
       exit 0
     else
-      #echo -e "PHP Coding Standards Fixer result: Failed! See bin/output/phpcsfixer-report.log for details.\n"
       exit 1
     fi
 fi
