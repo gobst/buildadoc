@@ -11,14 +11,5 @@
 #
 ############################################################################
 
-echo $1
-
-# run unit tests with testdox
-if [[ $1 == 'run-testdox' ]]; then
-    bin/phpunit --testdox --color
-fi
-
-# run unit tests
-if [[ $1 == 'run' ]]; then
-    bin/phpunit
-fi
+# Run mutation tests
+bin/infection --threads=4

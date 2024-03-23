@@ -11,14 +11,11 @@
 #
 ############################################################################
 
-# check files with PHP Mess Detector
-echo "Checking code with: PHP Mess Detector"
+# Check files with PHP Mess Detector
 bin/phpmd src text cfg/dev/phpmd.xml --suffixes php --reportfile bin/output/phpmd-report.log
 phpmd_status=$?
 if [[ $((phpmd_status)) == 0 ]]; then
-    echo -e "PHP Mess Detector result: Success!\n"
+    exit 0
 else
-    echo -e "PHP Mess Detector result: Failed! See bin/output/phpmd-report.log for details.\n"
+    exit 1
 fi
-
-exit $((phpmd_status))

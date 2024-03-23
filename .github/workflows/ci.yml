@@ -1,64 +1,139 @@
-name: "CI Workflow"
+name: "CI"
 
 on:
   pull_request:
     branches:
       - "main"
       - "develop"
-  push:
-    branches:
-      - "main"
-      - "develop"
 
 jobs:
-  test:
+  run-ci:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Login to GitHub packages
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Pull images
-        uses: isbang/compose-action@v1.5.1
+        run: |
+          docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
+
+      - name: Run composer
+        run: |
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/psalm"
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php-cs-fixer"
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php_codesniffer"
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/phpmd"
+
+      - name: Check code
+        run: |
+          mkdir -p artifacts
+          
+          # Run PHP-CS-Fixer
+          $(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
+          
+          # Run Psalm
+          psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
+
+          # Run CodeSniffer
+          codesnifferExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/codesniffer.sh"; echo $?)
+          
+           # Run Mess Detector
+          messdetectorExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
+          
+          if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0 || $messdetectorExitCode -ne 0 ]]; then
+            mkdir -p artifacts
+          
+            if [[ $psalmExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts
+            fi
+          
+            if [[ $codesnifferExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcs-report.log artifacts            
+            fi
+
+             if [[ $messdetectorExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpmd-report.log artifacts    
+            fi
+            exit 1
+          fi
+          exit 0
+
+      - name: Upload artifacts from code check
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          compose-file: "./docker-compose.yml"
-          services: |
-            buildadoc
-            buildadoc-dev
+          name: code-check-artifacts
+          path: ./artifacts
 
-      - name: Run code analysis
+      - name: Run unit tests
+        id: unit-tests
+        if: success()
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev up -d buildadoc-dev
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/psalm.sh
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/csfixer.sh dry-run
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/analysis/phpcs
+          mkdir -p artifacts/unit
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run" > artifacts/unit/phpunit.log
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/junit.xml artifacts/unit
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.xml artifacts/unit
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.txt artifacts/unit
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage artifacts/unit
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage-xml artifacts/unit
 
-      - name: Run unit tests and generate code coverage
-        run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/phpunit.sh coverage
+      - name: Upload artifacts from unit tests
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-artifacts
+          path: ./artifacts/unit
 
-      - name: Run mutation tests with msi score
+      - name: Run mutation tests
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -it buildadoc-dev ./scripts/test/infectionPHP.sh
+          mkdir -p artifacts/mutation
+          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.log artifacts/mutation
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.html artifacts/mutation
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/summary.log artifacts/mutation
+
+      - name: Upload artifacts from mutation tests
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-test-artifacts
+          path: ./artifacts/mutation
 
       - name: Check if Code Coverage and Mutation Score improved
         run: |
-          # Get the previous coverage and mutation score
-          previous_coverage=$(cat previous_coverage.txt)
-          previous_mutation_score=$(cat previous_mutation_score.txt)
+          
+          # Get previous coverage and mutation score
+          previous_coverage=$(grep -oP '(?<=\[Code Coverage\]\(https:\/\/img\.shields\.io\/badge\/Code_Coverage-)[0-9.]+' README.md)
+          previous_mutation_score=$(grep -oP '(?<=\[Mutation Score\]\(https:\/\/img\.shields\.io\/badge\/Mutation_Score-)[0-9.]+' README.md)
 
-          # Get the current coverage and mutation score
-          current_coverage=$(grep lines-total coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/')
-          current_mutation_score=$(grep 'MSI for the codebase is' infection-log.txt | sed -E 's/.*is ([0-9]+)%/\1/')
+          # Get current coverage
+          current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+' artifacts/unit/coverage.txt)
+
+          # Get current mutation score
+          total=$(grep -E 'Total' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
+          killed=$(grep -E 'Killed' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
+          current_mutation_score=$(echo "scale=4; $killed / $total * 100" | bc)
+          current_mutation_score=$(printf "%.2f\n" $current_mutation_score)
+
+          # Convert floating point numbers to integers for comparison
+          current_coverage_int=$(echo "($current_coverage * 100 + 0.5)/1" | bc)
+          previous_coverage_int=$(echo "($previous_coverage * 100 + 0.5)/1" | bc)
+          current_mutation_score_int=$(echo "($current_mutation_score * 100 + 0.5)/1" | bc)
+          previous_mutation_score_int=$(echo "($previous_mutation_score * 100 + 0.5)/1" | bc)
 
           # Check if coverage or mutation score got worse
-          if [ $current_coverage -lt $previous_coverage ] || [ $current_mutation_score -lt $previous_mutation_score ]; then
+          if (( $current_coverage_int < $previous_coverage_int )) || (( $current_mutation_score_int < $previous_mutation_score_int )); then
             echo "Code coverage or mutation score got worse."
+            echo "Current Code Coverage: $current_coverage %"
+            echo "Previous Code Coverage: $previous_coverage %"
+            echo "Current Mutation Score: $current_mutation_score %"
+            echo "Previous Mutation Score: $previous_mutation_score %"
             exit 1
+          else
+            echo "Code coverage and mutation score improved or remained the same."
+            exit 0
           fi
-
-      - name: Save Current Code Coverage and Mutation Score
-        run: |
-          # Save the current coverage and mutation score for the next run
-          grep lines-total coverage.xml | sed -E 's/.*>([0-9]+)%<.*/\1/' > previous_coverage.txt
-          grep 'MSI for the codebase is' infection-log.txt | sed -E 's/.*is ([0-9]+)%/\1/' > previous_mutation_score.txt

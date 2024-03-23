@@ -11,14 +11,11 @@
 #
 ############################################################################
 
-# check files with PHP CodeSniffer
-echo "Checking code with: PHP CodeSniffer"
+# Check files with PHP CodeSniffer
 bin/phpcs --runtime-set ignore_warnings_on_exit 1 --standard=cfg/dev/phpcs.xml --extensions=php -s -p --report=code --report-width=120 src > bin/output/phpcs-report.log
 phpcs_status=$?
 if [[ $phpcs_status == 0 ]]; then
-    echo -e "PHP CodeSniffer result: Success!\n"
+    exit 0
 else
-    echo -e "PHP CodeSniffer result: Failed! See bin/output/phpcs-report.log for details.\n"
+    exit 1
 fi
-
-exit $((phpcs_status))

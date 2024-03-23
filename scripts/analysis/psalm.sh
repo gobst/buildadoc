@@ -11,15 +11,11 @@
 #
 ############################################################################
 
-# check files with PHP PSALM
-echo "Checking code with: PHP PSALM"
-bin/psalm --config=cfg/dev/psalm.xml --output-format=text > bin/output/psalm-report.log
-psalm_status=$?
-if [[ $((psalm_status)) == 0 ]]; then
-    echo "PHP Psalm result: Success!"
+# Check files with PHP Psalm
+bin/psalm --config=./cfg/dev/psalm.xml --output-format=text > bin/output/psalm-report.log
+status=$?
+if [[ $((status)) == 0 ]]; then
+    exit 0
 else
-    echo "PHP Psalm result: Failed! See bin/output/psalm-report.log for details."
+    exit 1
 fi
-
-# Return code should only be zero if CS and MD returned 0
-exit $((psalm_status))
