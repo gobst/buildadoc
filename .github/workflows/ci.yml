@@ -22,7 +22,6 @@ jobs:
 
       - name: Pull images
         run: |
-          ls -l
           cd res/docker/config
           ls -l
           docker-compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
