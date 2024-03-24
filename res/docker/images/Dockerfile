@@ -65,7 +65,7 @@ RUN mkdir /home/files \
     src
 
 # copy files
-COPY ../../../docker/config /home/files/config
+COPY ../../../res/docker/config /home/files/config
 COPY ../../../src src
 COPY ../../../res res
 COPY ../../../cfg/services.yml cfg
