@@ -65,9 +65,9 @@ RUN mkdir /home/files \
     src
 
 # copy files
-COPY ../config /home/files/config
+COPY ../../../docker/config /home/files/config
 COPY ../../../src src
-COPY ../.. res
+COPY ../../../res res
 COPY ../../../cfg/services.yml cfg
 COPY ../../../composer.json composer.json
 
