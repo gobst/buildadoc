@@ -22,7 +22,7 @@ jobs:
 
       - name: Pull images
         run: |
-          cd res/docker/config
+          ls -l
           docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
 
       - name: Run composer
