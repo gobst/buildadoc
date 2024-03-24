@@ -36,7 +36,7 @@ RUN apt-get  \update && \
     && apt-get clean
 
 # add php resource
-COPY ../config/php/php.list /etc/apt/sources.list.d/php.list
+COPY ../../../res/docker/config/php/php.list /etc/apt/sources.list.d/php.list
 RUN wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add
 
 # install php
