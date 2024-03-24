@@ -18,22 +18,22 @@ jobs:
 
       - name: Pull image
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
+          docker-compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
 
       - name: Run composer
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
+          docker-compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
 
       - name: Run unit tests
         run: |
           mkdir -p bin/output
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run"
+          docker-compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run"
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.txt bin/output
 
       - name: Run mutation tests
         run: |
           mkdir -p bin/output/mutation
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
+          docker-compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/summary.log bin/output/mutation
 
       - name: Update code coverage badge in README file
