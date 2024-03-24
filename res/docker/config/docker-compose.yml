@@ -15,7 +15,7 @@ services:
   buildadoc:
     build:
       context: ../../..
-      dockerfile: ../images/Dockerfile
+      dockerfile: res/docker/images/Dockerfile
     image: ghcr.io/gobst/buildadoc/buildadoc:1.0.0
     container_name: buildadoc_container
   buildadoc-dev:
