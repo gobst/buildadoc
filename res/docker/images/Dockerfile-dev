@@ -41,7 +41,6 @@ COPY ../config/xdebug/xdebug.ini etc/php/${php_version}/cli/conf.d/20-xdebug.ini
 
 COPY ../../../cfg/dev/phpunit.xml .
 COPY ../../../cfg/dev/infection.json5 .
-COPY ../../../rector.php .
 
 EXPOSE 8081
 
