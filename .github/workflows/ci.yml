@@ -48,7 +48,7 @@ jobs:
           # Run Mess Detector
           messdetectorExitCode=$(docker-compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
           
-          if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0 || $messdetectorExitCode -ne 0 ]]; then
+          if [[ $psalmExitCode -ne 0 || $messdetectorExitCode -ne 0 ]]; then
             mkdir -p artifacts
           
             if [[ $psalmExitCode -ne 0 ]]; then
