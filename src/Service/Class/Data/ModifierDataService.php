@@ -18,6 +18,9 @@ use Contract\Service\Class\Data\ModifierDataServiceInterface;
 use Dto\Common\Modifier;
 use PhpParser\Node;
 
+/**
+ * @psalm-suppress NoInterfaceProperties
+ */
 final class ModifierDataService implements ModifierDataServiceInterface
 {
     public function __construct() {}

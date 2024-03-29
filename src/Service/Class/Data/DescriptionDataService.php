@@ -60,6 +60,7 @@ final class DescriptionDataService implements DescriptionDataServiceInterface
             // remove " *" from each line
             $lines = array_map(static fn ($line) => trim($line, ' *'), explode("\n", $phpdoc));
             // get all lines with the given tag
+            /** @psalm-suppress PossiblyInvalidArgument */
             $linesTag = array_filter($lines, [new tagFilter($tag), 'hasTag'], ARRAY_FILTER_USE_BOTH);
             // push each value in the corresponding array
             $index1 = 0;

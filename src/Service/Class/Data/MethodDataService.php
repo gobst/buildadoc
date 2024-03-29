@@ -30,6 +30,9 @@ use Webmozart\Assert\InvalidArgumentException;
 
 use function gettype;
 
+/**
+ * @psalm-suppress NoInterfaceProperties
+ */
 final class MethodDataService implements MethodDataServiceInterface
 {
     private NodeFinder $nodeFinder;
@@ -45,6 +48,9 @@ final class MethodDataService implements MethodDataServiceInterface
         $this->descDataService = $descDataService;
     }
 
+    /**
+     * @psalm-suppress UndefinedMethod
+     */
     public function getMethods(array $ast): MethodCollection
     {
         // @todo: refactor method

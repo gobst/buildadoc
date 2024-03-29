@@ -45,7 +45,7 @@ jobs:
           # Run CodeSniffer
           codesnifferExitCode=$(docker-compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/codesniffer.sh"; echo $?)
           
-           # Run Mess Detector
+          # Run Mess Detector
           messdetectorExitCode=$(docker-compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
           
           if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0 || $messdetectorExitCode -ne 0 ]]; then
@@ -56,7 +56,7 @@ jobs:
             fi
           
             if [[ $codesnifferExitCode -ne 0 ]]; then
-              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcs-report.log artifacts            
+              #docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcs-report.log artifacts            
             fi
 
              if [[ $messdetectorExitCode -ne 0 ]]; then

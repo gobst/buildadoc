@@ -43,6 +43,10 @@ use Webmozart\Assert\InvalidArgumentException;
 
 use function gettype;
 
+/**
+ * @psalm-suppress NoInterfaceProperties
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 final class ClassDataService implements ClassDataServiceInterface
 {
     private FileServiceInterface $fileService;

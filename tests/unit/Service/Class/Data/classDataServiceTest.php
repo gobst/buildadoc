@@ -20,6 +20,7 @@ use Contract\Service\Class\Data\MethodDataServiceInterface;
 use Contract\Service\Class\Data\ModifierDataServiceInterface;
 use Contract\Service\File\FileServiceInterface;
 use Dto\Class\ClassDto;
+use Dto\Common\File;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -197,5 +198,13 @@ final class classDataServiceTest extends TestCase
     // @todo
     /*public function testGetAllClasses(): void
     {
+    }*/
+
+    // @todo
+   /* public function testGetClassData(): void
+    {
+        echo __DIR__ . '/../../../../data/classes/testClass.php';
+        $file = File::create('test.php', __DIR__ . '/../../../../data/classes/testClass.php', 'testClass', 'classes', 111);
+        $this->classDataService->getClassData($file);
     }*/
 }
