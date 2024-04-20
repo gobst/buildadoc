@@ -21,7 +21,7 @@ use Webmozart\Assert\InvalidArgumentException;
 final readonly class LinkFormatter implements LinkFormatterInterface
 {
     private const string LINK_WITHOUT_TEXT_TYPE = 'link_without_text';
-    private const string LINK_WITH_TEXT_TYPE = 'link_without_text';
+    private const string LINK_WITH_TEXT_TYPE = 'link_with_text';
 
     public function __construct(private FormatterInterface $formatter) {}
 
