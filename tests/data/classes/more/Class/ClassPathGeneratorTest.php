@@ -11,7 +11,7 @@
 
 declare(strict_types = 1);
 
-namespace unit\Generator\Documentation\Class\Page\Component\Class;
+namespace data\classes\more\Class;
 
 use Collection\ClassCollection;
 use Collection\MethodCollection;
@@ -23,9 +23,22 @@ use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
 use Generator\Documentation\Class\Page\Component\Class\ClassPathGenerator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Webmozart\Assert\InvalidArgumentException;
 
+#[CoversClass(ClassPathGenerator::class)]
+#[UsesClass(MethodCollection::class)]
+#[UsesClass(Modifier::class)]
+#[UsesClass(MethodParameter::class)]
+#[UsesClass(MethodParameterCollection::class)]
+#[UsesClass(Method::class)]
+#[UsesClass(ClassDto::class)]
+#[UsesClass(ModifierCollection::class)]
+#[UsesClass(ClassCollection::class)]
 class ClassPathGeneratorTest extends TestCase
 {
     private LinkGeneratorInterface&MockObject $linkGenerator;
@@ -37,18 +50,31 @@ class ClassPathGeneratorTest extends TestCase
         $this->classPathGenerator = new ClassPathGenerator($this->linkGenerator);
     }
 
-   public function testGenerateWithDokuWikiFormat(): void
+    #[TestDox('generate() method returns correct class path in DokuWiki format')]
+    public function testGenerateWithDokuWikiFormat(): void
     {
-       /* $class = $this->getTestClassDto();
+        $class = $this->getTestClassDto();
+
         $this->linkGenerator->expects(self::once())
             ->method('generate')
             ->willReturn('[[parenttestclass|parentTestClass]]');
 
         $actualOutput = $this->classPathGenerator->generate($class, 'dokuwiki');
-        $expectedOutput = file_get_contents('tests/data/DokuWiki/classPath.txt');
 
-        $this->assertEquals($expectedOutput, $actualOutput, 'Output is not as expected.');*/
-        $this->assertEquals(1,1);
+        $this->assertSame('testClass --> [[parenttestclass|parentTestClass]]', $actualOutput);
+    }
+
+    #[TestDox('generate() method fails on InvalidArgumentException with invalid output format')]
+    public function testGenerateFailsOnInvalidArgumentExceptionWithInvalidFormat(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $class = $this->getTestClassDto();
+
+        $this->linkGenerator->expects(self::never())
+            ->method('generate');
+
+        $this->classPathGenerator->generate($class, '');
     }
 
     private function getTestClassDto(): ClassDto

@@ -36,7 +36,7 @@ class MethodTableGeneratorTest extends TestCase
     }
 
     #[DataProvider('methodTableGeneratorTestDataProvider')]
-    #[TestDox('generate() method works correctly with parameters $method, "$format", $headerLabels')]
+    #[TestDox('generate() method works correctly with parameters $method, $format, $headerLabels')]
     public function testGenerate(Method $method, string $format, array $headerLabels): void
     {
         $this->tableFormatter->expects(self::once())
