@@ -33,6 +33,8 @@
       <directory>../../src/Collection</directory>
       <directory>../../src/Contract</directory>
       <directory>../../src/Dto</directory>
+      <directory>../../src/Exception</directory>
+      <directory>../../src/Command</directory>
     </exclude>
   </source>
 </phpunit>
