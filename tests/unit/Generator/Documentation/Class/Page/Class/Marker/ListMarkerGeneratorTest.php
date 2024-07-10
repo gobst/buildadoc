@@ -46,14 +46,21 @@ use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(ListMarkerGenerator::class)]
 #[UsesClass(MethodCollection::class)]
-#[UsesClass(Modifier::class)]
-#[UsesClass(MethodParameter::class)]
 #[UsesClass(MethodParameterCollection::class)]
-#[UsesClass(Method::class)]
-#[UsesClass(ClassDto::class)]
 #[UsesClass(ModifierCollection::class)]
 #[UsesClass(ClassCollection::class)]
+#[UsesClass(PropertyCollection::class)]
+#[UsesClass(ConstantCollection::class)]
+#[UsesClass(InterfaceCollection::class)]
 #[UsesClass(MethodNameFilter::class)]
+#[UsesClass(Constant::class)]
+#[UsesClass(InterfaceDto::class)]
+#[UsesClass(Modifier::class)]
+#[UsesClass(Property::class)]
+#[UsesClass(Method::class)]
+#[UsesClass(ClassDto::class)]
+#[UsesClass(Modifier::class)]
+#[UsesClass(MethodParameter::class)]
 final class ListMarkerGeneratorTest extends TestCase
 {
     private TranslationServiceInterface&MockObject $translationService;
