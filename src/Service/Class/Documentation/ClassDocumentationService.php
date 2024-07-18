@@ -17,8 +17,8 @@ use Collection\ClassCollection;
 use Collection\FileCollection;
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\ClassDocumentationServiceInterface;
+use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
 use Contract\Service\File\FileServiceInterface;
-use Service\Class\Documentation\Page\ClassPageService;
 use Webmozart\Assert\Assert;
 
 final readonly class ClassDocumentationService implements ClassDocumentationServiceInterface
@@ -26,7 +26,7 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
     public function __construct(
         private ClassDataServiceInterface $classDataService,
         private FileServiceInterface $fileService,
-        private ClassPageService $classPageService
+        private ClassPageServiceInterface $classPageService
     ) {}
 
     public function buildDocumentation(string $sourceDir, string $destDir, string $lang, string $format): void

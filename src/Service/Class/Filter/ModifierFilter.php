@@ -9,13 +9,11 @@
  *
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Service\Class\Filter;
 
-use ArrayIterator;
 use Dto\Method\Method;
-use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
 final readonly class ModifierFilter
@@ -34,26 +32,22 @@ final readonly class ModifierFilter
      */
     public function hasModifier(Method $method): bool
     {
-        $modifiers = $method->getModifiers();
+        $modifiers = explode(' ', $method->getModifiers()->toString());
+        $hasModifier = !($this->where === 'or');
 
-        /** @var ArrayIterator $iterator */
-        $iterator = $modifiers->getIterator();
-        $containsModifier = !($this->where === 'or');
-
-        while ($iterator->valid()) {
-            Assert::stringNotEmpty($iterator->current()->getName());
-
-            if ($this->where === 'or') {
-                if ($this->containsModifier($iterator->current()->getName(), $this->modifiers)) {
-                    return true;
-                }
-            } elseif (!$this->containsModifier($iterator->current()->getName(), $this->modifiers)) {
+        foreach ($this->modifiers as $checkedModifier) {
+            if ($this->where === 'or' &&
+                $this->containsModifier($checkedModifier, $modifiers)
+            ) {
+                return true;
+            }
+            if (!$this->containsModifier($checkedModifier, $modifiers)
+            ) {
                 return false;
             }
-            $iterator->next();
         }
 
-        return $containsModifier;
+        return $hasModifier;
     }
 
     /**
@@ -61,6 +55,6 @@ final readonly class ModifierFilter
      */
     private function containsModifier(string $modifier, array $existingModifiers): bool
     {
-        return in_array($modifier, $existingModifiers);
+        return in_array($modifier, $existingModifiers, true);
     }
 }

@@ -11,7 +11,7 @@
 
 declare(strict_types = 1);
 
-namespace data\classes\more\Class;
+namespace unit\Generator\Documentation\Class\Page\Component\Class;
 
 use Collection\ClassCollection;
 use Collection\MethodCollection;
