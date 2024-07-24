@@ -27,9 +27,9 @@ final readonly class FileService implements FileServiceInterface
 {
     private Filesystem $filesystem;
 
-    public function __construct()
+    public function __construct(Filesystem $filesystem)
     {
-        $this->filesystem = new Filesystem();
+        $this->filesystem = $filesystem;
     }
 
     /**
