@@ -8,13 +8,10 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Method;
 
-use Collection\MethodParameterCollection;
-use Collection\ModifierCollection;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodTableGeneratorInterface;
@@ -24,6 +21,7 @@ use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
 use Generator\Documentation\Class\Page\Method\MethodPageGenerator;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -98,14 +96,16 @@ final class MethodPageGeneratorTest extends TestCase
 
     public static function methodPageGeneratorTestDataProvider(): array
     {
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testString', 'string');
         $parameterDto = $parameterDto->withDefaultValue('test');
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create('testMethodWithoutPHPDoc', $modifiers, 'string', 'testClass');
         $methodDto = $methodDto->withParameters($parameters);
 
@@ -117,14 +117,16 @@ final class MethodPageGeneratorTest extends TestCase
 
     public static function methodPageGeneratorExceptionTestDataProvider(): array
     {
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testString', 'string');
         $parameterDto = $parameterDto->withDefaultValue('test');
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create('testMethodWithoutPHPDoc', $modifiers, 'string', 'testClass');
         $methodDto = $methodDto->withParameters($parameters);
 

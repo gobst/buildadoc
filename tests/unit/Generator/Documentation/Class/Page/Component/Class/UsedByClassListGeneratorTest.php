@@ -8,15 +8,10 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Class;
 
-use Collection\ClassCollection;
-use Collection\MethodCollection;
-use Collection\MethodParameterCollection;
-use Collection\ModifierCollection;
 use Contract\Formatter\Component\ListFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\ClassDto;
@@ -24,6 +19,7 @@ use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
 use Generator\Documentation\Class\Page\Component\Class\UsedByClassListGenerator;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -33,14 +29,11 @@ use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(UsedByClassListGenerator::class)]
-#[UsesClass(MethodCollection::class)]
+#[UsesClass(Collection::class)]
 #[UsesClass(Modifier::class)]
 #[UsesClass(MethodParameter::class)]
-#[UsesClass(MethodParameterCollection::class)]
 #[UsesClass(Method::class)]
 #[UsesClass(ClassDto::class)]
-#[UsesClass(ModifierCollection::class)]
-#[UsesClass(ClassCollection::class)]
 class UsedByClassListGeneratorTest extends TestCase
 {
     private ListFormatterInterface&MockObject $listFormatter;
@@ -89,51 +82,55 @@ class UsedByClassListGeneratorTest extends TestCase
 
     public static function getTestClassDto(): ClassDto
     {
-        $methods = new MethodCollection();
+        /** @var Collection<int, Method> $methods */
+        $methods = Collection::make();
 
-        $modifiers = new ModifierCollection();
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testString', 'string');
         $parameterDto = $parameterDto->withDefaultValue('test');
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create('testMethodWithoutPHPDoc', $modifiers, 'string', 'testClass');
         $methodDto->withParameters($parameters);
-        $methods->add($methodDto);
+        $methods->push($methodDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testInt', 'int');
         $parameterDto = $parameterDto->withDefaultValue(0);
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create('testMethodWithPHPDoc', $modifiers, 'string', 'testClass');
         $methodDto->withParameters($parameters);
-        $methods->add($methodDto);
+        $methods->push($methodDto);
 
-        $childClasses = new ClassCollection();
+        /** @var Collection<int, ClassDto> $childClasses */
+        $childClasses =  Collection::make();
 
         $childClassDto = ClassDto::create(
             'childTestClass',
             __DIR__ . '/../../../data/classes/childTestClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
-        $childClasses->add($childClassDto);
+        $childClasses->push($childClassDto);
 
         $child2ClassDto = ClassDto::create(
             'child2TestClass',
             __DIR__ . '/../../../data/classes/child2TestClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
-        $childClasses->add($child2ClassDto);
+        $childClasses->push($child2ClassDto);
 
         $classDto = ClassDto::create(
             'testClass',
             __DIR__ . '/../../../data/classes/testClass.php',
             $methods,
-            new ModifierCollection()
+            Collection::make()
         );
 
         return $classDto->withChildClasses($childClasses);

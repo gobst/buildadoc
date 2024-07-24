@@ -35,6 +35,7 @@ use Dto\Common\Property;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
 use Generator\Documentation\Class\Page\Class\Marker\ListMarkerGenerator;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -552,54 +553,62 @@ final class ListMarkerGeneratorTest extends TestCase
 
     private function getTestClassDto(): ClassDto
     {
-        $methods = new MethodCollection();
+        /** @var Collection<int, Method> $methods */
+        $methods = Collection::make();
 
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testString', 'string');
         $parameterDto = $parameterDto->withDefaultValue('test');
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create('testMethodWithoutPHPDoc', $modifiers, 'string', 'testClass');
         $methodDto->withParameters($parameters);
-        $methods->add($methodDto);
+        $methods->push($methodDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testInt', 'int');
         $parameterDto = $parameterDto->withDefaultValue(0);
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create('__construct', $modifiers, 'string', 'testClass');
         $methodDto->withParameters($parameters);
-        $methods->add($methodDto);
+        $methods->push($methodDto);
 
-        $constants = new ConstantCollection();
+        /** @var Collection<int, Constant> $constants */
+        $constants = Collection::make();
         $constant = Constant::create('testConstant', 'string', 'test', $modifiers);
-        $constants->add($constant);
+        $constants->push($constant);
 
-        $properties = new PropertyCollection();
+        /** @var Collection<int, Property> $properties */
+        $properties = Collection::make();
         $property = Property::create('testProperty', 'string', $modifiers);
-        $properties->add($property);
+        $properties->push($property);
 
-        $interfaces = new InterfaceCollection();
+        /** @var Collection<int, InterfaceDto> $interfaces */
+        $interfaces = Collection::make();
         $interface = InterfaceDto::create('testInterface');
-        $interfaces->add($interface);
+        $interfaces->push($interface);
 
-        $childClasses = new ClassCollection();
+        /** @var Collection<int, ClassDto> $childClasses */
+        $childClasses = Collection::make();
         $childClassDto = ClassDto::create(
             'parentTestClass',
             __DIR__ . '/../../../data/classes/childTestClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
-        $childClasses->add($childClassDto);
+        $childClasses->push($childClassDto);
 
         $classDto = ClassDto::create(
             'testClass',
             __DIR__ . '/../../../data/classes/testClass.php',
             $methods,
-            new ModifierCollection()
+            Collection::make()
         );
 
         return $classDto

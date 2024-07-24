@@ -8,25 +8,28 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Property;
 
-use Collection\MethodCollection;
-use Collection\ModifierCollection;
-use Collection\PropertyCollection;
 use Contract\Formatter\Component\ListFormatterInterface;
 use Dto\Class\ClassDto;
 use Dto\Common\Modifier;
 use Dto\Common\Property;
 use Generator\Documentation\Class\Page\Component\Property\PropertyListGenerator;
+use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
+#[CoversClass(PropertyListGenerator::class)]
+#[UsesClass(Collection::class)]
+#[UsesClass(Modifier::class)]
+#[UsesClass(Property::class)]
 final class PropertyListGeneratorTest extends TestCase
 {
     private ListFormatterInterface&MockObject $listFormatter;
@@ -66,20 +69,18 @@ final class PropertyListGeneratorTest extends TestCase
         $classDto = ClassDto::create(
             'testClass',
             __DIR__ . '/../../../data/classes/testClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
 
-        $modifiers = new ModifierCollection();
-        $modifiers->add(Modifier::create('public'));
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
+        $modifiers->push(Modifier::create('public'));
 
-        $properties = new PropertyCollection();
-        $property = Property::create(
-            'testProp',
-            'string',
-            $modifiers
-        );
-        $properties->add($property);
+        /** @var Collection<int, Property> $properties */
+        $properties = Collection::make();
+        $property = Property::create('testProp', 'string', $modifiers);
+        $properties->push($property);
 
         $classDto = $classDto->withProperties($properties);
 
@@ -94,20 +95,18 @@ final class PropertyListGeneratorTest extends TestCase
         $classDto = ClassDto::create(
             'testClass',
             __DIR__ . '/../../../data/classes/testClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
 
-        $modifiers = new ModifierCollection();
-        $modifiers->add(Modifier::create('public'));
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
+        $modifiers->push(Modifier::create('public'));
 
-        $properties = new PropertyCollection();
-        $property = Property::create(
-            'testProp',
-            'string',
-            $modifiers
-        );
-        $properties->add($property);
+        /** @var Collection<int, Property> $properties */
+        $properties = Collection::make();
+        $property = Property::create('testProp', 'string', $modifiers);
+        $properties->push($property);
 
         $classDto = $classDto->withProperties($properties);
 

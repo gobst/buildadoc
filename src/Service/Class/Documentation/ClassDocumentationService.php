@@ -19,6 +19,9 @@ use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\ClassDocumentationServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
 use Contract\Service\File\FileServiceInterface;
+use Dto\Class\ClassDto;
+use Dto\Common\File;
+use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 
 final readonly class ClassDocumentationService implements ClassDocumentationServiceInterface
@@ -41,17 +44,19 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
 
     /**
      * @psalm-param non-empty-string $sourceDir
+     * @return Collection<int, ClassDto>
      */
-    private function getClasses(string $sourceDir): ClassCollection
+    private function getClasses(string $sourceDir): Collection
     {
         return $this->classDataService->getAllClasses($this->getFiles($sourceDir));
     }
 
     /**
      * @psalm-param non-empty-string $sourceDir
+     * @return Collection<int, File>
      */
-    private function getFiles(string $sourceDir): FileCollection
+    private function getFiles(string $sourceDir): Collection
     {
-        return $this->fileService->getAllFilesWithinDir($sourceDir, new FileCollection());
+        return $this->fileService->getAllFilesWithinDir($sourceDir, Collection::make());
     }
 }

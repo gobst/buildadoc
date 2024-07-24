@@ -8,14 +8,13 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types=1);
 
 namespace unit\Service\Class\Filter;
 
-use Collection\ModifierCollection;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -25,6 +24,7 @@ use Service\Class\Filter\MethodNameFilter;
 #[CoversClass(MethodNameFilter::class)]
 #[UsesClass(Modifier::class)]
 #[UsesClass(Method::class)]
+#[UsesClass(Collection::class)]
 final class MethodNameFilterTest extends TestCase
 {
     private MethodNameFilter $methodNameFilter;
@@ -37,9 +37,10 @@ final class MethodNameFilterTest extends TestCase
     #[TestDox('hasName() method returns true')]
     public function testHasNameReturnsTrue(): void
     {
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
         $methodDto = Method::create('testMethod', $modifiers, 'string', 'testClass');
 
@@ -49,9 +50,10 @@ final class MethodNameFilterTest extends TestCase
     #[TestDox('hasName() method returns false')]
     public function testHasNameReturnsFalse(): void
     {
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
         $methodDto = Method::create('superTestMethod', $modifiers, 'string', 'testClass');
 
@@ -61,9 +63,10 @@ final class MethodNameFilterTest extends TestCase
     #[TestDox('hasNotName() method returns false')]
     public function testHasNotNameReturnsFalse(): void
     {
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
         $methodDto = Method::create('testMethod', $modifiers, 'string', 'testClass');
 
@@ -73,9 +76,10 @@ final class MethodNameFilterTest extends TestCase
     #[TestDox('hasNotName() method returns true')]
     public function testHasNotNameReturnsTrue(): void
     {
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
         $methodDto = Method::create('superTestMethod', $modifiers, 'string', 'testClass');
 

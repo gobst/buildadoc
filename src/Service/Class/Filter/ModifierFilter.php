@@ -32,7 +32,7 @@ final readonly class ModifierFilter
      */
     public function hasModifier(Method $method): bool
     {
-        $modifiers = explode(' ', $method->getModifiers()->toString());
+        $modifiers = $method->getModifiers()->toArray();
         $hasModifier = !($this->where === 'or');
 
         foreach ($this->modifiers as $checkedModifier) {

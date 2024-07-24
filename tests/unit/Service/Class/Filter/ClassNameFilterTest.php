@@ -8,14 +8,12 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types=1);
 
 namespace unit\Service\Class\Filter;
 
-use Collection\MethodCollection;
-use Collection\ModifierCollection;
 use Dto\Class\ClassDto;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -24,6 +22,7 @@ use Service\Class\Filter\ClassNameFilter;
 
 #[CoversClass(ClassNameFilter::class)]
 #[UsesClass(ClassDto::class)]
+#[UsesClass(Collection::class)]
 final class ClassNameFilterTest extends TestCase
 {
     private ClassNameFilter $classNameFilter;
@@ -39,8 +38,8 @@ final class ClassNameFilterTest extends TestCase
         $classDto = ClassDto::create(
             'testClass',
             __DIR__ . '/../../../data/classes/TestClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
 
         $this->assertTrue($this->classNameFilter->hasClassName($classDto));
@@ -52,8 +51,8 @@ final class ClassNameFilterTest extends TestCase
         $classDto = ClassDto::create(
             'superTestClass',
             __DIR__ . '/../../../data/classes/TestClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
 
         $this->assertFalse($this->classNameFilter->hasClassName($classDto));

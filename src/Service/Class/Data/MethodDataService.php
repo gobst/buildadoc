@@ -22,6 +22,7 @@ use Contract\Service\Class\Data\ModifierDataServiceInterface;
 use Dto\Class\ClassDto;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
+use Illuminate\Support\Collection;
 use PhpParser\Node;
 use PhpParser\NodeFinder;
 use Service\Class\Filter\ModifierFilter;
@@ -50,11 +51,12 @@ final class MethodDataService implements MethodDataServiceInterface
 
     /**
      * @psalm-suppress UndefinedMethod
+     * @return Collection<int, Method>
      */
-    public function getMethods(array $ast): MethodCollection
+    public function getMethods(array $ast): Collection
     {
         // @todo: refactor method
-        $methods = new MethodCollection();
+        $methods = Collection::make();
         /** @var Node\Stmt\ClassMethod $methodNode */
         $methodNode = $this->nodeFinder->findInstanceOf($ast, Node\Stmt\ClassMethod::class);
         /** @var Node\Stmt\Class_ $classNode */
@@ -101,15 +103,18 @@ final class MethodDataService implements MethodDataServiceInterface
             if (!empty($descL)) {
                 $methodDto = $methodDto->withDescription($descL);
             }
-            $methods->add($methodDto);
+            $methods->push($methodDto);
         }
 
         return $methods;
     }
 
-    private function fetchMethodParams(Node $method): MethodParameterCollection
+    /**
+     * @return Collection<int, MethodParameter>
+     */
+    private function fetchMethodParams(Node $method): Collection
     {
-        $params = new MethodParameterCollection();
+        $params = Collection::make();
         $methodParams = $this->nodeFinder->findInstanceOf($method, Node\Param::class);
         foreach ($methodParams as $param) {
             if (empty($param->type)) {
@@ -136,15 +141,18 @@ final class MethodDataService implements MethodDataServiceInterface
             if ($default !== null) {
                 $paramDto = $paramDto->withDefaultValue($default);
             }
-            $params->add($paramDto);
+            $params->push($paramDto);
         }
 
         return $params;
     }
 
-    public function fetchInheritedMethods(ClassDto $class): MethodCollection
+    /**
+     * @return Collection<int, Method>
+     */
+    public function fetchInheritedMethods(ClassDto $class): Collection
     {
-        $inheritedMethods = new MethodCollection();
+        $inheritedMethods = Collection::make();
         $parentClasses = $class->getParentClasses();
         if ($parentClasses !== null) {
             /** @var ArrayIterator $iterator */
@@ -157,11 +165,11 @@ final class MethodDataService implements MethodDataServiceInterface
             }
         }
 
-        return new MethodCollection(
-            $inheritedMethods
-                ->filter([new ModifierFilter(['public', 'protected'], 'or'), 'hasModifier'])
-                ->toArray()
-        );
+        $inheritedMethods = $inheritedMethods->filter(function ($value) {
+            return (new ModifierFilter(['public', 'protected'], 'or'))->hasModifier($value);
+        })->first();
+
+        return $inheritedMethods ?? Collection::make();
     }
 
     /**
@@ -190,10 +198,11 @@ final class MethodDataService implements MethodDataServiceInterface
 
     /**
      * @psalm-param non-empty-string $name
+     * @param Collection<int, Method> $methods
      *
      * @throws InvalidArgumentException
      */
-    public function fetchMethod(string $name, MethodCollection $methods): Method|bool
+    public function fetchMethod(string $name, Collection $methods): Method|bool
     {
         Assert::stringNotEmpty($name);
         /** @var ArrayIterator $iterator */
@@ -208,7 +217,10 @@ final class MethodDataService implements MethodDataServiceInterface
         return false;
     }
 
-    private function paramsToString(MethodParameterCollection $params): string
+    /**
+     * @param Collection<int, MethodParameter> $params
+     */
+    private function paramsToString(Collection $params): string
     {
         $paramsStr = '';
         /** @var ArrayIterator $iterator */

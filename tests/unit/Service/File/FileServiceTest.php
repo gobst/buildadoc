@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Service\File;
 
 use Collection\FileCollection;
 use Dto\Common\File;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -43,7 +43,8 @@ final class FileServiceTest extends TestCase
     #[TestDox('getAllFilesWithinDir() method works correctly with no excluded files')]
     public function testGetFileListOfDir(): void
     {
-        $collection = new FileCollection();
+        /** @var Collection<int, File> $collection */
+        $collection = Collection::make();
         $file1 = File::create(
             'parentTest2Class',
             '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more/parentTest2Class.php',
@@ -58,12 +59,12 @@ final class FileServiceTest extends TestCase
             '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more',
             642
         )->withExtension('php');
-        $collection->add($file1);
-        $collection->add($file2);
+        $collection->push($file1);
+        $collection->push($file2);
 
         $actualFiles = $this->fileService->getAllFilesWithinDir(
             __DIR__.'/../../../data/classes/more/',
-            new FileCollection()
+            Collection::make()
         );
 
         $this->assertEquals($collection, $actualFiles);
@@ -72,7 +73,7 @@ final class FileServiceTest extends TestCase
     #[TestDox('getAllFilesWithinDir() method works correctly with excluded files')]
     public function testGetFileListOfDirWithExcludeFiles(): void
     {
-        $collection = new FileCollection();
+        $collection = Collection::make();
         $file1 = File::create(
             'test2Class',
             '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more/test2Class.php',
@@ -80,11 +81,11 @@ final class FileServiceTest extends TestCase
             '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more',
             642
         )->withExtension('php');
-        $collection->add($file1);
+        $collection->push($file1);
 
         $actualFiles = $this->fileService->getAllFilesWithinDir(
             __DIR__.'/../../../data/classes/more/',
-            new FileCollection(),
+            Collection::make(),
             ['parentTest2Class.php']
         );
 
@@ -98,7 +99,7 @@ final class FileServiceTest extends TestCase
 
         $actualFiles = $this->fileService->getAllFilesWithinDir(
             __DIR__.'/../../../data/classes/more/',
-            new FileCollection(),
+            Collection::make(),
             [],
             'txt'
         );
@@ -114,7 +115,7 @@ final class FileServiceTest extends TestCase
 
         $this->fileService->getAllFilesWithinDir(
             $directory,
-            new FileCollection(),
+            Collection::make(),
             $excludeFiles,
             $extension
         );
@@ -139,7 +140,7 @@ final class FileServiceTest extends TestCase
     #[TestDox('dumpFile() method works correctly')]
     public function testGetSingleFile(): void
     {
-        $collection = new FileCollection();
+        $collection = Collection::make();
         $file1 = File::create(
             'parentTest2Class',
             '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more/parentTest2Class.php',
@@ -154,8 +155,8 @@ final class FileServiceTest extends TestCase
             '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more',
             642
         )->withExtension('php');
-        $collection->add($file1);
-        $collection->add($file2);
+        $collection->push($file1);
+        $collection->push($file2);
 
         $actualDto = $this->fileService->getSingleFile(
             '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more/test2Class.php',

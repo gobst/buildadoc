@@ -8,16 +8,14 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types=1);
 
 namespace unit\Service\Class\Filter;
 
-use Collection\MethodParameterCollection;
-use Collection\ModifierCollection;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -28,6 +26,7 @@ use Service\Class\Filter\ModifierFilter;
 #[UsesClass(MethodParameter::class)]
 #[UsesClass(Modifier::class)]
 #[UsesClass(Method::class)]
+#[UsesClass(Collection::class)]
 final class ModifierFilterTest extends TestCase
 {
     private ModifierFilter $modifierFilter;
@@ -37,14 +36,16 @@ final class ModifierFilterTest extends TestCase
     {
         $this->modifierFilter = new ModifierFilter(['public']);
 
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testString', 'string');
         $parameterDto = $parameterDto->withDefaultValue('test');
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create(
             'testMethodWithoutPHPDoc',
             $modifiers,
@@ -60,14 +61,16 @@ final class ModifierFilterTest extends TestCase
     {
         $this->modifierFilter = new ModifierFilter(['public']);
 
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('private');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testString', 'string');
         $parameterDto = $parameterDto->withDefaultValue('test');
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create(
             'testMethodWithoutPHPDoc',
             $modifiers,
@@ -83,14 +86,16 @@ final class ModifierFilterTest extends TestCase
     {
         $this->modifierFilter = new ModifierFilter(['readonly', 'private'], 'and');
 
-        $modifiers = new ModifierCollection();
-        $modifiers->add(Modifier::create('private'));
-        $modifiers->add(Modifier::create('readonly'));
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
+        $modifiers->push(Modifier::create('private'));
+        $modifiers->push(Modifier::create('readonly'));
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testString', 'string');
         $parameterDto = $parameterDto->withDefaultValue('test');
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create(
             'testMethodWithoutPHPDoc',
             $modifiers,
@@ -106,13 +111,15 @@ final class ModifierFilterTest extends TestCase
     {
         $this->modifierFilter = new ModifierFilter(['public', 'readonly'], 'and');
 
-        $modifiers = new ModifierCollection();
-        $modifiers->add(Modifier::create('public'));
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
+        $modifiers->push(Modifier::create('public'));
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testString', 'string');
         $parameterDto = $parameterDto->withDefaultValue('test');
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create(
             'testMethodWithoutPHPDoc',
             $modifiers,

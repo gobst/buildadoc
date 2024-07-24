@@ -18,6 +18,7 @@ use Contract\Formatter\Component\ListFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\InterfaceDto;
 use Generator\Documentation\Class\Page\Component\Interface\InterfaceListGenerator;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
@@ -85,15 +86,18 @@ final class InterfacesListGeneratorTest extends TestCase
         $this->interListGenerator->generate($this->getTestInterfaceData(), 'dokuwiki', '');
     }
 
-    private function getTestInterfaceData(): InterfaceCollection
+    /**
+     * @return Collection<int, InterfaceDto>
+     */
+    private function getTestInterfaceData(): Collection
     {
-        $interfaces = new InterfaceCollection();
+        $interfaces = Collection::make();
 
         $interfaceDto = InterfaceDto::create('testInterface');
-        $interfaces->add($interfaceDto);
+        $interfaces->push($interfaceDto);
 
         $interfaceDto = InterfaceDto::create('testInterface2');
-        $interfaces->add($interfaceDto);
+        $interfaces->push($interfaceDto);
 
         return $interfaces;
     }

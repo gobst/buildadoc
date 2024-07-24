@@ -18,6 +18,7 @@ use Collection\ClassCollection;
 use Contract\Generator\Documentation\Class\Page\Component\Class\ClassPathGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\ClassDto;
+use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -60,9 +61,10 @@ final readonly class ClassPathGenerator implements ClassPathGeneratorInterface
     }
 
     /**
+     * @param Collection<int, ClassDto> $classes
      * @throws InvalidArgumentException
      */
-    private function generateClassPath(ClassCollection $classes, string $format): array
+    private function generateClassPath(Collection $classes, string $format): array
     {
         Assert::stringNotEmpty($format);
 

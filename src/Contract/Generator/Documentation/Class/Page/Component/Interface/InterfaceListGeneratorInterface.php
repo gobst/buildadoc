@@ -8,21 +8,22 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
 namespace Contract\Generator\Documentation\Class\Page\Component\Interface;
 
-use Collection\InterfaceCollection;
+use Dto\Class\InterfaceDto;
+use Illuminate\Support\Collection;
 
 interface InterfaceListGeneratorInterface
 {
     /**
      * @psalm-param non-empty-string $format
      * @psalm-param non-empty-string $listType
+     * @param Collection<int, InterfaceDto> $interfaces
      */
     public function generate(
-        InterfaceCollection $interfaces,
+        Collection $interfaces,
         string $format,
         string $listType = 'ordered',
         bool $linked = true

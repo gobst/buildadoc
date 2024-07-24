@@ -21,6 +21,7 @@ use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGener
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodListGeneratorInterface;
 use Dto\Class\ClassDto;
 use Dto\Method\Method;
+use Illuminate\Support\Collection;
 use Service\Class\Filter\MethodNameFilter;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
@@ -67,14 +68,13 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
     /**
      * @psalm-param non-empty-string $format
      * @psalm-param non-empty-string $listType
+     * @param Collection<int, Method> $methods
      */
-    private function fetchList(MethodCollection $methods, string $format, bool $link, string $listType): string
+    private function fetchList(Collection $methods, string $format, bool $link, string $listType): string
     {
-        $methods = new MethodCollection(
-            $methods
-                ->filter([new MethodNameFilter('__construct'), 'hasNotName'])
-                ->toArray()
-        );
+        $methods = $methods->filter(function ($value) {
+            return (new MethodNameFilter('__construct'))->hasNotName($value);
+        });
 
         $list = '';
         /** @var ArrayIterator $iterator */

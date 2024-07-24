@@ -8,15 +8,10 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Method;
 
-use Collection\ClassCollection;
-use Collection\MethodCollection;
-use Collection\MethodParameterCollection;
-use Collection\ModifierCollection;
 use Contract\Formatter\Component\ListFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
@@ -25,12 +20,23 @@ use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
 use Generator\Documentation\Class\Page\Component\Method\MethodListGenerator;
+use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Service\Class\Filter\MethodNameFilter;
 use Webmozart\Assert\InvalidArgumentException;
 
+#[CoversClass(MethodListGenerator::class)]
+#[UsesClass(Collection::class)]
+#[UsesClass(Modifier::class)]
+#[UsesClass(Method::class)]
+#[UsesClass(MethodParameter::class)]
+#[UsesClass(ClassDto::class)]
+#[UsesClass(MethodNameFilter::class)]
 final class MethodListGeneratorTest extends TestCase
 {
     private LinkGeneratorInterface&MockObject $linkGenerator;
@@ -96,42 +102,47 @@ final class MethodListGeneratorTest extends TestCase
 
     public static function methodListGeneratorTestDataProvider(): array
     {
-        $methods = new MethodCollection();
+        /** @var Collection<int, Method> $methods */
+        $methods = Collection::make();
 
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testString', 'string');
         $parameterDto = $parameterDto->withDefaultValue('test');
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create('testMethodWithoutPHPDoc', $modifiers, 'string', 'testClass');
         $methodDto = $methodDto->withParameters($parameters);
-        $methods->add($methodDto);
+        $methods->push($methodDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testInt', 'int');
         $parameterDto = $parameterDto->withDefaultValue(0);
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create('testMethodWithPHPDoc', $modifiers, 'string', 'testClass');
         $methodDto = $methodDto->withParameters($parameters);
-        $methods->add($methodDto);
+        $methods->push($methodDto);
 
-        $parentClasses = new ClassCollection();
+        /** @var Collection<int, ClassDto> $parentClasses */
+        $parentClasses = Collection::make();
         $parentClassDto = ClassDto::create(
             'parentTestClass',
             __DIR__ . '/../../../data/classes/parentTestClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
-        $parentClasses->add($parentClassDto);
+        $parentClasses->push($parentClassDto);
 
         $classDto = ClassDto::create(
             'testClass',
             __DIR__ . '/../../../data/classes/testClass.php',
             $methods,
-            new ModifierCollection()
+            Collection::make()
         );
         $classDto = $classDto->withParentClasses($parentClasses);
 
@@ -152,8 +163,8 @@ final class MethodListGeneratorTest extends TestCase
         $classDto = ClassDto::create(
             'testClass',
             __DIR__ . '/../../../data/classes/testClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
 
         return [

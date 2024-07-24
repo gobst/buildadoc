@@ -13,8 +13,6 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Class;
 
-use Collection\MethodCollection;
-use Collection\ModifierCollection;
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPathMarkerGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ConstructorMarkerGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ListMarkerGeneratorInterface;
@@ -24,6 +22,7 @@ use Contract\Service\File\TemplateServiceInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
 use Dto\Class\ClassDto;
 use Generator\Documentation\Class\Page\Class\ClassPageGenerator;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -127,8 +126,8 @@ final class ClassPageGeneratorTest extends TestCase
         $classDto = ClassDto::create(
             'testClass',
             __DIR__ . '/../../../data/classes/testClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
 
         return [
@@ -142,8 +141,8 @@ final class ClassPageGeneratorTest extends TestCase
         $classDto = ClassDto::create(
             'testClass',
             __DIR__ . '/../../../data/classes/testClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
 
         return [

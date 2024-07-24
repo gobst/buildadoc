@@ -43,7 +43,7 @@ final readonly class PropertyListGenerator implements PropertyListGeneratorInter
             while ($iterator->valid()) {
                 /** @var Property $property */
                 $property = $iterator->current();
-                $modifiersStr = $property->getModifiers()->toString();
+                $modifiersStr = $property->getModifiers()->toArray();
                 $contentParts = [];
                 $contentParts[] = $modifiersStr;
                 $contentParts[] = $property->getType();

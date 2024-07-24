@@ -8,14 +8,13 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Service\Class\Data;
 
-use Collection\ModifierCollection;
 use Contract\Service\Class\Data\ModifierDataServiceInterface;
 use Dto\Common\Modifier;
+use Illuminate\Support\Collection;
 use PhpParser\Node;
 
 /**
@@ -25,50 +24,53 @@ final class ModifierDataService implements ModifierDataServiceInterface
 {
     public function __construct() {}
 
-    public function getModifiers(Node $node): ModifierCollection
+    /**
+     * @return Collection<int, Modifier>
+     */
+    public function getModifiers(Node $node): Collection
     {
-        $modifiers = new ModifierCollection();
+        $modifiers = Collection::make();
         switch ($node->flags) {
             case Node\Stmt\Class_::MODIFIER_PROTECTED:
-                $modifiers->add(Modifier::create('protected'));
+                $modifiers->push(Modifier::create('protected'));
                 break;
             case Node\Stmt\Class_::MODIFIER_PRIVATE:
-                $modifiers->add(Modifier::create('private'));
+                $modifiers->push(Modifier::create('private'));
                 break;
             case Node\Stmt\Class_::MODIFIER_PUBLIC + Node\Stmt\Class_::MODIFIER_STATIC:
-                $modifiers->add(Modifier::create('public'));
-                $modifiers->add(Modifier::create('static'));
+                $modifiers->push(Modifier::create('public'));
+                $modifiers->push(Modifier::create('static'));
                 break;
             case Node\Stmt\Class_::MODIFIER_PRIVATE + Node\Stmt\Class_::MODIFIER_STATIC:
-                $modifiers->add(Modifier::create('private'));
-                $modifiers->add(Modifier::create('static'));
+                $modifiers->push(Modifier::create('private'));
+                $modifiers->push(Modifier::create('static'));
                 break;
             case Node\Stmt\Class_::MODIFIER_PROTECTED + Node\Stmt\Class_::MODIFIER_STATIC:
-                $modifiers->add(Modifier::create('protected'));
-                $modifiers->add(Modifier::create('static'));
+                $modifiers->push(Modifier::create('protected'));
+                $modifiers->push(Modifier::create('static'));
                 break;
             case Node\Stmt\Class_::MODIFIER_PUBLIC + Node\Stmt\Class_::MODIFIER_ABSTRACT:
-                $modifiers->add(Modifier::create('abstract'));
-                $modifiers->add(Modifier::create('public'));
+                $modifiers->push(Modifier::create('abstract'));
+                $modifiers->push(Modifier::create('public'));
                 break;
             case Node\Stmt\Class_::MODIFIER_PRIVATE + Node\Stmt\Class_::MODIFIER_ABSTRACT:
-                $modifiers->add(Modifier::create('abstract'));
-                $modifiers->add(Modifier::create('private'));
+                $modifiers->push(Modifier::create('abstract'));
+                $modifiers->push(Modifier::create('private'));
                 break;
             case Node\Stmt\Class_::MODIFIER_PROTECTED + Node\Stmt\Class_::MODIFIER_ABSTRACT:
-                $modifiers->add(Modifier::create('abstract'));
-                $modifiers->add(Modifier::create('protected'));
+                $modifiers->push(Modifier::create('abstract'));
+                $modifiers->push(Modifier::create('protected'));
                 break;
             case Node\Stmt\Class_::MODIFIER_PUBLIC + Node\Stmt\Class_::MODIFIER_FINAL:
-                $modifiers->add(Modifier::create('final'));
-                $modifiers->add(Modifier::create('public'));
+                $modifiers->push(Modifier::create('final'));
+                $modifiers->push(Modifier::create('public'));
                 break;
             case Node\Stmt\Class_::MODIFIER_PROTECTED + Node\Stmt\Class_::MODIFIER_FINAL:
-                $modifiers->add(Modifier::create('final'));
-                $modifiers->add(Modifier::create('protected'));
+                $modifiers->push(Modifier::create('final'));
+                $modifiers->push(Modifier::create('protected'));
                 break;
             default:
-                $modifiers->add(Modifier::create('public'));
+                $modifiers->push(Modifier::create('public'));
                 break;
         }
 

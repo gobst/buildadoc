@@ -8,16 +8,14 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types=1);
 
 namespace unit\Service\Class\Documentation;
 
-use Collection\ClassCollection;
-use Collection\FileCollection;
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
 use Contract\Service\File\FileServiceInterface;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -28,8 +26,7 @@ use Service\Class\Documentation\ClassDocumentationService;
 use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(ClassDocumentationService::class)]
-#[UsesClass(FileCollection::class)]
-#[UsesClass(ClassCollection::class)]
+#[UsesClass(Collection::class)]
 final class ClassDocumentationServiceTest extends TestCase
 {
     private ClassDataServiceInterface&MockObject $classDataService;
@@ -61,11 +58,11 @@ final class ClassDocumentationServiceTest extends TestCase
 
         $this->classDataService->expects(self::once())
             ->method('getAllClasses')
-            ->willReturn(new ClassCollection());
+            ->willReturn(Collection::make());
 
         $this->fileService->expects(self::once())
             ->method('getAllFilesWithinDir')
-            ->willReturn(new FileCollection());
+            ->willReturn(Collection::make());
 
         $this->classDocService->buildDocumentation(
             'test/source',

@@ -8,21 +8,22 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Contract\Service\File;
 
-use Collection\FileCollection;
 use Dto\Common\File;
+use Illuminate\Support\Collection;
 
 interface FileServiceInterface
 {
     /**
      * @psalm-param non-empty-string $directory
      * @psalm-param non-empty-string $extension
+     * @param Collection<int, File> $files
+     * @return Collection<int, File>
      */
-    public function getAllFilesWithinDir(string $directory, FileCollection $files, array $excludeFiles = [], string $extension = 'php'): FileCollection;
+    public function getAllFilesWithinDir(string $directory, Collection $files, array $excludeFiles = [], string $extension = 'php'): Collection;
 
     /**
      * @psalm-param non-empty-string $filename
@@ -31,6 +32,7 @@ interface FileServiceInterface
 
     /**
      * @psalm-param non-empty-string $phpFile
+     * @param Collection<int, File> $files
      */
-    public function getSingleFile(string $phpFile, FileCollection $files): File;
+    public function getSingleFile(string $phpFile, Collection $files): ?File;
 }

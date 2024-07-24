@@ -21,6 +21,7 @@ use Contract\Generator\Documentation\Class\Page\Method\MethodPageGeneratorInterf
 use Contract\Service\Class\Documentation\Page\MethodPageServiceInterface;
 use Dto\Documentation\DocPage;
 use Dto\Method\Method;
+use Illuminate\Support\Collection;
 use Service\Class\Filter\PageTitleFilter;
 use Webmozart\Assert\Assert;
 
@@ -32,12 +33,17 @@ final readonly class MethodPageService implements MethodPageServiceInterface, Do
         private MethodPageGeneratorInterface $methodPageGenerator
     ) {}
 
-    public function getPages(MethodCollection $methods, string $lang, string $format): DocPageCollection
+    /**
+     * @param Collection<int, Method> $methods
+     * @return Collection<int, DocPage>
+     */
+    public function getPages(Collection $methods, string $lang, string $format): Collection
     {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 
-        $docPageCollection = new DocPageCollection();
+        /** @var Collection<int, DocPage> $docPageCollection */
+        $docPageCollection = Collection::make();
         $fileExtension = $this->getFileExtension($format);
         /** @var ArrayIterator $iterator */
         $iterator = $methods->getIterator();
@@ -60,15 +66,13 @@ final readonly class MethodPageService implements MethodPageServiceInterface, Do
                 $fileExtension
             );
 
-            $docPageCollection->add($dto);
+            $docPageCollection->push($dto);
             $iterator->next();
         }
 
-        return new DocPageCollection(
-            $docPageCollection
-                ->filter([new PageTitleFilter('__construct'), 'hasNotPageTitle'])
-                ->toArray()
-        );
+        return Collection::make($docPageCollection->filter(function ($value) {
+            return (new PageTitleFilter('__construct'))->hasNotPageTitle($value);
+        })->toArray());
     }
 
     private function getFileExtension(string $format): string

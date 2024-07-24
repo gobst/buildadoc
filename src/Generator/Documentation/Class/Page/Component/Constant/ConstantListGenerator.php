@@ -8,16 +8,15 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Generator\Documentation\Class\Page\Component\Constant;
 
 use ArrayIterator;
-use Collection\ConstantCollection;
 use Contract\Formatter\Component\ListFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Constant\ConstantListGeneratorInterface;
 use Dto\Class\Constant;
+use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -28,9 +27,10 @@ final readonly class ConstantListGenerator implements ConstantListGeneratorInter
     public function __construct(private ListFormatterInterface $listFormatter) {}
 
     /**
+     * @param Collection<int, Constant> $constants
      * @throws InvalidArgumentException
      */
-    public function generate(ConstantCollection $constants, string $format, string $listType = 'ordered'): string
+    public function generate(Collection $constants, string $format, string $listType = 'ordered'): string
     {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($listType);
@@ -42,7 +42,7 @@ final readonly class ConstantListGenerator implements ConstantListGeneratorInter
             while ($iterator->valid()) {
                 /** @var Constant $constant */
                 $constant = $iterator->current();
-                $modifiersStr = $constant->getModifiers()->toString();
+                $modifiersStr = $constant->getModifiers()->toArray();
 
                 $contentParts = [];
                 $contentParts[] = $modifiersStr;

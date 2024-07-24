@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Service\Class\Documentation\Page;
@@ -22,7 +21,10 @@ use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
 use Contract\Service\Class\Documentation\Page\MethodPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
 use Dto\Class\ClassDto;
+use Dto\Common\Modifier;
 use Dto\Documentation\DocPage;
+use Dto\Method\Method;
+use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 
 final readonly class ClassPageService implements ClassPageServiceInterface, DokuWikiFormatInterface
@@ -35,7 +37,10 @@ final readonly class ClassPageService implements ClassPageServiceInterface, Doku
         private MethodPageServiceInterface $methodPageService
     ) {}
 
-    public function dumpPages(ClassCollection $classes, string $destDirectory, string $lang, string $format): void
+    /**
+     * @param Collection<int, ClassDto> $classes
+     */
+    public function dumpPages(Collection $classes, string $destDirectory, string $lang, string $format): void
     {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
@@ -46,10 +51,13 @@ final readonly class ClassPageService implements ClassPageServiceInterface, Doku
     /**
      * @psalm-param non-empty-string $lang
      * @psalm-param non-empty-string $format
+     * @param Collection<int, ClassDto> $classes
+     * @return Collection<int, DocPage>
      */
-    private function getPages(ClassCollection $classes, string $lang, string $format): DocPageCollection
+    private function getPages(Collection $classes, string $lang, string $format): Collection
     {
-        $pages = new DocPageCollection();
+        /** @var Collection<int, DocPage> $pages */
+        $pages = Collection::make();
         $fileExtension = $this->getFileExtension($format);
         /** @var ArrayIterator $iterator */
         $iterator = $classes->getIterator();
@@ -73,16 +81,17 @@ final readonly class ClassPageService implements ClassPageServiceInterface, Doku
                 $fileName,
                 $fileExtension
             );
-            $pages->add($page);
+            $pages->push($page);
 
             $methods = $class->getMethods();
+            /** @var Collection<int, DocPage> $methodPages */
             $methodPages = $this->methodPageService->getPages($methods, $lang, $format);
             $pages = $pages->merge($methodPages);
 
             $iterator->next();
         }
 
-        return new DocPageCollection($pages->toArray());
+        return Collection::make($pages->toArray());
     }
 
     private function getFileExtension(string $format): string

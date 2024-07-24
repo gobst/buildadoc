@@ -8,31 +8,45 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
 namespace Contract\Service\Class\Data;
 
-use Collection\ClassCollection;
-use Collection\ConstantCollection;
-use Collection\FileCollection;
-use Collection\InterfaceCollection;
-use Collection\PropertyCollection;
-use Collection\TraitCollection;
 use Dto\Class\ClassDto;
+use Dto\Class\Constant;
+use Dto\Class\InterfaceDto;
+use Dto\Class\TraitDto;
 use Dto\Common\File;
+use Dto\Common\Property;
+use Illuminate\Support\Collection;
 
 interface ClassDataServiceInterface
 {
-    public function getConstants(array $ast): ConstantCollection;
+    /**
+     * @return Collection<int, Constant>
+     */
+    public function getConstants(array $ast): Collection;
 
-    public function getProperties(array $ast): PropertyCollection;
+    /**
+     * @return Collection<int, Property>
+     */
+    public function getProperties(array $ast): Collection;
 
-    public function getInterfaces(array $ast): InterfaceCollection;
+    /**
+     * @return Collection<int, InterfaceDto>
+     */
+    public function getInterfaces(array $ast): Collection;
 
-    public function getTraits(array $ast): TraitCollection;
+    /**
+     * @return Collection<int, TraitDto>
+     */
+    public function getTraits(array $ast): Collection;
 
-    public function getAllClasses(FileCollection $files): ClassCollection;
+    /**
+     * @param Collection<int, File> $files
+     * @return Collection<int, ClassDto>
+     */
+    public function getAllClasses(Collection $files): Collection;
 
     /**
      * @psalm-param non-empty-string $phpFile
@@ -41,5 +55,8 @@ interface ClassDataServiceInterface
 
     public function getClassData(File $file): ?ClassDto;
 
-    public function getSingleClass(string $className, ClassCollection $classes): ClassDto;
+    /**
+     * @param Collection<int, ClassDto> $classes
+     */
+    public function getSingleClass(string $className, Collection $classes): ?ClassDto;
 }
