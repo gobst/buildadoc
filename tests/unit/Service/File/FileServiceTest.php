@@ -95,7 +95,7 @@ final class FileServiceTest extends TestCase
     #[TestDox('getAllFilesWithinDir() method works correctly with extension')]
     public function testGetFileListOfDirWithExtension(): void
     {
-        $collection = new FileCollection();
+        $collection = Collection::make();
 
         $actualFiles = $this->fileService->getAllFilesWithinDir(
             __DIR__.'/../../../data/classes/more/',

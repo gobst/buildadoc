@@ -13,9 +13,10 @@ declare(strict_types = 1);
 
 namespace unit\Service\File;
 
-use Collection\DocPageCollection;
 use Contract\Service\File\FileServiceInterface;
 use Dto\Documentation\DocPage;
+use Dto\Method\Method;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -25,6 +26,7 @@ use Service\File\DocFileService;
 
 #[CoversClass(DocFileService::class)]
 #[UsesClass(DocPage::class)]
+#[UsesClass(Collection::class)]
 final class DocFileServiceTest extends TestCase
 {
     private FileServiceInterface&MockObject $fileService;
@@ -39,7 +41,8 @@ final class DocFileServiceTest extends TestCase
     #[TestDox('dumpDocFiles() method works correctly')]
     public function testDumpDocFiles(): void
     {
-        $collection = new DocPageCollection();
+        /** @var Collection<int, DocPage> $collection */
+        $collection = Collection::make();
         $docPage = DocPage::create('superContent', 'superTitle', 'super', 'txt');
         $collection->add($docPage);
 

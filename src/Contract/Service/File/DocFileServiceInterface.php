@@ -8,14 +8,17 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Contract\Service\File;
 
-use Collection\DocPageCollection;
+use Dto\Documentation\DocPage;
+use Illuminate\Support\Collection;
 
 interface DocFileServiceInterface
 {
-    public function dumpDocFiles(DocPageCollection $pages, string $destDirectory): void;
+    /**
+     * @param Collection<int, DocPage> $pages
+     */
+    public function dumpDocFiles(Collection $pages, string $destDirectory): void;
 }

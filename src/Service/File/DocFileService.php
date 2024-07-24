@@ -8,16 +8,14 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Service\File;
 
-use ArrayIterator;
-use Collection\DocPageCollection;
 use Contract\Service\File\DocFileServiceInterface;
 use Contract\Service\File\FileServiceInterface;
 use Dto\Documentation\DocPage;
+use Illuminate\Support\Collection;
 
 final readonly class DocFileService implements DocFileServiceInterface
 {
@@ -25,9 +23,11 @@ final readonly class DocFileService implements DocFileServiceInterface
         private FileServiceInterface $fileService
     ) {}
 
-    public function dumpDocFiles(DocPageCollection $pages, string $destDirectory): void
+    /**
+     * @param Collection<int, DocPage> $pages
+     */
+    public function dumpDocFiles(Collection $pages, string $destDirectory): void
     {
-        /** @var ArrayIterator $iterator */
         $iterator = $pages->getIterator();
         while ($iterator->valid()) {
             /** @var DocPage $page */

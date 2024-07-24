@@ -6,7 +6,6 @@
       "Exception\\": "src/Exception/",
       "Service\\": "src/Service/",
       "Contract\\": "src/Contract/",
-      "Collection\\": "src/Collection/",
       "": "src/"
     }
   },

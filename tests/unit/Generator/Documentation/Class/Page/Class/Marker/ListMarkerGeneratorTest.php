@@ -8,18 +8,10 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types=1);
 
 namespace unit\Generator\Documentation\Class\Page\Class\Marker;
 
-use Collection\ClassCollection;
-use Collection\ConstantCollection;
-use Collection\InterfaceCollection;
-use Collection\MethodCollection;
-use Collection\MethodParameterCollection;
-use Collection\ModifierCollection;
-use Collection\PropertyCollection;
 use Contract\Generator\Documentation\Class\Page\Component\Class\UsedByClassListGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Constant\ConstantListGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
@@ -46,13 +38,6 @@ use Service\Class\Filter\MethodNameFilter;
 use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(ListMarkerGenerator::class)]
-#[UsesClass(MethodCollection::class)]
-#[UsesClass(MethodParameterCollection::class)]
-#[UsesClass(ModifierCollection::class)]
-#[UsesClass(ClassCollection::class)]
-#[UsesClass(PropertyCollection::class)]
-#[UsesClass(ConstantCollection::class)]
-#[UsesClass(InterfaceCollection::class)]
 #[UsesClass(MethodNameFilter::class)]
 #[UsesClass(Constant::class)]
 #[UsesClass(InterfaceDto::class)]
@@ -62,6 +47,7 @@ use Webmozart\Assert\InvalidArgumentException;
 #[UsesClass(ClassDto::class)]
 #[UsesClass(Modifier::class)]
 #[UsesClass(MethodParameter::class)]
+#[UsesClass(Collection::class)]
 final class ListMarkerGeneratorTest extends TestCase
 {
     private TranslationServiceInterface&MockObject $translationService;
