@@ -8,13 +8,10 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Service\Class\Documentation;
 
-use Collection\ClassCollection;
-use Collection\FileCollection;
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\ClassDocumentationServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;

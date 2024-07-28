@@ -107,6 +107,7 @@ final class ClassDataService implements ClassDataServiceInterface
 
     public function getConstants(array $ast): Collection
     {
+        /** @var Collection<int, Constant> $constants */
         $constants = Collection::make();
         $constantsAst = $this->nodeFinder->findInstanceOf($ast, Node\Stmt\ClassConst::class);
 
@@ -133,6 +134,7 @@ final class ClassDataService implements ClassDataServiceInterface
 
     public function getProperties(array $ast): Collection
     {
+        /** @var Collection<int, Property> $properties */
         $properties = Collection::make();
         $propertiesAst = $this->nodeFinder->findInstanceOf($ast, Node\Stmt\Property::class);
         foreach ($propertiesAst as $prop) {
@@ -159,6 +161,7 @@ final class ClassDataService implements ClassDataServiceInterface
 
     public function getInterfaces(array $ast): Collection
     {
+        /** @var Collection<int, InterfaceDto> $interfaces */
         $interfaces = Collection::make();
         $nodes = $this->nodeFinder->findInstanceOf($ast, Node\Stmt\Class_::class);
         if (!empty($nodes)) {
@@ -185,6 +188,7 @@ final class ClassDataService implements ClassDataServiceInterface
 
     public function getTraits(array $ast): Collection
     {
+        /** @var Collection<int, TraitDto> $traits */
         $traits = Collection::make();
         $nodes = $this->nodeFinder->findInstanceOf($ast, Node\Stmt\TraitUse::class);
         if (!empty($nodes)) {
@@ -307,7 +311,6 @@ final class ClassDataService implements ClassDataServiceInterface
      * @param Collection<int, ClassDto> $classes
      *
      * @throws InvalidArgumentException
-     * @throws NoSuchElementException
      */
     public function getSingleClass(string $className, Collection $classes): ?ClassDto
     {

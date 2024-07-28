@@ -56,6 +56,7 @@ final class MethodDataService implements MethodDataServiceInterface
     public function getMethods(array $ast): Collection
     {
         // @todo: refactor method
+        /** @var Collection<int, Method> $methods */
         $methods = Collection::make();
         /** @var Node\Stmt\ClassMethod $methodNode */
         $methodNode = $this->nodeFinder->findInstanceOf($ast, Node\Stmt\ClassMethod::class);
@@ -114,6 +115,7 @@ final class MethodDataService implements MethodDataServiceInterface
      */
     private function fetchMethodParams(Node $method): Collection
     {
+        /** @var Collection<int, MethodParameter> $params */
         $params = Collection::make();
         $methodParams = $this->nodeFinder->findInstanceOf($method, Node\Param::class);
         foreach ($methodParams as $param) {
@@ -152,6 +154,7 @@ final class MethodDataService implements MethodDataServiceInterface
      */
     public function fetchInheritedMethods(ClassDto $class): Collection
     {
+        /** @var Collection<int, Method> $inheritedMethods */
         $inheritedMethods = Collection::make();
         $parentClasses = $class->getParentClasses();
         if ($parentClasses !== null) {
@@ -167,9 +170,9 @@ final class MethodDataService implements MethodDataServiceInterface
 
         $inheritedMethods = $inheritedMethods->filter(function ($value) {
             return (new ModifierFilter(['public', 'protected'], 'or'))->hasModifier($value);
-        })->first();
+        });
 
-        return $inheritedMethods ?? Collection::make();
+        return $inheritedMethods->isNotEmpty() ? $inheritedMethods : Collection::make();
     }
 
     /**

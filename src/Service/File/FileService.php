@@ -126,7 +126,6 @@ final readonly class FileService implements FileServiceInterface
 
     /**
      * @throws InvalidArgumentException
-     * @throws NoSuchElementException
      */
     public function getSingleFile(string $phpFile, Collection $files): ?File
     {

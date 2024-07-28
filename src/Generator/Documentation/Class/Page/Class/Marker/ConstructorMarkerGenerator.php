@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Generator\Documentation\Class\Page\Class\Marker;
@@ -19,6 +18,7 @@ use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGener
 use Contract\Service\Translation\TranslationServiceInterface;
 use Dto\Class\ClassDto;
 use Dto\Method\Method;
+use Illuminate\Support\Collection;
 use Service\Class\Filter\MethodNameFilter;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
@@ -59,11 +59,14 @@ final readonly class ConstructorMarkerGenerator implements ConstructorMarkerGene
 
     private function getConstructor(ClassDto $class): Method|bool
     {
-        $collection = $class->getMethods()->filter([new MethodNameFilter('__construct'), 'hasName']);
+        $collection = Collection::make($class->getMethods()->filter(function ($value) {
+            return (new MethodNameFilter('__construct'))->hasName($value);
+        }));
+
         if ($collection->isEmpty()) {
             return false;
         }
 
-        return $collection->first();
+        return $collection->first() ?? false;
     }
 }

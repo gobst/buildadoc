@@ -29,6 +29,7 @@ final class ModifierDataService implements ModifierDataServiceInterface
      */
     public function getModifiers(Node $node): Collection
     {
+        /** @var Collection<int, Modifier> $modifiers */
         $modifiers = Collection::make();
         switch ($node->flags) {
             case Node\Stmt\Class_::MODIFIER_PROTECTED:
