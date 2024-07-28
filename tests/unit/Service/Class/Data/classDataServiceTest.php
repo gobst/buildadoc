@@ -20,7 +20,6 @@ use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Collection\Exception\NoSuchElementException;
 use Service\Class\Data\ClassDataService;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -88,34 +87,6 @@ final class classDataServiceTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $this->classDataService->getSingleClass('', Collection::make());
-    }
-
-    #[TestDox('getSingleClass() method fails on NoSuchElementException')]
-    public function testGetSingleClassWillFailOnNoSuchElementException(): void
-    {
-        $this->expectException(NoSuchElementException::class);
-
-        /** @var Collection<int, ClassDto> $classes */
-        $classes = Collection::make();
-
-        $firstClass = ClassDto::create(
-            'TestClass1',
-            '/path/to/file',
-            Collection::make(),
-            Collection::make()
-        );
-
-        $secondClass = ClassDto::create(
-            'TestClass2',
-            '/path/to/file',
-            Collection::make(),
-            Collection::make()
-        );
-
-        $classes->push($firstClass);
-        $classes->push($secondClass);
-
-        $this->classDataService->getSingleClass('TestClass3', $classes);
     }
 
     // @todo

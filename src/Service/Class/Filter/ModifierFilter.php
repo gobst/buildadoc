@@ -8,12 +8,13 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types=1);
 
 namespace Service\Class\Filter;
 
+use Dto\Common\Modifier;
 use Dto\Method\Method;
+use Illuminate\Support\Collection;
 use Webmozart\Assert\InvalidArgumentException;
 
 final readonly class ModifierFilter
@@ -32,17 +33,17 @@ final readonly class ModifierFilter
      */
     public function hasModifier(Method $method): bool
     {
-        $modifiers = $method->getModifiers()->toArray();
+        $modifiers = $method->getModifiers();
         $hasModifier = !($this->where === 'or');
 
         foreach ($this->modifiers as $checkedModifier) {
-            if ($this->where === 'or' &&
-                $this->containsModifier($checkedModifier, $modifiers)
-            ) {
+            if ($this->where === 'or'
+                && $this->containsModifier($checkedModifier, $modifiers))
+            {
                 return true;
             }
-            if (!$this->containsModifier($checkedModifier, $modifiers)
-            ) {
+            if (!$this->containsModifier($checkedModifier, $modifiers))
+            {
                 return false;
             }
         }
@@ -52,9 +53,15 @@ final readonly class ModifierFilter
 
     /**
      * @psalm-param non-empty-string $modifier
+     * @param Collection<int, Modifier> $existingModifiers
      */
-    private function containsModifier(string $modifier, array $existingModifiers): bool
+    private function containsModifier(string $modifier, Collection $existingModifiers): bool
     {
-        return in_array($modifier, $existingModifiers, true);
+        foreach ($existingModifiers->all() as $existingModifier) {
+            if ($existingModifier->getName() === $modifier) {
+                return true;
+            }
+        }
+        return false;
     }
 }
