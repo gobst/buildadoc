@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace unit\Service\File;
 
-use Collection\FileCollection;
 use Dto\Common\File;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -47,16 +46,16 @@ final class FileServiceTest extends TestCase
         $collection = Collection::make();
         $file1 = File::create(
             'parentTest2Class',
-            '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more/parentTest2Class.php',
+            __DIR__.'/../../../data/classes/more/parentTest2Class.php',
             'parentTest2Class.php',
-            '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more',
+            __DIR__.'/../../../data/classes/more',
             91
         )->withExtension('php');
         $file2 = File::create(
             'test2Class',
-            '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more/test2Class.php',
+            __DIR__.'/../../../data/classes/more/test2Class.php',
             'test2Class.php',
-            '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more',
+            __DIR__.'/../../../data/classes/more',
             642
         )->withExtension('php');
         $collection->push($file1);
@@ -76,9 +75,9 @@ final class FileServiceTest extends TestCase
         $collection = Collection::make();
         $file1 = File::create(
             'test2Class',
-            '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more/test2Class.php',
+                __DIR__.'/../../../data/classes/more/test2Class.php',
             'test2Class.php',
-            '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more',
+            __DIR__.'/../../../data/classes/more',
             642
         )->withExtension('php');
         $collection->push($file1);
@@ -143,23 +142,23 @@ final class FileServiceTest extends TestCase
         $collection = Collection::make();
         $file1 = File::create(
             'parentTest2Class',
-            '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more/parentTest2Class.php',
+            __DIR__.'/../../../data/classes/more/parentTest2Class.php',
             'parentTest2Class.php',
-            '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more',
+            __DIR__.'/../../../data/classes/more',
             91
         )->withExtension('php');
         $file2 = File::create(
             'test2Class',
-            '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more/test2Class.php',
+            __DIR__.'/../../../data/classes/more/test2Class.php',
             'test2Class.php',
-            '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more',
+            __DIR__.'/../../../data/classes/more',
             642
         )->withExtension('php');
         $collection->push($file1);
         $collection->push($file2);
 
         $actualDto = $this->fileService->getSingleFile(
-            '/home/gobst/Projects/BuildADoc/tests/unit/Service/File/../../../data/classes/more/test2Class.php',
+            __DIR__.'/../../../data/classes/more/test2Class.php',
             $collection
         );
 
