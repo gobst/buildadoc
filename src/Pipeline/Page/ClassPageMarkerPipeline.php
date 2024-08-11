@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Pipeline\Page;
 
+use Closure;
 use Contract\Pipeline\ClassPageMarkerPipelineInterface;
 use Contract\Pipeline\Fetcher\FetcherProviderInterface;
 use Dto\Class\ClassDto;
@@ -35,66 +36,42 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
 
         return $this->pipeline
             ->send(Collection::make())
-            ->through([
-                function ($passable, $next) use ($class, $format, $lang) {
-                    $passable = $this->fetcherProvider
-                        ->getFetcher('heading')
-                        ->handle($passable, $class, $format, $lang);
-
-                    return $next($passable);
-                },
-                function ($passable, $next) use ($class, $format, $lang) {
-                    $passable = $this->fetcherProvider
-                        ->getFetcher('filesTable')
-                        ->handle($passable, $class, $format, $lang);
-
-                    return $next($passable);
-                },
-                function ($passable, $next) use ($class, $format, $lang) {
-                    $passable = $this->fetcherProvider
-                        ->getFetcher('classPath')
-                        ->handle($passable, $class, $format, $lang);
-
-                    return $next($passable);
-                },
-                function ($passable, $next) use ($class, $format, $lang) {
-                    $passable = $this->fetcherProvider
-                        ->getFetcher('constructor')
-                        ->handle($passable, $class, $format, $lang);
-
-                    return $next($passable);
-                },
-                function ($passable, $next) use ($class, $format, $lang) {
-                    $passable = $this->fetcherProvider
-                        ->getFetcher('propertiesList')
-                        ->handle($passable, $class, $format, $lang);
-
-                    return $next($passable);
-                },
-                function ($passable, $next) use ($class, $format, $lang) {
-                    $passable = $this->fetcherProvider
-                        ->getFetcher('interfacesList')
-                        ->handle($passable, $class, $format, $lang);
-
-                    return $next($passable);
-                },
-                function ($passable, $next) use ($class, $format, $lang) {
-                    $passable = $this->fetcherProvider
-                        ->getFetcher('constantList')
-                        ->handle($passable, $class, $format, $lang);
-
-                    return $next($passable);
-                },
-                function ($passable, $next) use ($class, $format, $lang) {
-                    $passable = $this->fetcherProvider
-                        ->getFetcher('methodList')
-                        ->handle($passable, $class, $format, $lang);
-
-                    return $next($passable);
-                },
-            ])
+            ->through($this->getClosures($class, $format, $lang))
             ->then(function (Collection $passable) {
                 return $passable;
             });
+    }
+
+    /**
+     * @psalm-param non-empty-string $format
+     * @psalm-param non-empty-string $lang
+     * @return array<int, Closure>
+     */
+    private function getClosures(ClassDto $class, string $format, string $lang): array
+    {
+        $fetchers = [
+            'heading',
+            'filesTable',
+            'classPath',
+            'constructor',
+            'propertiesList',
+            'interfacesList',
+            'constantList',
+            'methodList'
+        ];
+
+        $closures = [];
+
+        foreach($fetchers as $fetcher){
+            $closure = function ($passable, $next) use ($class, $format, $lang, $fetcher) {
+                $passable = $this->fetcherProvider
+                    ->getFetcher($fetcher)
+                    ->handle($passable, $class, $format, $lang);
+                return $next($passable);
+            };
+            $closures[] = $closure;
+        }
+
+        return $closures;
     }
 }
