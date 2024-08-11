@@ -77,8 +77,8 @@ final class ConstructorMarkerGeneratorTest extends TestCase
             ->willReturn('testStr2');
 
         $expectedMarker = [];
-        $expectedMarker['###CONSTRUCTOR_HEADING###'] = 'testStr' . $lineBreak;
-        $expectedMarker['###CONSTRUCTOR###'] = 'testStr2' . $lineBreak;
+        $expectedMarker['CONSTRUCTOR_HEADING'] = 'testStr' . $lineBreak;
+        $expectedMarker['CONSTRUCTOR'] = 'testStr2' . $lineBreak;
 
         $actualMarker = $this->constructorMarkerGen->generate(
             $this->getTestClassDtoWithConstructor(),

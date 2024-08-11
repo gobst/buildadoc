@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Generator\Documentation\Class\Page\Class\Marker;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPathMarkerGeneratorInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Class\ClassPathGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
@@ -21,7 +21,7 @@ use Dto\Class\ClassDto;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ClassPathMarkerGenerator implements ClassPathMarkerGeneratorInterface
+final readonly class ClassPathMarkerGenerator implements ClassPathMarkerGeneratorInterface, MarkerInterface
 {
     public function __construct(
         private TranslationServiceInterface $translationService,
@@ -45,8 +45,8 @@ final readonly class ClassPathMarkerGenerator implements ClassPathMarkerGenerato
             $text = $this->translationService->translate('class.parentclasses');
             Assert::stringNotEmpty($text);
 
-            $marker['###CLASS_PATH_HEADING###'] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker['###CLASS_PATH###'] = $this->classPathGenerator->generate($class, $format) . $lineBreak;
+            $marker[self::CLASS_PATH_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
+            $marker[self::CLASS_PATH_MARKER] = $this->classPathGenerator->generate($class, $format) . $lineBreak;
         }
 
         return $marker;

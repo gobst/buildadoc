@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace Generator\Documentation\Class\Page\Class\Marker;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ConstructorMarkerGeneratorInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
@@ -23,7 +24,7 @@ use Service\Class\Filter\MethodNameFilter;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ConstructorMarkerGenerator implements ConstructorMarkerGeneratorInterface
+final readonly class ConstructorMarkerGenerator implements ConstructorMarkerGeneratorInterface, MarkerInterface
 {
     public function __construct(
         private TranslationServiceInterface $translationService,
@@ -50,8 +51,8 @@ final readonly class ConstructorMarkerGenerator implements ConstructorMarkerGene
             Assert::stringNotEmpty($text);
             Assert::isInstanceOf($constructor, Method::class);
 
-            $marker['###CONSTRUCTOR_HEADING###'] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker['###CONSTRUCTOR###'] = $this->methodLineGenerator->generate($constructor) . $lineBreak;
+            $marker[self::CONSTRUCTOR_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
+            $marker[self::CONSTRUCTOR_MARKER] = $this->methodLineGenerator->generate($constructor) . $lineBreak;
         }
 
         return $marker;

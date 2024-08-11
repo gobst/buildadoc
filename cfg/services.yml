@@ -23,6 +23,8 @@ services:
     resource: '../src/Formatter/*'
   Contract\:
     resource: '../src/Contract/*'
+  Pipeline\:
+    resource: '../src/Pipeline/*'
   Service\Class\Filter\TagFilter:
     arguments:
       $tag: "%tag%"
@@ -44,3 +46,14 @@ services:
   Service\Class\Filter\ModifierFilter:
     arguments:
       $modifiers: []
+  Pipeline\Page\FetcherProvider:
+    arguments:
+      $fetchers:
+        heading: 'Pipeline\Page\Fetcher\HeadingFetcher',
+        classPath: 'Pipeline\Page\Fetcher\ClassPathFetcher',
+        constantList: 'Pipeline\Page\Fetcher\ConstantListFetcher',
+        constructor: 'Pipeline\Page\Fetcher\ConstructorFetcher',
+        filesTable: 'Pipeline\Page\Fetcher\FilesTableFetcher',
+        interfacesList: 'Pipeline\Page\Fetcher\InterfacesListFetcher',
+        methodList: 'Pipeline\Page\Fetcher\MethodListFetcher',
+        propertiesList: 'Pipeline\Page\Fetcher\PropertiesListFetcher'

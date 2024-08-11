@@ -13,18 +13,15 @@ declare(strict_types = 1);
 namespace Service\Class\Documentation\Page;
 
 use ArrayIterator;
-use Collection\ClassCollection;
-use Collection\DocPageCollection;
 use Contract\Formatter\DokuWikiFormatInterface;
 use Contract\Generator\Documentation\Class\Page\Class\ClassPageGeneratorInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
 use Contract\Service\Class\Documentation\Page\MethodPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
 use Dto\Class\ClassDto;
-use Dto\Common\Modifier;
 use Dto\Documentation\DocPage;
-use Dto\Method\Method;
 use Illuminate\Support\Collection;
+use Pipeline\Page\ClassPageMarkerPipeline;
 use Webmozart\Assert\Assert;
 
 final readonly class ClassPageService implements ClassPageServiceInterface, DokuWikiFormatInterface
@@ -34,7 +31,8 @@ final readonly class ClassPageService implements ClassPageServiceInterface, Doku
     public function __construct(
         private ClassPageGeneratorInterface $classPageGenerator,
         private DocFileServiceInterface $docFileService,
-        private MethodPageServiceInterface $methodPageService
+        private MethodPageServiceInterface $methodPageService,
+        private ClassPageMarkerPipeline $classPageMarkerPipeline
     ) {}
 
     /**

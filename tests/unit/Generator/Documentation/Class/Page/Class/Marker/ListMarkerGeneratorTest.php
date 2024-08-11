@@ -108,8 +108,8 @@ final class ListMarkerGeneratorTest extends TestCase
             ->willReturn('testStr2');
 
         $expectedMarker = [];
-        $expectedMarker['###CLASS_USEDBYCLASSES_HEADING###'] = 'testStr' . $lineBreak;
-        $expectedMarker['###CLASS_USEDBYCLASSES_LIST###'] = 'testStr2' . $lineBreak;
+        $expectedMarker['CLASS_USEDBYCLASSES_HEADING'] = 'testStr' . $lineBreak;
+        $expectedMarker['CLASS_USEDBYCLASSES_LIST'] = 'testStr2' . $lineBreak;
 
         $actualMarker = $this->listMarkerGenerator->generateUsedByClassList(
             $this->getTestClassDto(),
@@ -198,8 +198,8 @@ final class ListMarkerGeneratorTest extends TestCase
             ->willReturn('testStr2');
 
         $expectedMarker = [];
-        $expectedMarker['###CONSTANTS_LIST_HEADING###'] = 'testStr' . $lineBreak;
-        $expectedMarker['###CONSTANTS_LIST###'] = 'testStr2' . $lineBreak;
+        $expectedMarker['CONSTANTS_LIST_HEADING'] = 'testStr' . $lineBreak;
+        $expectedMarker['CONSTANTS_LIST'] = 'testStr2' . $lineBreak;
 
         $actualMarker = $this->listMarkerGenerator->generateConstantList(
             $this->getTestClassDto(),
@@ -288,8 +288,8 @@ final class ListMarkerGeneratorTest extends TestCase
             ->willReturn('testStr2');
 
         $expectedMarker = [];
-        $expectedMarker['###CLASS_PROPERTIES_LIST_HEADING###'] = 'testStr' . $lineBreak;
-        $expectedMarker['###CLASS_PROPERTIES_LIST###'] = 'testStr2' . $lineBreak;
+        $expectedMarker['CLASS_PROPERTIES_LIST_HEADING'] = 'testStr' . $lineBreak;
+        $expectedMarker['CLASS_PROPERTIES_LIST'] = 'testStr2' . $lineBreak;
 
         $actualMarker = $this->listMarkerGenerator->generatePropertiesList(
             $this->getTestClassDto(),
@@ -378,8 +378,8 @@ final class ListMarkerGeneratorTest extends TestCase
             ->willReturn('testStr2');
 
         $expectedMarker = [];
-        $expectedMarker['###CLASS_INTERFACES_LIST_HEADING###'] = 'testStr' . $lineBreak;
-        $expectedMarker['###CLASS_INTERFACES_LIST###'] = 'testStr2' . $lineBreak;
+        $expectedMarker['CLASS_INTERFACES_LIST_HEADING'] = 'testStr' . $lineBreak;
+        $expectedMarker['CLASS_INTERFACES_LIST'] = 'testStr2' . $lineBreak;
 
         $actualMarker = $this->listMarkerGenerator->generateInterfacesList(
             $this->getTestClassDto(),
@@ -468,8 +468,8 @@ final class ListMarkerGeneratorTest extends TestCase
             ->willReturn('testStr2');
 
         $expectedMarker = [];
-        $expectedMarker['###METHODS_LIST_HEADING###'] = 'testStr' . $lineBreak;
-        $expectedMarker['###METHODS_LIST###'] = 'testStr2' . $lineBreak;
+        $expectedMarker['METHODS_LIST_HEADING'] = 'testStr' . $lineBreak;
+        $expectedMarker['METHODS_LIST'] = 'testStr2' . $lineBreak;
 
         $actualMarker = $this->listMarkerGenerator->generateMethodList(
             $this->getTestClassDto(),
