@@ -53,7 +53,10 @@ final readonly class TemplateService implements TemplateServiceInterface
                     self::MARKER_IDENTIFIER
                 );
 
-                $templateContent = str_replace($key, $marker->getValue(), $templateContent);
+                $markerValue = $marker->getValue();
+                Assert::notNull($markerValue);
+
+                $templateContent = str_replace($key, $markerValue, $templateContent);
                 $iterator->next();
             }
         }
@@ -81,14 +84,14 @@ final readonly class TemplateService implements TemplateServiceInterface
         $interfaceReflection = new ReflectionClass($interface);
         $definedMarkers = $interfaceReflection->getConstants();
 
-        foreach($definedMarkers as $markerKey => $markerValue) {
+        foreach($definedMarkers as $markerKey) {
 
-            $foundMarker = $markers->filter(function ($marker) use ($markerValue) {
-                return (new MarkerNameFilter($markerValue))->hasName($marker);
+            $foundMarker = $markers->filter(function ($marker) use ($markerKey) {
+                return (new MarkerNameFilter($markerKey))->hasName($marker);
             });
 
             if($foundMarker->isEmpty()){
-                $markers->push(Marker::create($markerValue)->withValue(''));
+                $markers->push(Marker::create($markerKey)->withValue(''));
             }
         }
 

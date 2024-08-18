@@ -27,7 +27,7 @@ interface TemplateServiceInterface
 
     /**
      * @param Collection<int, Marker> $markers
-     * @psalm-param non-empty-string $interface
+     * @param class-string $interface
      * @return Collection<int, Marker>
      *
      * @throws ReflectionException
