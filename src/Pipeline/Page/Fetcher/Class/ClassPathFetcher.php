@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Pipeline\Page\Fetcher\Class;
 
-use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPageMarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Class\ClassPathGeneratorInterface;
 use Contract\Pipeline\ClassPagePipelineStepInterface;
 use Dto\Class\ClassDto;
@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ClassPathFetcher implements ClassPagePipelineStepInterface, MarkerInterface
+final readonly class ClassPathFetcher implements ClassPagePipelineStepInterface, ClassPageMarkerInterface
 {
     public function __construct(private ClassPathGeneratorInterface $classPathGenerator)
     {

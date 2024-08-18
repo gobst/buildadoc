@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Pipeline\Page\Fetcher\Method;
 
-use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\MethodPageMarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
 use Contract\Pipeline\MethodPagePipelineStepInterface;
 use Dto\Common\Marker;
@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class MethodSignatureFetcher implements MethodPagePipelineStepInterface, MarkerInterface
+final readonly class MethodSignatureFetcher implements MethodPagePipelineStepInterface, MethodPageMarkerInterface
 {
     public function __construct(
         private MethodLineGeneratorInterface $methodLineGenerator

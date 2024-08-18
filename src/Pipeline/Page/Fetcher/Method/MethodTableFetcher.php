@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Pipeline\Page\Fetcher\Method;
 
-use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\MethodPageMarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodTableGeneratorInterface;
 use Contract\Pipeline\MethodPagePipelineStepInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
@@ -22,7 +22,7 @@ use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class MethodTableFetcher implements MethodPagePipelineStepInterface, MarkerInterface
+final readonly class MethodTableFetcher implements MethodPagePipelineStepInterface, MethodPageMarkerInterface
 {
     private const string NAME_PARAM_TRANS_KEY = 'nameofparam';
     private const string TYPE_TRANS_KEY = 'type';

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Pipeline\Page\Fetcher\Class;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ConstructorMarkerGeneratorInterface;
-use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPageMarkerInterface;
 use Contract\Pipeline\ClassPagePipelineStepInterface;
 use Dto\Class\ClassDto;
 use Dto\Common\Marker;
@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ConstructorFetcher implements ClassPagePipelineStepInterface, MarkerInterface
+final readonly class ConstructorFetcher implements ClassPagePipelineStepInterface, ClassPageMarkerInterface
 {
     public function __construct(private ConstructorMarkerGeneratorInterface $constructorMarkerGen)
     {

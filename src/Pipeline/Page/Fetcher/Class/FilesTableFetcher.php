@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Pipeline\Page\Fetcher\Class;
 
-use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPageMarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\File\FilesTableGeneratorInterface;
 use Contract\Pipeline\ClassPagePipelineStepInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
@@ -22,7 +22,7 @@ use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class FilesTableFetcher implements ClassPagePipelineStepInterface, MarkerInterface
+final readonly class FilesTableFetcher implements ClassPagePipelineStepInterface, ClassPageMarkerInterface
 {
     private const string CLASS_NECESSARY_FILES_TRANS_KEY = 'class.necfiles';
     private const string NAME_TRANS_KEY = 'name';

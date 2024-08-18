@@ -12,7 +12,7 @@ declare(strict_types = 1);
 
 namespace Contract\Generator\Documentation\Class\Page\Class\Marker;
 
-interface MarkerInterface
+interface ClassPageMarkerInterface
 {
     public const string METHODS_LIST_HEADING_MARKER = 'METHODS_LIST_HEADING';
     public const string METHODS_LIST_MARKER = 'METHODS_LIST';
@@ -28,6 +28,4 @@ interface MarkerInterface
     public const string CONSTRUCTOR_MARKER = 'CONSTRUCTOR';
     public const string CLASS_PATH_MARKER = 'CLASS_PATH';
     public const string CLASS_PATH_HEADING_MARKER = 'CLASS_PATH_HEADING';
-    public const string METHOD_PARAMETERS_TABLE_MARKER = 'METHOD_PARAMETERS_TABLE';
-    public const string METHOD_SIGNATURE_MARKER = 'METHOD_SIGNATURE';
 }

@@ -13,7 +13,7 @@ declare(strict_types = 1);
 namespace Generator\Documentation\Class\Page\Class\Marker;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ListMarkerGeneratorInterface;
-use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPageMarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Class\UsedByClassListGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Constant\ConstantListGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
@@ -25,7 +25,7 @@ use Dto\Class\ClassDto;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface, MarkerInterface
+final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface, ClassPageMarkerInterface
 {
     public function __construct(
         private TranslationServiceInterface $translationService,

@@ -13,7 +13,7 @@ declare(strict_types = 1);
 namespace Generator\Documentation\Class\Page\Class\Marker;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPathMarkerGeneratorInterface;
-use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPageMarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Class\ClassPathGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
@@ -21,7 +21,7 @@ use Dto\Class\ClassDto;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ClassPathMarkerGenerator implements ClassPathMarkerGeneratorInterface, MarkerInterface
+final readonly class ClassPathMarkerGenerator implements ClassPathMarkerGeneratorInterface, ClassPageMarkerInterface
 {
     public function __construct(
         private TranslationServiceInterface $translationService,

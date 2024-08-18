@@ -15,7 +15,7 @@ namespace unit\Generator\Documentation\Class\Page\Method;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodTableGeneratorInterface;
-use Contract\Service\File\TemplateServiceInterface;
+use Contract\Service\File\Template\TemplateServiceInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
 use Dto\Common\Modifier;
 use Dto\Method\Method;

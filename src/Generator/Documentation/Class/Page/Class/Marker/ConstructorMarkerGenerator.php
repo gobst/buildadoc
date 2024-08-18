@@ -13,7 +13,7 @@ declare(strict_types = 1);
 namespace Generator\Documentation\Class\Page\Class\Marker;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ConstructorMarkerGeneratorInterface;
-use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPageMarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
@@ -24,7 +24,7 @@ use Service\Class\Filter\MethodNameFilter;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ConstructorMarkerGenerator implements ConstructorMarkerGeneratorInterface, MarkerInterface
+final readonly class ConstructorMarkerGenerator implements ConstructorMarkerGeneratorInterface, ClassPageMarkerInterface
 {
     public function __construct(
         private TranslationServiceInterface $translationService,
