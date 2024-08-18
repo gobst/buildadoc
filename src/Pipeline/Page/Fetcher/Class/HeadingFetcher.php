@@ -10,23 +10,21 @@
  */
 declare(strict_types=1);
 
-namespace Pipeline\Page\Fetcher;
+namespace Pipeline\Page\Fetcher\Class;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
-use Contract\Generator\Documentation\Class\Page\Component\File\FilesTableGeneratorInterface;
+use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
 use Contract\Pipeline\ClassPagePipelineStepInterface;
-use Contract\Service\Translation\TranslationServiceInterface;
 use Dto\Class\ClassDto;
 use Dto\Common\Marker;
 use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class FilesTableFetcher implements ClassPagePipelineStepInterface, MarkerInterface
+final readonly class HeadingFetcher implements ClassPagePipelineStepInterface, MarkerInterface
 {
     public function __construct(
-        private FilesTableGeneratorInterface $filesTableGenerator,
-        private TranslationServiceInterface $translationService
+        private HeadingGeneratorInterface $headingGenerator
     )
     {
     }
@@ -45,20 +43,11 @@ final readonly class FilesTableFetcher implements ClassPagePipelineStepInterface
         Assert::stringNotEmpty($lang);
 
         $lineBreak = chr(13) . chr(13);
-
-        $this->translationService->setLanguage($lang);
-        $tableTranslations = [
-            $this->translationService->translate('class.necfiles'),
-            $this->translationService->translate('name'),
-            $this->translationService->translate('class.namespace'),
-        ];
-
-        $marker = Marker::create(self::FILES_TABLE_MARKER)
+        $marker = Marker::create(self::HEADING_MARKER)
             ->withValue(
-                $this->filesTableGenerator->generate(
-                    $class,
-                    $format,
-                    $tableTranslations
+                $this->headingGenerator->generate(
+                    $class->getName(),
+                    1, $format
                 ) . $lineBreak
             );
 

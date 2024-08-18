@@ -10,14 +10,14 @@
  */
 declare(strict_types=1);
 
-namespace Pipeline\Page;
+namespace Pipeline\Page\Provider;
 
 use Contract\Pipeline\ClassPagePipelineStepInterface;
-use Contract\Pipeline\Fetcher\FetcherProviderInterface;
+use Contract\Pipeline\Fetcher\ClassPageFetcherProviderInterface;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class FetcherProvider implements FetcherProviderInterface
+final readonly class ClassPageFetcherProvider implements ClassPageFetcherProviderInterface
 {
     private array $fetchers;
 

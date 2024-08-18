@@ -13,7 +13,7 @@ declare(strict_types = 1);
 namespace integration\Pipeline\Page;
 
 use Contract\Pipeline\ClassPagePipelineStepInterface;
-use Contract\Pipeline\Fetcher\FetcherProviderInterface;
+use Contract\Pipeline\Fetcher\ClassPageFetcherProviderInterface;
 use Dto\Class\ClassDto;
 use Dto\Common\Marker;
 use Illuminate\Pipeline\Pipeline;
@@ -27,22 +27,22 @@ use Pipeline\Page\ClassPageMarkerPipeline;
 
 #[CoversClass(ClassPageMarkerPipeline::class)]
 #[UsesClass(Collection::class)]
+#[UsesClass(ClassDto::class)]
+#[UsesClass(Pipeline::class)]
 #[UsesClass(Marker::class)]
 final class ClassPageMarkerPipelineTest extends TestCase
 {
-    private FetcherProviderInterface&MockObject $fetcherProvider;
+    private ClassPageFetcherProviderInterface&MockObject $fetcherProvider;
     private ClassPagePipelineStepInterface&MockObject $fetcher;
-    private Pipeline $pipeline;
     private ClassPageMarkerPipeline $classPageMarkerPipe;
 
     public function setUp(): void
     {
-        $this->fetcherProvider = $this->getMockBuilder(FetcherProviderInterface::class)
+        $this->fetcherProvider = $this->getMockBuilder(ClassPageFetcherProviderInterface::class)
             ->getMock();
         $this->fetcher = $this->getMockBuilder(ClassPagePipelineStepInterface::class)
             ->getMock();
-        $this->pipeline = new Pipeline();
-        $this->classPageMarkerPipe = new ClassPageMarkerPipeline($this->fetcherProvider, $this->pipeline);
+        $this->classPageMarkerPipe = new ClassPageMarkerPipeline($this->fetcherProvider, new Pipeline());
     }
 
     #[TestDox('handlePipeline() method works correctly')]

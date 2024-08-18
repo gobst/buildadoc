@@ -28,4 +28,6 @@ interface MarkerInterface
     public const string CONSTRUCTOR_MARKER = 'CONSTRUCTOR';
     public const string CLASS_PATH_MARKER = 'CLASS_PATH';
     public const string CLASS_PATH_HEADING_MARKER = 'CLASS_PATH_HEADING';
+    public const string METHOD_PARAMETERS_TABLE_MARKER = 'METHOD_PARAMETERS_TABLE';
+    public const string METHOD_SIGNATURE_MARKER = 'METHOD_SIGNATURE';
 }

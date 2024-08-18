@@ -10,18 +10,18 @@
  */
 declare(strict_types=1);
 
-namespace Pipeline\Page\Fetcher;
+namespace Pipeline\Page\Fetcher\Method;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
-use Contract\Pipeline\ClassPagePipelineStepInterface;
-use Dto\Class\ClassDto;
+use Contract\Pipeline\MethodPagePipelineStepInterface;
 use Dto\Common\Marker;
+use Dto\Method\Method;
 use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class HeadingFetcher implements ClassPagePipelineStepInterface, MarkerInterface
+final readonly class MethodHeadingFetcher implements MethodPagePipelineStepInterface, MarkerInterface
 {
     public function __construct(
         private HeadingGeneratorInterface $headingGenerator
@@ -34,9 +34,9 @@ final readonly class HeadingFetcher implements ClassPagePipelineStepInterface, M
      */
     public function handle(
         Collection $passable,
-        ClassDto $class,
-        string $format,
-        string $lang
+        Method     $method,
+        string     $format,
+        string     $lang
     ): Collection
     {
         Assert::stringNotEmpty($format);
@@ -46,7 +46,7 @@ final readonly class HeadingFetcher implements ClassPagePipelineStepInterface, M
         $marker = Marker::create(self::HEADING_MARKER)
             ->withValue(
                 $this->headingGenerator->generate(
-                    $class->getName(),
+                    $method->getName(),
                     1, $format
                 ) . $lineBreak
             );

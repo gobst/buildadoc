@@ -10,7 +10,7 @@
  */
 declare(strict_types=1);
 
-namespace Pipeline\Page\Fetcher;
+namespace Pipeline\Page\Fetcher\Class;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ConstructorMarkerGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;

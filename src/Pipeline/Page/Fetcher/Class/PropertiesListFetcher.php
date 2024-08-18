@@ -10,7 +10,7 @@
  */
 declare(strict_types=1);
 
-namespace Pipeline\Page\Fetcher;
+namespace Pipeline\Page\Fetcher\Class;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ListMarkerGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Class\Marker\MarkerInterface;
@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class InterfacesListFetcher implements ClassPagePipelineStepInterface, MarkerInterface
+final readonly class PropertiesListFetcher implements ClassPagePipelineStepInterface, MarkerInterface
 {
     public function __construct(private ListMarkerGeneratorInterface $listGenerator)
     {
@@ -40,15 +40,15 @@ final readonly class InterfacesListFetcher implements ClassPagePipelineStepInter
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 
-        $marker = $this->listGenerator->generateInterfacesList($class, $format, 'unordered', $lang);
+        $marker = $this->listGenerator->generatePropertiesList($class, $format, 'unordered', $lang);
 
-        $passable->push(Marker::create(self::INTERFACES_LIST_HEADING_MARKER)
+        $passable->push(Marker::create(self::PROPERTIES_LIST_HEADING_MARKER)
             ->withValue(
-                $marker[self::INTERFACES_LIST_HEADING_MARKER]
+                $marker[self::PROPERTIES_LIST_HEADING_MARKER]
             ));
-        $passable->push(Marker::create(self::INTERFACES_LIST_MARKER)
+        $passable->push(Marker::create(self::PROPERTIES_LIST_MARKER)
             ->withValue(
-                $marker[self::INTERFACES_LIST_MARKER]
+                $marker[self::PROPERTIES_LIST_MARKER]
             ));
 
         return $passable;

@@ -14,7 +14,7 @@ namespace Contract\Pipeline\Fetcher;
 
 use Contract\Pipeline\ClassPagePipelineStepInterface;
 
-interface FetcherProviderInterface
+interface ClassPageFetcherProviderInterface
 {
     /**
      * @psalm-param non-empty-string $type

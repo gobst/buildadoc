@@ -46,14 +46,20 @@ services:
   Service\Class\Filter\ModifierFilter:
     arguments:
       $modifiers: []
-  Pipeline\Page\FetcherProvider:
+  Pipeline\Page\Provider\ClassPageFetcherProvider:
     arguments:
       $fetchers:
-        heading: 'Pipeline\Page\Fetcher\HeadingFetcher',
-        classPath: 'Pipeline\Page\Fetcher\ClassPathFetcher',
-        constantList: 'Pipeline\Page\Fetcher\ConstantListFetcher',
-        constructor: 'Pipeline\Page\Fetcher\ConstructorFetcher',
-        filesTable: 'Pipeline\Page\Fetcher\FilesTableFetcher',
-        interfacesList: 'Pipeline\Page\Fetcher\InterfacesListFetcher',
-        methodList: 'Pipeline\Page\Fetcher\MethodListFetcher',
-        propertiesList: 'Pipeline\Page\Fetcher\PropertiesListFetcher'
+        heading: 'Pipeline\Page\Fetcher\Class\HeadingFetcher',
+        classPath: 'Pipeline\Page\Fetcher\Class\ClassPathFetcher',
+        constantList: 'Pipeline\Page\Fetcher\Class\ConstantListFetcher',
+        constructor: 'Pipeline\Page\Fetcher\Class\ConstructorFetcher',
+        filesTable: 'Pipeline\Page\Fetcher\Class\FilesTableFetcher',
+        interfacesList: 'Pipeline\Page\Fetcher\Class\InterfacesListFetcher',
+        methodList: 'Pipeline\Page\Fetcher\Class\MethodListFetcher',
+        propertiesList: 'Pipeline\Page\Fetcher\Class\PropertiesListFetcher'
+  Pipeline\Page\Provider\MethodPageFetcherProvider:
+    arguments:
+      $fetchers:
+        methodHeading: 'Pipeline\Page\Fetcher\Method\MethodHeadingFetcher',
+        methodTable: 'Pipeline\Page\Fetcher\Method\MethodTableFetcher',
+        methodSignature: 'Pipeline\Page\Fetcher\Method\MethodSignatureFetcher'

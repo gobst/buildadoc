@@ -14,7 +14,7 @@ namespace Pipeline\Page;
 
 use Closure;
 use Contract\Pipeline\ClassPageMarkerPipelineInterface;
-use Contract\Pipeline\Fetcher\FetcherProviderInterface;
+use Contract\Pipeline\Fetcher\ClassPageFetcherProviderInterface;
 use Dto\Class\ClassDto;
 use Illuminate\Contracts\Pipeline\Pipeline;
 use Illuminate\Support\Collection;
@@ -22,9 +22,18 @@ use Webmozart\Assert\Assert;
 
 final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineInterface
 {
+    private const string CLASS_HEADING_KEY_FETCHER = 'heading';
+    private const string FILES_TABLE_KEY_FETCHER = 'filesTable';
+    private const string CLASS_PATH_KEY_FETCHER = 'classPath';
+    private const string CONSTRUCTOR_KEY_FETCHER = 'constructor';
+    private const string PROPERTIES_LIST_KEY_FETCHER = 'propertiesList';
+    private const string INTERFACES_LIST_KEY_FETCHER = 'interfacesList';
+    private const string CONSTANT_LIST_KEY_FETCHER = 'constantList';
+    private const string METHOD_LIST_KEY_FETCHER = 'methodList';
+
     public function __construct(
-        private FetcherProviderInterface $fetcherProvider,
-        private Pipeline $pipeline
+        private ClassPageFetcherProviderInterface $fetcherProvider,
+        private Pipeline                          $pipeline
     )
     {
     }
@@ -50,14 +59,14 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
     private function getClosures(ClassDto $class, string $format, string $lang): array
     {
         $fetchers = [
-            'heading',
-            'filesTable',
-            'classPath',
-            'constructor',
-            'propertiesList',
-            'interfacesList',
-            'constantList',
-            'methodList'
+            self::CLASS_HEADING_KEY_FETCHER,
+            self::FILES_TABLE_KEY_FETCHER,
+            self::CLASS_PATH_KEY_FETCHER,
+            self::CONSTRUCTOR_KEY_FETCHER,
+            self::PROPERTIES_LIST_KEY_FETCHER,
+            self::INTERFACES_LIST_KEY_FETCHER,
+            self::CONSTANT_LIST_KEY_FETCHER,
+            self::METHOD_LIST_KEY_FETCHER
         ];
 
         $closures = [];
