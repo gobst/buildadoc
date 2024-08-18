@@ -83,12 +83,12 @@ final readonly class TemplateService implements TemplateServiceInterface
 
         foreach($definedMarkers as $markerKey => $markerValue) {
 
-            $foundMarker = $markers->filter(function ($marker) use ($markerKey) {
-                return (new MarkerNameFilter($markerKey))->hasName($marker);
+            $foundMarker = $markers->filter(function ($marker) use ($markerValue) {
+                return (new MarkerNameFilter($markerValue))->hasName($marker);
             });
 
             if($foundMarker->isEmpty()){
-                $markers->push(Marker::create($markerKey)->withValue(''));
+                $markers->push(Marker::create($markerValue)->withValue(''));
             }
         }
 
