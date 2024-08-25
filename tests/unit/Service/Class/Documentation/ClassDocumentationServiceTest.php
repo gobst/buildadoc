@@ -14,6 +14,7 @@ namespace unit\Service\Class\Documentation;
 
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
+use Contract\Service\File\DocFileServiceInterface;
 use Contract\Service\File\FileServiceInterface;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -31,6 +32,7 @@ final class ClassDocumentationServiceTest extends TestCase
 {
     private ClassDataServiceInterface&MockObject $classDataService;
     private FileServiceInterface&MockObject $fileService;
+    private DocFileServiceInterface&MockObject $docFileService;
     private ClassPageServiceInterface&MockObject $classPageService;
     private ClassDocumentationService $classDocService;
 
@@ -40,22 +42,22 @@ final class ClassDocumentationServiceTest extends TestCase
             ->getMock();
         $this->fileService = $this->getMockBuilder(FileServiceInterface::class)
             ->getMock();
+        $this->docFileService = $this->getMockBuilder(DocFileServiceInterface::class)
+            ->getMock();
         $this->classPageService = $this->getMockBuilder(ClassPageServiceInterface::class)
             ->getMock();
 
         $this->classDocService = new ClassDocumentationService(
             $this->classDataService,
-            $this->fileService,
-            $this->classPageService
+            $this->classPageService,
+            $this->docFileService,
+            $this->fileService
         );
     }
 
     #[TestDox('buildDocumentation() method works correctly')]
     public function testBuildDocumentation(): void
     {
-        $this->classPageService->expects(self::once())
-            ->method('dumpPages');
-
         $this->classDataService->expects(self::once())
             ->method('getAllClasses')
             ->willReturn(Collection::make());
@@ -82,9 +84,6 @@ final class ClassDocumentationServiceTest extends TestCase
     ): void
     {
         $this->expectException(InvalidArgumentException::class);
-
-        $this->classPageService->expects(self::never())
-            ->method('dumpPages');
 
         $this->classDataService->expects(self::never())
             ->method('getAllClasses');
