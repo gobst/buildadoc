@@ -20,7 +20,7 @@ use ReflectionException;
 
 final readonly class ClassPageTemplateService implements PageTemplateServiceInterface
 {
-    private const string TEMPLATE_FILE = __DIR__.'/../../res/templates/dokuwiki/classTmpl.txt';
+    private const string TEMPLATE_FILE = __DIR__.'/../../../../res/templates/dokuwiki/classTmpl.txt';
 
     public function __construct(private TemplateServiceInterface $templateService)
     {

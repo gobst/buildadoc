@@ -8,11 +8,13 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
 namespace Command;
 
+use Contract\Service\Class\Data\ClassDataServiceInterface;
+use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
+use Contract\Service\File\DocFileServiceInterface;
 use Exception;
 use Service\Class\Data\ClassDataService;
 use Service\Class\Documentation\ClassDocumentationService;
@@ -56,14 +58,24 @@ class DokuWikiCiCommand extends Command
         $container->compile();
 
         /** @var ClassDataService $classDataService */
-        $classDataService = $container->get('Service\Class\Data\ClassDataService');
+        $classDataService = $container->get(ClassDataServiceInterface::class);
         /** @var FileService $fileService */
-        $fileService = $container->get('Service\File\FileService');
+        $docFileService = $container->get(DocFileServiceInterface::class);
         /** @var ClassPageService $classPageService */
-        $classPageService = $container->get('Service\Class\Documentation\Page\ClassPageService');
-        $classDocService = new ClassDocumentationService($classDataService, $fileService, $classPageService);
+        $classPageService = $container->get(ClassPageServiceInterface::class);
 
-        $classDocService->buildDocumentation($args['source'], $args['destination'], $language, self::FORMAT);
+        $classDocService = new ClassDocumentationService(
+            $classDataService,
+            $classPageService,
+            $docFileService
+        );
+
+        $classDocService->buildDocumentation(
+            $args['source'],
+            $args['destination'],
+            $language,
+            self::FORMAT
+        );
 
         $output->writeln('Done!');
 

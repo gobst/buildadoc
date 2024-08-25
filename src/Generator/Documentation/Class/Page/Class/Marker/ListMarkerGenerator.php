@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  *
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Class\Marker;
 
@@ -28,14 +28,16 @@ use Webmozart\Assert\InvalidArgumentException;
 final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface, ClassPageMarkerInterface
 {
     public function __construct(
-        private TranslationServiceInterface $translationService,
-        private MethodListGeneratorInterface $methodListGenerator,
-        private ConstantListGeneratorInterface $constListGenerator,
-        private PropertyListGeneratorInterface $propListGenerator,
-        private InterfaceListGeneratorInterface $interListGenerator,
-        private HeadingGeneratorInterface $headingGenerator,
+        private TranslationServiceInterface       $translationService,
+        private MethodListGeneratorInterface      $methodListGenerator,
+        private ConstantListGeneratorInterface    $constListGenerator,
+        private PropertyListGeneratorInterface    $propListGenerator,
+        private InterfaceListGeneratorInterface   $interListGenerator,
+        private HeadingGeneratorInterface         $headingGenerator,
         private UsedByClassListGeneratorInterface $usedByClassListGen,
-    ) {}
+    )
+    {
+    }
 
     /**
      * @throws InvalidArgumentException
@@ -49,6 +51,9 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         $marker = [];
         $lineBreak = chr(13) . chr(13);
         $this->translationService->setLanguage($lang);
+
+        $marker['CLASS_USEDBYCLASSES_HEADING'] = '';
+        $marker['CLASS_USEDBYCLASSES_LIST'] = '';
 
         if ($class->getChildClasses() !== null && !$class->getChildClasses()->isEmpty()) {
             $text = $this->translationService->translate('class.usedbyclasses');
@@ -74,6 +79,9 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         $lineBreak = chr(13) . chr(13);
         $this->translationService->setLanguage($lang);
 
+        $marker[self::CONSTANTS_LIST_HEADING_MARKER] = '';
+        $marker[self::CONSTANTS_LIST_MARKER] = '';
+
         if ($class->getConstants() !== null && !$class->getConstants()->isEmpty()) {
             $text = $this->translationService->translate('class.const');
             Assert::stringNotEmpty($text);
@@ -97,6 +105,9 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         $marker = [];
         $lineBreak = chr(13) . chr(13);
         $this->translationService->setLanguage($lang);
+
+        $marker[self::PROPERTIES_LIST_HEADING_MARKER] = '';
+        $marker[self::PROPERTIES_LIST_MARKER] = '';
 
         if ($class->getProperties() !== null && !$class->getProperties()->isEmpty()) {
             $text = $this->translationService->translate('class.properties');
@@ -122,6 +133,9 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         $lineBreak = chr(13) . chr(13);
         $this->translationService->setLanguage($lang);
 
+        $marker[self::INTERFACES_LIST_HEADING_MARKER] = '';
+        $marker[self::INTERFACES_LIST_MARKER] = '';
+
         if ($class->getInterfaces() !== null && !$class->getInterfaces()->isEmpty()) {
             $text = $this->translationService->translate('class.interfaces');
             Assert::stringNotEmpty($text);
@@ -145,6 +159,9 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         $marker = [];
         $lineBreak = chr(13) . chr(13);
         $this->translationService->setLanguage($lang);
+
+        $marker[self::METHODS_LIST_HEADING_MARKER] = '';
+        $marker[self::METHODS_LIST_MARKER] = '';
 
         if (!$class->getMethods()->isEmpty()) {
             $text = $this->translationService->translate('class.methods');

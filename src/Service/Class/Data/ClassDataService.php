@@ -8,19 +8,11 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Service\Class\Data;
 
 use ArrayIterator;
-use Collection\ClassCollection;
-use Collection\ConstantCollection;
-use Collection\FileCollection;
-use Collection\InterfaceCollection;
-use Collection\ModifierCollection;
-use Collection\PropertyCollection;
-use Collection\TraitCollection;
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Data\MethodDataServiceInterface;
 use Contract\Service\Class\Data\ModifierDataServiceInterface;
@@ -30,15 +22,12 @@ use Dto\Class\Constant;
 use Dto\Class\InterfaceDto;
 use Dto\Class\TraitDto;
 use Dto\Common\File;
-use Dto\Common\Modifier;
 use Dto\Common\Property;
-use Dto\Documentation\DocPage;
 use Illuminate\Support\Collection;
 use PhpParser\Node;
 use PhpParser\NodeFinder;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
-use Ramsey\Collection\Exception\NoSuchElementException;
 use Service\Class\Filter\ClassNameFilter;
 use Service\Class\Filter\ParentClassNameFilter;
 use Webmozart\Assert\Assert;
@@ -141,8 +130,6 @@ final class ClassDataService implements ClassDataServiceInterface
 
             $modifiers = $this->modifierDataService->getModifiers($prop);
             $type = !empty($prop->type->name) ? $prop->type->name : '';
-
-            Assert::stringNotEmpty($type);
 
             $defaultValue = !empty($prop->props[0]->default->value) ? $prop->props[0]->default->value : '';
             $property = Property::create(

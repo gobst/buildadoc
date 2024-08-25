@@ -20,7 +20,7 @@ use ReflectionException;
 
 final readonly class MethodPageTemplateService implements PageTemplateServiceInterface
 {
-    private const string TEMPLATE_FILE = __DIR__.'/../../res/templates/dokuwiki/methodTmpl.txt';
+    private const string TEMPLATE_FILE = __DIR__.'/../../../../res/templates/dokuwiki/methodTmpl.txt';
 
     public function __construct(private TemplateServiceInterface $templateService)
     {
