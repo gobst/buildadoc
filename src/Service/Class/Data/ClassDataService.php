@@ -121,6 +121,9 @@ final class ClassDataService implements ClassDataServiceInterface
         return $constants;
     }
 
+    /**
+     * @psalm-suppress PossiblyInvalidArgument
+     */
     public function getProperties(array $ast): Collection
     {
         /** @var Collection<int, Property> $properties */

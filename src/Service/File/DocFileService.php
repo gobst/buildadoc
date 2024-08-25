@@ -25,7 +25,7 @@ final readonly class DocFileService implements DocFileServiceInterface, FileExte
     private const string FORMAT_DOKUWIKI_KEY = 'dokuwiki';
 
     public function __construct(
-        public FileServiceInterface $fileService
+        private FileServiceInterface $fileService
     )
     {
     }

@@ -15,11 +15,9 @@ namespace Command;
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
+use Contract\Service\File\FileServiceInterface;
 use Exception;
-use Service\Class\Data\ClassDataService;
 use Service\Class\Documentation\ClassDocumentationService;
-use Service\Class\Documentation\Page\ClassPageService;
-use Service\File\FileService;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -57,17 +55,20 @@ class DokuWikiCiCommand extends Command
         $loader->load('services.yml');
         $container->compile();
 
-        /** @var ClassDataService $classDataService */
+        /** @var ClassDataServiceInterface $classDataService */
         $classDataService = $container->get(ClassDataServiceInterface::class);
-        /** @var FileService $fileService */
+        /** @var DocFileServiceInterface $docFileService */
         $docFileService = $container->get(DocFileServiceInterface::class);
-        /** @var ClassPageService $classPageService */
+        /** @var FileServiceInterface $fileService */
+        $fileService = $container->get(FileServiceInterface::class);
+        /** @var ClassPageServiceInterface $classPageService */
         $classPageService = $container->get(ClassPageServiceInterface::class);
 
         $classDocService = new ClassDocumentationService(
             $classDataService,
             $classPageService,
-            $docFileService
+            $docFileService,
+            $fileService
         );
 
         $classDocService->buildDocumentation(

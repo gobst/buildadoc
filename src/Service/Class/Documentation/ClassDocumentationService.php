@@ -17,6 +17,7 @@ use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\ClassDocumentationServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
+use Contract\Service\File\FileServiceInterface;
 use Dto\Class\ClassDto;
 use Dto\Common\File;
 use Illuminate\Support\Collection;
@@ -27,7 +28,8 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
     public function __construct(
         private ClassDataServiceInterface $classDataService,
         private ClassPageServiceInterface $classPageService,
-        private DocFileServiceInterface $docFileService
+        private DocFileServiceInterface $docFileService,
+        private FileServiceInterface $fileService
     )
     {
     }
@@ -67,6 +69,6 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
      */
     private function fetchFiles(string $sourceDir): Collection
     {
-        return $this->docFileService->fileService->getAllFilesWithinDir($sourceDir, Collection::make());
+        return $this->fileService->getAllFilesWithinDir($sourceDir, Collection::make());
     }
 }
