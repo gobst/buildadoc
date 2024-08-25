@@ -14,7 +14,6 @@ namespace Contract\Service\Class\Documentation\Page;
 
 use Dto\Documentation\DocPage;
 use Dto\Method\Method;
-use Illuminate\Support\Collection;
 
 interface MethodPageServiceInterface
 {
@@ -23,12 +22,4 @@ interface MethodPageServiceInterface
      * @psalm-param non-empty-string $lang
      */
     public function generateMethodPage(Method $method, string $format, string $lang): DocPage;
-
-    /**
-     * @psalm-param non-empty-string $lang
-     * @psalm-param non-empty-string $format
-     * @param Collection<int, Method> $methods
-     * @return Collection<int, DocPage>
-     */
-    public function getPages(Collection $methods, string $lang, string $format): Collection;
 }

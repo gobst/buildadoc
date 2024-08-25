@@ -36,7 +36,7 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
         Assert::stringNotEmpty($lang);
         Assert::stringNotEmpty($format);
 
-        $this->classPageService->dumpPages($this->getClasses($sourceDir), $destDir, $lang, $format);
+        #$this->classPageService->dumpPages($this->getClasses($sourceDir), $destDir, $lang, $format);
     }
 
     /**
