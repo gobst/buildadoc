@@ -16,6 +16,7 @@ use Closure;
 use Contract\Pipeline\ClassPageMarkerPipelineInterface;
 use Contract\Pipeline\Fetcher\ClassPageFetcherProviderInterface;
 use Dto\Class\ClassDto;
+use Dto\Common\Marker;
 use Illuminate\Contracts\Pipeline\Pipeline;
 use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
@@ -38,6 +39,11 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
     {
     }
 
+    /**
+     * @psalm-param non-empty-string $lang
+     * @psalm-param non-empty-string $format
+     * @return Collection<int, Marker>
+     */
     public function handlePipeline(ClassDto $class, string $format, string $lang): Collection
     {
         Assert::stringNotEmpty($format);

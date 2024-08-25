@@ -19,6 +19,12 @@ use Illuminate\Support\Collection;
 interface MethodPageServiceInterface
 {
     /**
+     * @psalm-param non-empty-string $format
+     * @psalm-param non-empty-string $lang
+     */
+    public function generateMethodPage(Method $method, string $format, string $lang): DocPage;
+
+    /**
      * @psalm-param non-empty-string $lang
      * @psalm-param non-empty-string $format
      * @param Collection<int, Method> $methods

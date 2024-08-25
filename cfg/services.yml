@@ -63,3 +63,8 @@ services:
         methodHeading: 'Pipeline\Page\Fetcher\Method\MethodHeadingFetcher',
         methodTable: 'Pipeline\Page\Fetcher\Method\MethodTableFetcher',
         methodSignature: 'Pipeline\Page\Fetcher\Method\MethodSignatureFetcher'
+  Service\File\Template\Provider\TemplateServiceProvider:
+    arguments:
+      $services:
+        method: 'Service\File\Template\MethodPageTemplateService',
+        class: 'Service\File\Template\ClassPageTemplateService'

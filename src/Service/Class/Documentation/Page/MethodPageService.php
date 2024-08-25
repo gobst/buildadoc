@@ -8,30 +8,54 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Service\Class\Documentation\Page;
 
 use ArrayIterator;
-use Collection\DocPageCollection;
-use Collection\MethodCollection;
-use Contract\Formatter\DokuWikiFormatInterface;
-use Contract\Generator\Documentation\Class\Page\Method\MethodPageGeneratorInterface;
+use Contract\Pipeline\MethodPageMarkerPipelineInterface;
 use Contract\Service\Class\Documentation\Page\MethodPageServiceInterface;
+use Contract\Service\File\DocFileServiceInterface;
+use Contract\Service\File\Template\TemplateServiceProviderInterface;
 use Dto\Documentation\DocPage;
 use Dto\Method\Method;
 use Illuminate\Support\Collection;
 use Service\Class\Filter\PageTitleFilter;
 use Webmozart\Assert\Assert;
 
-final readonly class MethodPageService implements MethodPageServiceInterface, DokuWikiFormatInterface
+final readonly class MethodPageService implements MethodPageServiceInterface
 {
-    private const string FILE_EXTENSION_SUFFIX = 'FILE_EXTENSION';
+    private const string METHODPAGE_TEMPLATE_SERVICE_KEY = 'method';
 
     public function __construct(
-        private MethodPageGeneratorInterface $methodPageGenerator
+        private MethodPageMarkerPipelineInterface $methodPageMPipeline,
+        private TemplateServiceProviderInterface $tmplServiceProvider,
+        private DocFileServiceInterface $docFileService
     ) {}
+
+    /**
+     * @psalm-param non-empty-string $format
+     * @psalm-param non-empty-string $lang
+     */
+    public function generateMethodPage(Method $method, string $format, string $lang): DocPage
+    {
+        Assert::stringNotEmpty($format);
+        Assert::stringNotEmpty($lang);
+
+        $markers = $this->methodPageMPipeline->handlePipeline($method, $format, $lang);
+        $pageContent = $this->tmplServiceProvider
+            ->getService(self::METHODPAGE_TEMPLATE_SERVICE_KEY)
+            ->fillTemplate($markers);
+
+        Assert::stringNotEmpty($pageContent);
+
+        return DocPage::create(
+            $pageContent,
+            $method->getName(),
+            sprintf('%s_%s', $method->getClass(), $method->getName()),
+            $this->docFileService->getFileExtensionByFormat($format)
+        );
+    }
 
     /**
      * @param Collection<int, Method> $methods
@@ -73,10 +97,5 @@ final readonly class MethodPageService implements MethodPageServiceInterface, Do
         return Collection::make($docPageCollection->filter(function ($value) {
             return (new PageTitleFilter('__construct'))->hasNotPageTitle($value);
         })->toArray());
-    }
-
-    private function getFileExtension(string $format): string
-    {
-        return self::{sprintf('%s_%s', strtoupper($format), self::FILE_EXTENSION_SUFFIX)};
     }
 }

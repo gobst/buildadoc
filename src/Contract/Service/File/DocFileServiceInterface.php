@@ -21,4 +21,10 @@ interface DocFileServiceInterface
      * @param Collection<int, DocPage> $pages
      */
     public function dumpDocFiles(Collection $pages, string $destDirectory): void;
+
+    /**
+     * @psalm-param non-empty-string $format
+     * @psalm-return non-empty-string
+     */
+    public function getFileExtensionByFormat(string $format): string;
 }
