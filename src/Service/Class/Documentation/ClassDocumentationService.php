@@ -12,10 +12,11 @@ declare(strict_types = 1);
 
 namespace Service\Class\Documentation;
 
+use ArrayIterator;
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\ClassDocumentationServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
-use Contract\Service\File\FileServiceInterface;
+use Contract\Service\File\DocFileServiceInterface;
 use Dto\Class\ClassDto;
 use Dto\Common\File;
 use Illuminate\Support\Collection;
@@ -25,9 +26,11 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
 {
     public function __construct(
         private ClassDataServiceInterface $classDataService,
-        private FileServiceInterface $fileService,
-        private ClassPageServiceInterface $classPageService
-    ) {}
+        private ClassPageServiceInterface $classPageService,
+        private DocFileServiceInterface $docFileService
+    )
+    {
+    }
 
     public function buildDocumentation(string $sourceDir, string $destDir, string $lang, string $format): void
     {
@@ -36,24 +39,34 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
         Assert::stringNotEmpty($lang);
         Assert::stringNotEmpty($format);
 
-        #$this->classPageService->dumpPages($this->getClasses($sourceDir), $destDir, $lang, $format);
+        $classes = $this->fetchClasses($sourceDir);
+
+        /** @var ArrayIterator $iterator */
+        $iterator = $classes->getIterator();
+        while ($iterator->valid()) {
+            /** @var ClassDto $class */
+            $class = $iterator->current();
+            $docPages = $this->classPageService->generateClassPageIncludingMethodPages($class, $format, $lang);
+            $this->docFileService->dumpDocFiles($docPages, $destDir);
+            $iterator->next();
+        }
     }
 
     /**
      * @psalm-param non-empty-string $sourceDir
      * @return Collection<int, ClassDto>
      */
-    private function getClasses(string $sourceDir): Collection
+    private function fetchClasses(string $sourceDir): Collection
     {
-        return $this->classDataService->getAllClasses($this->getFiles($sourceDir));
+        return $this->classDataService->getAllClasses($this->fetchFiles($sourceDir));
     }
 
     /**
      * @psalm-param non-empty-string $sourceDir
      * @return Collection<int, File>
      */
-    private function getFiles(string $sourceDir): Collection
+    private function fetchFiles(string $sourceDir): Collection
     {
-        return $this->fileService->getAllFilesWithinDir($sourceDir, Collection::make());
+        return $this->docFileService->fileService->getAllFilesWithinDir($sourceDir, Collection::make());
     }
 }

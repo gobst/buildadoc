@@ -8,16 +8,13 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types=1);
 
 namespace Service\File;
 
-use Collection\FileCollection;
 use Contract\Service\File\FileServiceInterface;
 use Dto\Common\File;
 use Illuminate\Support\Collection;
-use Ramsey\Collection\Exception\NoSuchElementException;
 use Service\File\Filter\FileNameFilter;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;

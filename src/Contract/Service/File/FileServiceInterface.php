@@ -23,7 +23,12 @@ interface FileServiceInterface
      * @param Collection<int, File> $files
      * @return Collection<int, File>
      */
-    public function getAllFilesWithinDir(string $directory, Collection $files, array $excludeFiles = [], string $extension = 'php'): Collection;
+    public function getAllFilesWithinDir(
+        string $directory,
+        Collection $files,
+        array $excludeFiles = [],
+        string $extension = 'php'
+    ): Collection;
 
     /**
      * @psalm-param non-empty-string $filename
