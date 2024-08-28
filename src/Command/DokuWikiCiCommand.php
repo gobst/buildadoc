@@ -16,7 +16,6 @@ use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
 use Contract\Service\File\FileServiceInterface;
-use Exception;
 use Service\Class\Documentation\ClassDocumentationService;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -25,7 +24,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Webmozart\Assert\Assert;
 
 #[AsCommand(
@@ -36,11 +35,7 @@ class DokuWikiCiCommand extends Command
 {
     private const string FORMAT = 'dokuwiki';
     private const string DEFAULT_LANGUAGE = 'de';
-    protected static $defaultDescription = 'Creating class documentation for DokuWiki.';
 
-    /**
-     * @throws Exception
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $args = $input->getArguments();
@@ -50,26 +45,7 @@ class DokuWikiCiCommand extends Command
         Assert::stringNotEmpty($args['destination']);
         Assert::stringNotEmpty($language);
 
-        $container = new ContainerBuilder();
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../cfg'));
-        $loader->load('services.yml');
-        $container->compile();
-
-        /** @var ClassDataServiceInterface $classDataService */
-        $classDataService = $container->get(ClassDataServiceInterface::class);
-        /** @var DocFileServiceInterface $docFileService */
-        $docFileService = $container->get(DocFileServiceInterface::class);
-        /** @var FileServiceInterface $fileService */
-        $fileService = $container->get(FileServiceInterface::class);
-        /** @var ClassPageServiceInterface $classPageService */
-        $classPageService = $container->get(ClassPageServiceInterface::class);
-
-        $classDocService = new ClassDocumentationService(
-            $classDataService,
-            $classPageService,
-            $docFileService,
-            $fileService
-        );
+        $classDocService = $this->getDocumentationService();
 
         $classDocService->buildDocumentation(
             $args['source'],
@@ -101,5 +77,29 @@ class DokuWikiCiCommand extends Command
                 InputArgument::OPTIONAL,
                 'The language that should be used (en or de). Default is "de".'
             );
+    }
+
+    private function getDocumentationService(): ClassDocumentationService
+    {
+        $container = new ContainerBuilder();
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../../cfg'));
+        $loader->load('services.php');
+        $container->compile();
+
+        /** @var ClassDataServiceInterface $classDataService */
+        $classDataService = $container->get(ClassDataServiceInterface::class);
+        /** @var DocFileServiceInterface $docFileService */
+        $docFileService = $container->get(DocFileServiceInterface::class);
+        /** @var FileServiceInterface $fileService */
+        $fileService = $container->get(FileServiceInterface::class);
+        /** @var ClassPageServiceInterface $classPageService */
+        $classPageService = $container->get(ClassPageServiceInterface::class);
+
+        return new ClassDocumentationService(
+            $classDataService,
+            $classPageService,
+            $docFileService,
+            $fileService
+        );
     }
 }

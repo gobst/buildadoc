@@ -31,6 +31,7 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
     private const string INTERFACES_LIST_KEY_FETCHER = 'interfacesList';
     private const string CONSTANT_LIST_KEY_FETCHER = 'constantList';
     private const string METHOD_LIST_KEY_FETCHER = 'methodList';
+    private const string CLASS_USEDBYCLASSES_LIST_KEY_FETCHER = 'usedByClassesList';
 
     public function __construct(
         private ClassPageFetcherProviderInterface $fetcherProvider,
@@ -72,7 +73,8 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
             self::PROPERTIES_LIST_KEY_FETCHER,
             self::INTERFACES_LIST_KEY_FETCHER,
             self::CONSTANT_LIST_KEY_FETCHER,
-            self::METHOD_LIST_KEY_FETCHER
+            self::METHOD_LIST_KEY_FETCHER,
+            self::CLASS_USEDBYCLASSES_LIST_KEY_FETCHER
         ];
 
         $closures = [];

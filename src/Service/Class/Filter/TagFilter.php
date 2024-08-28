@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Service\Class\Filter;
@@ -22,7 +21,7 @@ final readonly class TagFilter
         $this->tag = $tag;
     }
 
-    public function hasTag(string $txt)
+    public function hasTag(string $txt): bool
     {
         return str_contains($txt, '@' . $this->tag);
     }

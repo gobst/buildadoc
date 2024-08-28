@@ -8,8 +8,8 @@
  * file that was distributed with this source code.
  *
  */
- 
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Formatter;
 
@@ -26,11 +26,11 @@ final readonly class Formatter implements FormatterInterface, DokuWikiFormatInte
 
     public function formatContent(string $formatStr, array $contentParts): string
     {
-        if(is_array($contentParts[0])){
-            if($contentParts[0][0] instanceof Modifier){
+        if (is_array($contentParts[0])) {
+            if ($contentParts[0][0] instanceof Modifier) {
                 $modifiers = [];
                 /** @var Modifier $modifier */
-                foreach($contentParts[0] as $modifier){
+                foreach ($contentParts[0] as $modifier) {
                     $modifiers[] = $modifier->getName();
                 }
                 $contentParts[0] = implode(' ', $modifiers);

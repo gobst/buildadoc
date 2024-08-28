@@ -28,4 +28,6 @@ interface ClassPageMarkerInterface
     public const string CONSTRUCTOR_MARKER = 'CONSTRUCTOR';
     public const string CLASS_PATH_MARKER = 'CLASS_PATH';
     public const string CLASS_PATH_HEADING_MARKER = 'CLASS_PATH_HEADING';
+    public const string CLASS_USEDBYCLASSES_HEADING_MARKER = 'CLASS_USEDBYCLASSES_HEADING';
+    public const string CLASS_USEDBYCLASSES_LIST_MARKER = 'CLASS_USEDBYCLASSES_LIST';
 }

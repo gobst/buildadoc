@@ -58,13 +58,13 @@ final class ClassPageMarkerPipelineTest extends TestCase
         /** @var Collection<int, Marker> $passable */
         $passable = Collection::make();
 
-        $this->fetcherProvider->expects(self::exactly(8))
+        $this->fetcherProvider->expects(self::exactly(9))
             ->method('getFetcher')
             ->willReturn(
                 $this->fetcher
             );
 
-        $this->fetcher->expects(self::exactly(8))
+        $this->fetcher->expects(self::exactly(9))
             ->method('handle')
             ->willReturnOnConsecutiveCalls(
                 $passable->push(Marker::create('Step1')->withValue('1')),
@@ -75,6 +75,7 @@ final class ClassPageMarkerPipelineTest extends TestCase
                 $passable->push(Marker::create('Step6')->withValue('6')),
                 $passable->push(Marker::create('Step7')->withValue('7')),
                 $passable->push(Marker::create('Step8')->withValue('8')),
+                $passable->push(Marker::create('Step9')->withValue('9')),
             );
 
         $actualPassable = $this->classPageMarkerPipe->handlePipeline($classDto, 'dokuwiki', 'de');

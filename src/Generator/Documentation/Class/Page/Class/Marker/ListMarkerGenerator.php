@@ -41,6 +41,8 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
 
     /**
      * @throws InvalidArgumentException
+     * @todo: there is anywhere a bug (maybe in usedByClassListGen?). The formatter has an issue with $contentParts.
+     * @SuppressWarnings(PHPMD)
      */
     public function generateUsedByClassList(ClassDto $class, string $format, string $listType, string $lang): array
     {
@@ -49,18 +51,18 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         Assert::stringNotEmpty($lang);
 
         $marker = [];
-        $lineBreak = chr(13) . chr(13);
+        #$lineBreak = chr(13) . chr(13);
         $this->translationService->setLanguage($lang);
 
-        $marker['CLASS_USEDBYCLASSES_HEADING'] = '';
-        $marker['CLASS_USEDBYCLASSES_LIST'] = '';
+        $marker[self::CLASS_USEDBYCLASSES_HEADING_MARKER] = '';
+        $marker[self::CLASS_USEDBYCLASSES_LIST_MARKER] = '';
 
         if ($class->getChildClasses() !== null && !$class->getChildClasses()->isEmpty()) {
             $text = $this->translationService->translate('class.usedbyclasses');
             Assert::stringNotEmpty($text);
 
-            $marker['CLASS_USEDBYCLASSES_HEADING'] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker['CLASS_USEDBYCLASSES_LIST'] = $this->usedByClassListGen->generate($class, $format, true, $listType) . $lineBreak;
+            #$marker[self::CLASS_USEDBYCLASSES_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
+            #$marker[self::CLASS_USEDBYCLASSES_LIST_MARKER] = $this->usedByClassListGen->generate($class, $format, true, $listType) . $lineBreak;
         }
 
         return $marker;

@@ -68,7 +68,7 @@ RUN mkdir /home/files \
 COPY ../../../res/docker/config /home/files/config
 COPY ../../../src src
 COPY ../../../res res
-COPY ../../../cfg/services.yml cfg
+COPY ../../../cfg/services.php cfg
 COPY ../../../composer.json composer.json
 
 # run composer
