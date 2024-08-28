@@ -115,8 +115,16 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
             $text = $this->translationService->translate('class.properties');
             Assert::stringNotEmpty($text);
 
-            $marker[self::PROPERTIES_LIST_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker[self::PROPERTIES_LIST_MARKER] = $this->propListGenerator->generate($class, $format, $listType) . $lineBreak;
+            $marker[self::PROPERTIES_LIST_HEADING_MARKER] = $lineBreak . $this->headingGenerator->generate(
+                    $text,
+                    2,
+                    $format
+                ) . $lineBreak;
+            $marker[self::PROPERTIES_LIST_MARKER] = $this->propListGenerator->generate(
+                    $class,
+                    $format,
+                    $listType
+                ) . $lineBreak;
         }
 
         return $marker;

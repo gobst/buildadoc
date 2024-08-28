@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  *
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Class\Marker;
 
@@ -25,9 +25,11 @@ final readonly class ClassPathMarkerGenerator implements ClassPathMarkerGenerato
 {
     public function __construct(
         private TranslationServiceInterface $translationService,
-        private HeadingGeneratorInterface $headingGenerator,
+        private HeadingGeneratorInterface   $headingGenerator,
         private ClassPathGeneratorInterface $classPathGenerator
-    ) {}
+    )
+    {
+    }
 
     /**
      * @throws InvalidArgumentException
@@ -45,8 +47,15 @@ final readonly class ClassPathMarkerGenerator implements ClassPathMarkerGenerato
             $text = $this->translationService->translate('class.parentclasses');
             Assert::stringNotEmpty($text);
 
-            $marker[self::CLASS_PATH_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker[self::CLASS_PATH_MARKER] = $this->classPathGenerator->generate($class, $format) . $lineBreak;
+            $marker[self::CLASS_PATH_HEADING_MARKER] = $this->headingGenerator->generate(
+                    $text,
+                    2,
+                    $format
+                ) . $lineBreak;
+            $marker[self::CLASS_PATH_MARKER] = $this->classPathGenerator->generate(
+                    $class,
+                    $format
+                ) . $lineBreak . $lineBreak;
         }
 
         return $marker;

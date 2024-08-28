@@ -290,7 +290,7 @@ final class ListMarkerGeneratorTest extends TestCase
             ->willReturn('testStr2');
 
         $expectedMarker = [];
-        $expectedMarker['CLASS_PROPERTIES_LIST_HEADING'] = 'testStr' . $lineBreak;
+        $expectedMarker['CLASS_PROPERTIES_LIST_HEADING'] = $lineBreak . 'testStr' . $lineBreak;
         $expectedMarker['CLASS_PROPERTIES_LIST'] = 'testStr2' . $lineBreak;
 
         $actualMarker = $this->listMarkerGenerator->generatePropertiesList(
