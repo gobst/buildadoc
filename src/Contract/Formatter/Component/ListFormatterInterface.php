@@ -8,10 +8,12 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
 namespace Contract\Formatter\Component;
+
+use Dto\Common\Modifier;
+use Illuminate\Support\Collection;
 
 interface ListFormatterInterface
 {
@@ -25,5 +27,13 @@ interface ListFormatterInterface
         string $listType,
         array $contentParts,
         string $listItemType = 'ordered'
+    ): string;
+
+    /**
+     * @param Collection<int, Modifier> $collection
+     */
+    public function implodeModifierDTOCollection(
+        Collection $collection,
+        string $delimiter = ' '
     ): string;
 }

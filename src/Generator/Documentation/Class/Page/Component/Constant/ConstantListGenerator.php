@@ -42,7 +42,8 @@ final readonly class ConstantListGenerator implements ConstantListGeneratorInter
             while ($iterator->valid()) {
                 /** @var Constant $constant */
                 $constant = $iterator->current();
-                $modifiersStr = $constant->getModifiers()->toArray();
+
+                $modifiersStr = $this->listFormatter->implodeModifierDTOCollection($constant->getModifiers());
 
                 $contentParts = [];
                 $contentParts[] = $modifiersStr;

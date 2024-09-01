@@ -8,15 +8,12 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types=1);
 
 namespace Formatter;
 
 use Contract\Formatter\DokuWikiFormatInterface;
 use Contract\Formatter\FormatterInterface;
-use Dto\Common\Modifier;
-use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -26,17 +23,6 @@ final readonly class Formatter implements FormatterInterface, DokuWikiFormatInte
 
     public function formatContent(string $formatStr, array $contentParts): string
     {
-        if (is_array($contentParts[0])) {
-            if ($contentParts[0][0] instanceof Modifier) {
-                $modifiers = [];
-                /** @var Modifier $modifier */
-                foreach ($contentParts[0] as $modifier) {
-                    $modifiers[] = $modifier->getName();
-                }
-                $contentParts[0] = implode(' ', $modifiers);
-            }
-        }
-
         return vsprintf($formatStr, $contentParts);
     }
 

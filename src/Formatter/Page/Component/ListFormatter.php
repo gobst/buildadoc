@@ -8,13 +8,14 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Formatter\Page\Component;
 
 use Contract\Formatter\Component\ListFormatterInterface;
 use Contract\Formatter\FormatterInterface;
+use Dto\Common\Modifier;
+use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -39,6 +40,16 @@ final readonly class ListFormatter implements ListFormatterInterface
             'dokuwiki' => $this->formatListItemToDokuWiki($format, $contentParts, $listType, $listItemType),
             default => throw new InvalidArgumentException('Error: Unknown format!'),
         };
+    }
+
+    /**
+     * @param Collection<int, Modifier> $collection
+     */
+    public function implodeModifierDTOCollection(Collection $collection, string $delimiter = ' '): string
+    {
+        return $collection
+            ->map(fn($dto) => $dto->getName())
+            ->implode($delimiter);
     }
 
     /**
