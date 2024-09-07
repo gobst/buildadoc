@@ -34,7 +34,8 @@ final readonly class ClassPathFetcher implements ClassPagePipelineStepInterface,
         Collection $passable,
         ClassDto $class,
         string $format,
-        string $lang
+        string $lang,
+        string $mainDirectory
     ): Collection
     {
         Assert::stringNotEmpty($format);
@@ -44,7 +45,8 @@ final readonly class ClassPathFetcher implements ClassPagePipelineStepInterface,
             ->withValue(
                 $this->classPathGenerator->generate(
                     $class,
-                    $format
+                    $format,
+                    $mainDirectory
                 )
             );
 

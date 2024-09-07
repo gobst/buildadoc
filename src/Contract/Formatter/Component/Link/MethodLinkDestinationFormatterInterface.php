@@ -10,17 +10,18 @@
  */
 declare(strict_types = 1);
 
-namespace Contract\Generator\Documentation\Class\Page\Component\Link;
+namespace Contract\Formatter\Component\Link;
 
-interface LinkGeneratorInterface
+use Dto\Method\Method;
+
+interface MethodLinkDestinationFormatterInterface
 {
     /**
      * @psalm-param non-empty-string $format
-     * @psalm-param non-empty-string $dest
      */
-    public function generate(
+    public function formatDestination(
         string $format,
-        string $dest,
-        string $text = ''
+        Method $method,
+        string $mainDirectory
     ): string;
 }

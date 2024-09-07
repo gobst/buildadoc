@@ -34,9 +34,10 @@ final readonly class HeadingFetcher implements ClassPagePipelineStepInterface, C
      */
     public function handle(
         Collection $passable,
-        ClassDto $class,
-        string $format,
-        string $lang
+        ClassDto   $class,
+        string     $format,
+        string     $lang,
+        string     $mainDirectory
     ): Collection
     {
         Assert::stringNotEmpty($format);

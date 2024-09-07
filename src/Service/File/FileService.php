@@ -96,6 +96,26 @@ final readonly class FileService implements FileServiceInterface
     }
 
     /**
+     * @throws IOException
+     * @throws InvalidArgumentException
+     */
+    public function makeDirectory(string $dir): void
+    {
+        Assert::stringNotEmpty($dir);
+        $this->filesystem->mkdir($dir);
+    }
+
+    /**
+     * @throws IOException
+     * @throws InvalidArgumentException
+     */
+    public function directoryExists(string $dir): bool
+    {
+        Assert::stringNotEmpty($dir);
+        return $this->filesystem->exists($dir);
+    }
+
+    /**
      * @throws InvalidArgumentException
      */
     private function isAllowedFile(array $file, string $allowedFileExtension, array $excludeFiles): bool

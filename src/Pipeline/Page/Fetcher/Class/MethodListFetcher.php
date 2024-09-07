@@ -34,13 +34,20 @@ final readonly class MethodListFetcher implements ClassPagePipelineStepInterface
         Collection $passable,
         ClassDto   $class,
         string     $format,
-        string     $lang
+        string     $lang,
+        string     $mainDirectory
     ): Collection
     {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 
-        $marker = $this->listGenerator->generateMethodList($class, $format, 'unordered', $lang);
+        $marker = $this->listGenerator->generateMethodList(
+            $class,
+            $format,
+            'unordered',
+            $lang,
+            $mainDirectory
+        );
 
         $passable->push(Marker::create(self::METHODS_LIST_HEADING_MARKER)
             ->withValue(

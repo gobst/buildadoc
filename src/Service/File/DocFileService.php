@@ -8,10 +8,11 @@
  * file that was distributed with this source code.
  *
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Service\File;
 
+use Contract\Formatter\DokuWikiFormatInterface;
 use Contract\Service\File\DocFileServiceInterface;
 use Contract\Service\File\FileExtensionInterface;
 use Contract\Service\File\FileServiceInterface;
@@ -20,10 +21,8 @@ use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class DocFileService implements DocFileServiceInterface, FileExtensionInterface
+final readonly class DocFileService implements DocFileServiceInterface, FileExtensionInterface, DokuWikiFormatInterface
 {
-    private const string FORMAT_DOKUWIKI_KEY = 'dokuwiki';
-
     public function __construct(
         private FileServiceInterface $fileService
     )
@@ -32,17 +31,44 @@ final readonly class DocFileService implements DocFileServiceInterface, FileExte
 
     /**
      * @param Collection<int, DocPage> $pages
+     * @throws InvalidArgumentException
      */
-    public function dumpDocFiles(Collection $pages, string $destDirectory): void
+    public function dumpDocFiles(Collection $pages, string $destDirectory, string $mainDir): void
     {
+        Assert::stringNotEmpty($destDirectory);
+        Assert::stringNotEmpty($mainDir);
+
+        $mainDirPath = sprintf('%s%s', $destDirectory, $mainDir);
+        if (!$this->fileService->directoryExists($mainDirPath)) {
+            $this->fileService->makeDirectory($mainDirPath);
+        }
+
+        /** @var DocPage $classPage */
+        $classPage = $pages->first();
+        $pageDir = sprintf('%s/%s', $mainDirPath, strtolower($classPage->getTitle()));
+        if (!$this->fileService->directoryExists($pageDir)) {
+            $this->fileService->makeDirectory($pageDir);
+        }
+
         $iterator = $pages->getIterator();
         while ($iterator->valid()) {
             /** @var DocPage $page */
             $page = $iterator->current();
-            $pageFile = sprintf('%s/%s.%s', $destDirectory, $page->getFileName(), $page->getFileExtension());
-            if (!file_exists($pageFile)) {
-                $this->fileService->dumpFile($pageFile, $page->getContent());
+
+            $pageFile = sprintf(
+                '%s/%s.%s',
+                $pageDir,
+                strtolower($page->getFileName()),
+                $page->getFileExtension()
+            );
+
+            if(!$this->fileService->directoryExists($pageFile)){
+                $this->fileService->dumpFile(
+                    $pageFile,
+                    $page->getContent()
+                );
             }
+
             $iterator->next();
         }
     }
@@ -57,7 +83,7 @@ final readonly class DocFileService implements DocFileServiceInterface, FileExte
         Assert::stringNotEmpty($format);
 
         return match ($format) {
-            self::FORMAT_DOKUWIKI_KEY => self::DOKUWIKI_FILE_EXTENSION,
+            self::DOKUWIKI_FORMAT_KEY => self::DOKUWIKI_FILE_EXTENSION,
             default => throw new InvalidArgumentException("Unknown format '$format'"),
         };
     }

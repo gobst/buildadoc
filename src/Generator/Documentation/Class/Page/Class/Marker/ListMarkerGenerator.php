@@ -160,7 +160,13 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
     /**
      * @throws InvalidArgumentException
      */
-    public function generateMethodList(ClassDto $class, string $format, string $listType, string $lang): array
+    public function generateMethodList(
+        ClassDto $class,
+        string $format,
+        string $listType,
+        string $lang,
+        string $mainDirectory
+    ): array
     {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($listType);
@@ -177,8 +183,20 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
             $text = $this->translationService->translate('class.methods');
             Assert::stringNotEmpty($text);
 
-            $marker[self::METHODS_LIST_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker[self::METHODS_LIST_MARKER] = $this->methodListGenerator->generate($class, $format, true, $listType, true) . $lineBreak;
+            $marker[self::METHODS_LIST_HEADING_MARKER] = $this->headingGenerator->generate(
+                $text,
+                2,
+                $format
+            ) . $lineBreak;
+
+            $marker[self::METHODS_LIST_MARKER] = $this->methodListGenerator->generate(
+                $class,
+                $format,
+                true,
+                $listType,
+                true,
+                $mainDirectory
+            ) . $lineBreak;
         }
 
         return $marker;

@@ -8,14 +8,12 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Service\File;
 
 use Contract\Service\File\FileServiceInterface;
 use Dto\Documentation\DocPage;
-use Dto\Method\Method;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -48,6 +46,6 @@ final class DocFileServiceTest extends TestCase
 
         $this->fileService->expects($this->once())->method('dumpFile');
 
-        $this->docFileService->dumpDocFiles($collection, 'destDir');
+        $this->docFileService->dumpDocFiles($collection, 'destDir', 'test');
     }
 }

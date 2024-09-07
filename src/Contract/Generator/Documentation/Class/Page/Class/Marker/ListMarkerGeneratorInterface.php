@@ -50,5 +50,11 @@ interface ListMarkerGeneratorInterface
      * @psalm-param non-empty-string $listType
      * @psalm-param non-empty-string $lang
      */
-    public function generateMethodList(ClassDto $class, string $format, string $listType, string $lang): array;
+    public function generateMethodList(
+        ClassDto $class,
+        string $format,
+        string $listType,
+        string $lang,
+        string $mainDirectory
+    ): array;
 }

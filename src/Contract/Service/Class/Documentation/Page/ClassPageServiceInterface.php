@@ -23,5 +23,10 @@ interface ClassPageServiceInterface
      * @psalm-param non-empty-string $lang
      * @return Collection<int, DocPage>
      */
-    public function generateClassPageIncludingMethodPages(ClassDto $class, string $format, string $lang): Collection;
+    public function generateClassPageIncludingMethodPages(
+        ClassDto $class,
+        string $format,
+        string $lang,
+        string $mainDirectory
+    ): Collection;
 }

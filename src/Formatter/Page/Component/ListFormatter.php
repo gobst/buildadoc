@@ -13,13 +13,14 @@ declare(strict_types = 1);
 namespace Formatter\Page\Component;
 
 use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Formatter\DokuWikiFormatInterface;
 use Contract\Formatter\FormatterInterface;
 use Dto\Common\Modifier;
 use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ListFormatter implements ListFormatterInterface
+final readonly class ListFormatter implements ListFormatterInterface, DokuWikiFormatInterface
 {
     public function __construct(private FormatterInterface $formatter) {}
 
@@ -37,7 +38,7 @@ final readonly class ListFormatter implements ListFormatterInterface
         Assert::stringNotEmpty($listItemType);
 
         return match ($format) {
-            'dokuwiki' => $this->formatListItemToDokuWiki($format, $contentParts, $listType, $listItemType),
+            self::DOKUWIKI_FORMAT_KEY => $this->formatListItemToDokuWiki($format, $contentParts, $listType, $listItemType),
             default => throw new InvalidArgumentException('Error: Unknown format!'),
         };
     }

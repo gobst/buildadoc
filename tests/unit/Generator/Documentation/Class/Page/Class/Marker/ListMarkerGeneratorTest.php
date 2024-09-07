@@ -477,7 +477,8 @@ final class ListMarkerGeneratorTest extends TestCase
             $this->getTestClassDto(),
             'dokuwiki',
             'ordered',
-            'de'
+            'de',
+            'test'
         );
 
         $this->assertSame($expectedMarker, $actualMarker);
@@ -509,7 +510,8 @@ final class ListMarkerGeneratorTest extends TestCase
             $this->getTestClassDto(),
             $format,
             $listType,
-            $lang
+            $lang,
+            'test'
         );
     }
 
@@ -535,7 +537,8 @@ final class ListMarkerGeneratorTest extends TestCase
             $this->getTestClassDto(),
             'dokuwiki',
             'ordered',
-            'de'
+            'de',
+            'test'
         );
     }
 

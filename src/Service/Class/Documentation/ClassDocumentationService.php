@@ -34,10 +34,17 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
     {
     }
 
-    public function buildDocumentation(string $sourceDir, string $destDir, string $lang, string $format): void
+    public function buildDocumentation(
+        string $sourceDir,
+        string $destDir,
+        string $name,
+        string $lang,
+        string $format
+    ): void
     {
         Assert::stringNotEmpty($sourceDir);
         Assert::stringNotEmpty($destDir);
+        Assert::stringNotEmpty($name);
         Assert::stringNotEmpty($lang);
         Assert::stringNotEmpty($format);
 
@@ -48,8 +55,8 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
         while ($iterator->valid()) {
             /** @var ClassDto $class */
             $class = $iterator->current();
-            $docPages = $this->classPageService->generateClassPageIncludingMethodPages($class, $format, $lang);
-            $this->docFileService->dumpDocFiles($docPages, $destDir);
+            $docPages = $this->classPageService->generateClassPageIncludingMethodPages($class, $format, $lang, $name);
+            $this->docFileService->dumpDocFiles($docPages, $destDir, $name);
             $iterator->next();
         }
     }

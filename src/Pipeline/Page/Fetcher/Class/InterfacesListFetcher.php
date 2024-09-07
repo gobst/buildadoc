@@ -34,7 +34,8 @@ final readonly class InterfacesListFetcher implements ClassPagePipelineStepInter
         Collection $passable,
         ClassDto   $class,
         string     $format,
-        string     $lang
+        string     $lang,
+        string     $mainDirectory
     ): Collection
     {
         Assert::stringNotEmpty($format);

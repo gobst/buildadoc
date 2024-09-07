@@ -8,25 +8,20 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
-namespace Contract\Generator\Documentation\Class\Page\Component\Method;
+namespace Contract\Formatter\Component\Link;
 
 use Dto\Class\ClassDto;
 
-interface MethodListGeneratorInterface
+interface ClassLinkDestinationFormatterInterface
 {
     /**
      * @psalm-param non-empty-string $format
-     * @psalm-param non-empty-string $listType
      */
-    public function generate(
-        ClassDto $class,
+    public function formatDestination(
         string $format,
-        bool $link = true,
-        string $listType = 'ordered',
-        bool $withInheritedMethods = false,
-        string $mainDirectory = ''
+        ClassDto $class,
+        string $mainDirectory
     ): string;
 }

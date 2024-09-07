@@ -8,15 +8,17 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
-namespace Contract\Formatter\Component;
+namespace Contract\Formatter\Component\Link;
 
 interface LinkFormatterInterface
 {
     /**
      * @psalm-param non-empty-string $format
      */
-    public function formatLink(string $format, array $contentParts): string;
+    public function formatLink(
+        string $format,
+        array $contentParts
+    ): string;
 }

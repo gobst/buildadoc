@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
 namespace Contract\Service\Class\Documentation;
@@ -18,8 +17,15 @@ interface ClassDocumentationServiceInterface
     /**
      * @psalm-param non-empty-string $sourceDir
      * @psalm-param non-empty-string $destDir
+     * @psalm-param non-empty-string $name
      * @psalm-param non-empty-string $lang
      * @psalm-param non-empty-string $format
      */
-    public function buildDocumentation(string $sourceDir, string $destDir, string $lang, string $format): void;
+    public function buildDocumentation(
+        string $sourceDir,
+        string $destDir,
+        string $name,
+        string $lang,
+        string $format
+    ): void;
 }

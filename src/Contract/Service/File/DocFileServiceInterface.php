@@ -19,8 +19,10 @@ interface DocFileServiceInterface
 {
     /**
      * @param Collection<int, DocPage> $pages
+     * @psalm-param non-empty-string $destDirectory
+     * @psalm-param non-empty-string $mainDir
      */
-    public function dumpDocFiles(Collection $pages, string $destDirectory): void;
+    public function dumpDocFiles(Collection $pages, string $destDirectory, string $mainDir): void;
 
     /**
      * @psalm-param non-empty-string $format

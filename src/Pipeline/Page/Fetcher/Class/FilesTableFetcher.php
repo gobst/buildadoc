@@ -30,7 +30,7 @@ final readonly class FilesTableFetcher implements ClassPagePipelineStepInterface
 
     public function __construct(
         private FilesTableGeneratorInterface $filesTableGenerator,
-        private TranslationServiceInterface $translationService
+        private TranslationServiceInterface  $translationService
     )
     {
     }
@@ -40,9 +40,10 @@ final readonly class FilesTableFetcher implements ClassPagePipelineStepInterface
      */
     public function handle(
         Collection $passable,
-        ClassDto $class,
-        string $format,
-        string $lang
+        ClassDto   $class,
+        string     $format,
+        string     $lang,
+        string     $mainDirectory
     ): Collection
     {
         Assert::stringNotEmpty($format);

@@ -34,7 +34,8 @@ final readonly class ConstantListFetcher implements ClassPagePipelineStepInterfa
         Collection $passable,
         ClassDto   $class,
         string     $format,
-        string     $lang
+        string     $lang,
+        string     $mainDirectory
     ): Collection
     {
         Assert::stringNotEmpty($format);

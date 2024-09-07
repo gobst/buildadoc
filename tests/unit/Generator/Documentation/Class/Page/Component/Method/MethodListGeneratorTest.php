@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Method;
 
+use Contract\Formatter\Component\Link\MethodLinkDestinationFormatterInterface;
 use Contract\Formatter\Component\ListFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
@@ -42,6 +43,7 @@ final class MethodListGeneratorTest extends TestCase
     private LinkGeneratorInterface&MockObject $linkGenerator;
     private MethodLineGeneratorInterface&MockObject $methodLineGenerator;
     private ListFormatterInterface&MockObject $listFormatter;
+    private MethodLinkDestinationFormatterInterface&MockObject $methodLinkDestFormat;
     private MethodListGenerator $methodListGenerator;
 
     public function setUp(): void
@@ -49,10 +51,12 @@ final class MethodListGeneratorTest extends TestCase
         $this->linkGenerator = $this->getMockBuilder(LinkGeneratorInterface::class)->getMock();
         $this->methodLineGenerator = $this->getMockBuilder(MethodLineGeneratorInterface::class)->getMock();
         $this->listFormatter = $this->getMockBuilder(ListFormatterInterface::class)->getMock();
+        $this->methodLinkDestFormat = $this->getMockBuilder(MethodLinkDestinationFormatterInterface::class)->getMock();
         $this->methodListGenerator = new MethodListGenerator(
             $this->linkGenerator,
             $this->methodLineGenerator,
-            $this->listFormatter
+            $this->listFormatter,
+            $this->methodLinkDestFormat
         );
     }
 
@@ -69,6 +73,10 @@ final class MethodListGeneratorTest extends TestCase
             ->willReturn('');
 
         if ($link === true) {
+            $this->methodLinkDestFormat->expects(self::exactly(2))
+                ->method('formatDestination')
+                ->willReturn('test123');
+
             $this->linkGenerator->expects(self::exactly(2))
                 ->method('generate')
                 ->willReturn('');
@@ -93,6 +101,9 @@ final class MethodListGeneratorTest extends TestCase
 
         $this->listFormatter->expects(self::never())
             ->method('formatListItem');
+
+        $this->methodLinkDestFormat->expects(self::never())
+            ->method('formatDestination');
 
         $this->linkGenerator->expects(self::never())
             ->method('generate');

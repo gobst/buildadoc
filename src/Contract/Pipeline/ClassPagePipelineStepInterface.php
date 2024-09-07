@@ -27,6 +27,7 @@ interface ClassPagePipelineStepInterface
         Collection $passable,
         ClassDto $class,
         string $format,
-        string $lang
+        string $lang,
+        string $mainDirectory
     ): Collection;
 }

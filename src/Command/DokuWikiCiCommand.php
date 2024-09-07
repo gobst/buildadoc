@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace Command;
 
+use Contract\Formatter\DokuWikiFormatInterface;
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
@@ -31,9 +32,8 @@ use Webmozart\Assert\Assert;
     name: 'DokuWiki:create-doc',
     description: 'Creates a class documentation for DokuWiki'
 )]
-class DokuWikiCiCommand extends Command
+class DokuWikiCiCommand extends Command implements DokuWikiFormatInterface
 {
-    private const string FORMAT = 'dokuwiki';
     private const string DEFAULT_LANGUAGE = 'de';
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -43,6 +43,7 @@ class DokuWikiCiCommand extends Command
 
         Assert::stringNotEmpty($args['source']);
         Assert::stringNotEmpty($args['destination']);
+        Assert::stringNotEmpty($args['name']);
         Assert::stringNotEmpty($language);
 
         $classDocService = $this->getDocumentationService();
@@ -50,8 +51,9 @@ class DokuWikiCiCommand extends Command
         $classDocService->buildDocumentation(
             $args['source'],
             $args['destination'],
+            $args['name'],
             $language,
-            self::FORMAT
+            self::DOKUWIKI_FORMAT_KEY
         );
 
         $output->writeln('Done!');
@@ -71,6 +73,11 @@ class DokuWikiCiCommand extends Command
                 'destination',
                 InputArgument::REQUIRED,
                 'The destination directory for the documentation.'
+            )
+            ->addArgument(
+                'name',
+                InputArgument::REQUIRED,
+                'The name of the documentation.'
             )
             ->addArgument(
                 'language',

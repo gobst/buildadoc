@@ -78,7 +78,7 @@ final class ClassPageMarkerPipelineTest extends TestCase
                 $passable->push(Marker::create('Step9')->withValue('9')),
             );
 
-        $actualPassable = $this->classPageMarkerPipe->handlePipeline($classDto, 'dokuwiki', 'de');
+        $actualPassable = $this->classPageMarkerPipe->handlePipeline($classDto, 'dokuwiki', 'de', 'test');
 
         $this->assertEquals($passable, $actualPassable);
     }

@@ -44,7 +44,12 @@ final readonly class ClassPageService implements ClassPageServiceInterface, File
      * @psalm-param non-empty-string $lang
      * @return Collection<int, DocPage>
      */
-    public function generateClassPageIncludingMethodPages(ClassDto $class, string $format, string $lang): Collection
+    public function generateClassPageIncludingMethodPages(
+        ClassDto $class,
+        string $format,
+        string $lang,
+        string $mainDirectory
+    ): Collection
     {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
@@ -52,7 +57,7 @@ final readonly class ClassPageService implements ClassPageServiceInterface, File
         /** @var Collection<int, DocPage> $docPages */
         $docPages = Collection::make();
 
-        $markers = $this->classPageMPipeline->handlePipeline($class, $format, $lang);
+        $markers = $this->classPageMPipeline->handlePipeline($class, $format, $lang, $mainDirectory);
         $pageContent = $this->tmplServiceProvider
             ->getService(self::CLASSPAGE_TEMPLATE_SERVICE_KEY)
             ->fillTemplate($markers);

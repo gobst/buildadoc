@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Class;
 
+use Contract\Formatter\Component\Link\ClassLinkDestinationFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\ClassDto;
 use Dto\Common\Modifier;
@@ -35,18 +36,27 @@ use Webmozart\Assert\InvalidArgumentException;
 class ClassPathGeneratorTest extends TestCase
 {
     private LinkGeneratorInterface&MockObject $linkGenerator;
+    private ClassLinkDestinationFormatterInterface&MockObject $classLinkDestFormat;
     private ClassPathGenerator $classPathGenerator;
 
     public function setUp(): void
     {
-        $this->linkGenerator = $this->getMockBuilder(LinkGeneratorInterface::class)->getMock();
-        $this->classPathGenerator = new ClassPathGenerator($this->linkGenerator);
+        $this->linkGenerator = $this->getMockBuilder(LinkGeneratorInterface::class)
+            ->getMock();
+        $this->classLinkDestFormat = $this->getMockBuilder(ClassLinkDestinationFormatterInterface::class)
+            ->getMock();
+
+        $this->classPathGenerator = new ClassPathGenerator($this->linkGenerator, $this->classLinkDestFormat);
     }
 
     #[TestDox('generate() method returns correct class path in DokuWiki format')]
     public function testGenerateWithDokuWikiFormat(): void
     {
         $class = $this->getTestClassDto();
+
+        $this->classLinkDestFormat->expects(self::once())
+            ->method('formatDestination')
+            ->willReturn('parenttestclass');
 
         $this->linkGenerator->expects(self::once())
             ->method('generate')
@@ -63,6 +73,9 @@ class ClassPathGeneratorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $class = $this->getTestClassDto();
+
+        $this->classLinkDestFormat->expects(self::never())
+            ->method('formatDestination');
 
         $this->linkGenerator->expects(self::never())
             ->method('generate');

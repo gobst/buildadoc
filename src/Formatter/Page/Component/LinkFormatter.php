@@ -8,17 +8,17 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Formatter\Page\Component;
 
-use Contract\Formatter\Component\LinkFormatterInterface;
+use Contract\Formatter\Component\Link\LinkFormatterInterface;
+use Contract\Formatter\DokuWikiFormatInterface;
 use Contract\Formatter\FormatterInterface;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class LinkFormatter implements LinkFormatterInterface
+final readonly class LinkFormatter implements LinkFormatterInterface, DokuWikiFormatInterface
 {
     private const string LINK_WITHOUT_TEXT_TYPE = 'link_without_text';
     private const string LINK_WITH_TEXT_TYPE = 'link_with_text';
@@ -33,14 +33,13 @@ final readonly class LinkFormatter implements LinkFormatterInterface
         Assert::stringNotEmpty($format);
 
         return match ($format) {
-            'dokuwiki' => $this->formatLinkToDokuWiki($format, $contentParts),
+            self::DOKUWIKI_FORMAT_KEY => $this->formatLinkToDokuWiki($format, $contentParts),
             default => throw new InvalidArgumentException('Error: Unknown format!'),
         };
     }
 
     /**
      * @psalm-param non-empty-string $format
-     *
      * @throws InvalidArgumentException
      */
     private function formatLinkToDokuWiki(string $format, array $contentParts): string

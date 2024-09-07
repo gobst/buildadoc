@@ -40,4 +40,14 @@ interface FileServiceInterface
      * @param Collection<int, File> $files
      */
     public function getSingleFile(string $phpFile, Collection $files): ?File;
+
+    /**
+     * @psalm-param non-empty-string $dir
+     */
+    public function makeDirectory(string $dir): void;
+
+    /**
+     * @psalm-param non-empty-string $dir
+     */
+    public function directoryExists(string $dir): bool;
 }

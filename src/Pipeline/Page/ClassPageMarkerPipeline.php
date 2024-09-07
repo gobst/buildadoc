@@ -45,14 +45,19 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
      * @psalm-param non-empty-string $format
      * @return Collection<int, Marker>
      */
-    public function handlePipeline(ClassDto $class, string $format, string $lang): Collection
+    public function handlePipeline(
+        ClassDto $class,
+        string $format,
+        string $lang,
+        string $mainDirectory
+    ): Collection
     {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 
         return $this->pipeline
             ->send(Collection::make())
-            ->through($this->getClosures($class, $format, $lang))
+            ->through($this->getClosures($class, $format, $lang, $mainDirectory))
             ->then(function (Collection $passable) {
                 return $passable;
             });
@@ -63,7 +68,12 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
      * @psalm-param non-empty-string $lang
      * @return array<int, Closure>
      */
-    private function getClosures(ClassDto $class, string $format, string $lang): array
+    private function getClosures(
+        ClassDto $class,
+        string $format,
+        string $lang,
+        string $mainDirectory
+    ): array
     {
         $fetchers = [
             self::CLASS_HEADING_KEY_FETCHER,
@@ -80,10 +90,10 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
         $closures = [];
 
         foreach($fetchers as $fetcher){
-            $closure = function ($passable, $next) use ($class, $format, $lang, $fetcher) {
+            $closure = function ($passable, $next) use ($class, $format, $lang, $fetcher, $mainDirectory) {
                 $passable = $this->fetcherProvider
                     ->getFetcher($fetcher)
-                    ->handle($passable, $class, $format, $lang);
+                    ->handle($passable, $class, $format, $lang, $mainDirectory);
                 return $next($passable);
             };
             $closures[] = $closure;

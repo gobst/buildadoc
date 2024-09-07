@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
 namespace Contract\Formatter;
@@ -27,4 +26,5 @@ interface DokuWikiFormatInterface
     public const string DOKUWIKI_HEADING_LEVEL3_FORMAT = '==== %s ====';
     public const string DOKUWIKI_HEADING_LEVEL4_FORMAT = '=== %s ===';
     public const string DOKUWIKI_HEADING_LEVEL5_FORMAT = '== %s ==';
+    public const string DOKUWIKI_FORMAT_KEY = 'dokuwiki';
 }

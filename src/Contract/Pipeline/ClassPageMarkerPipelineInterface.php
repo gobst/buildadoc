@@ -23,5 +23,10 @@ interface ClassPageMarkerPipelineInterface
      * @psalm-param non-empty-string $format
      * @return Collection<int, Marker>
      */
-    public function handlePipeline(ClassDto $class, string $format, string $lang): Collection;
+    public function handlePipeline(
+        ClassDto $class,
+        string $format,
+        string $lang,
+        string $mainDirectory
+    ): Collection;
 }

@@ -70,7 +70,7 @@ final class ClassDocumentationServiceTest extends TestCase
             'test/source',
             'test/destination',
             'de',
-            'dokuwiki'
+            'de', 'dokuwiki'
         );
     }
 
@@ -91,7 +91,7 @@ final class ClassDocumentationServiceTest extends TestCase
         $this->fileService->expects(self::never())
             ->method('getAllFilesWithinDir');
 
-        $this->classDocService->buildDocumentation($sourceDir, $destDir, $lang, $format);
+        $this->classDocService->buildDocumentation($sourceDir, $destDir, $lang, $lang, $format);
     }
 
     public static function classDocumentationTestDataProvider(): array
