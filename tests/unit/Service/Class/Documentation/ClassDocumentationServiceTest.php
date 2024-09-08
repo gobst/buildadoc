@@ -14,8 +14,10 @@ namespace unit\Service\Class\Documentation;
 
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
+use Contract\Service\Class\Documentation\Page\TableOfContentsPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
 use Contract\Service\File\FileServiceInterface;
+use Dto\Documentation\DocPage;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -28,12 +30,14 @@ use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(ClassDocumentationService::class)]
 #[UsesClass(Collection::class)]
+#[UsesClass(DocPage::class)]
 final class ClassDocumentationServiceTest extends TestCase
 {
     private ClassDataServiceInterface&MockObject $classDataService;
     private FileServiceInterface&MockObject $fileService;
     private DocFileServiceInterface&MockObject $docFileService;
     private ClassPageServiceInterface&MockObject $classPageService;
+    private TableOfContentsPageServiceInterface&MockObject $tableOfContentsPageService;
     private ClassDocumentationService $classDocService;
 
     public function setUp(): void
@@ -46,18 +50,23 @@ final class ClassDocumentationServiceTest extends TestCase
             ->getMock();
         $this->classPageService = $this->getMockBuilder(ClassPageServiceInterface::class)
             ->getMock();
+        $this->tableOfContentsPageService = $this->getMockBuilder(TableOfContentsPageServiceInterface::class)
+            ->getMock();
 
         $this->classDocService = new ClassDocumentationService(
             $this->classDataService,
             $this->classPageService,
             $this->docFileService,
-            $this->fileService
+            $this->fileService,
+            $this->tableOfContentsPageService
         );
     }
 
     #[TestDox('buildDocumentation() method works correctly')]
     public function testBuildDocumentation(): void
     {
+        $tableofContents = DocPage::create('super', 'test', 'testfile', 'txt');
+
         $this->classDataService->expects(self::once())
             ->method('getAllClasses')
             ->willReturn(Collection::make());
@@ -65,6 +74,10 @@ final class ClassDocumentationServiceTest extends TestCase
         $this->fileService->expects(self::once())
             ->method('getAllFilesWithinDir')
             ->willReturn(Collection::make());
+
+        $this->tableOfContentsPageService->expects(self::once())
+            ->method('generateTableOfContentsPage')
+            ->willReturn($tableofContents);
 
         $this->classDocService->buildDocumentation(
             'test/source',
@@ -90,6 +103,9 @@ final class ClassDocumentationServiceTest extends TestCase
 
         $this->fileService->expects(self::never())
             ->method('getAllFilesWithinDir');
+
+        $this->tableOfContentsPageService->expects(self::never())
+            ->method('generateTableOfContentsPage');
 
         $this->classDocService->buildDocumentation($sourceDir, $destDir, $lang, $lang, $format);
     }
