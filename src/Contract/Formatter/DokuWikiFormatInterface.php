@@ -18,6 +18,7 @@ interface DokuWikiFormatInterface
     public const string DOKUWIKI_CONSTANT_LIST_FORMAT = '%s %s **%s**%s';
     public const string DOKUWIKI_INTERFACE_LIST_FORMAT = '%s';
     public const string DOKUWIKI_METHOD_LIST_FORMAT = '%s';
+    public const string DOKUWIKI_CLASS_LIST_FORMAT = '%s';
     public const string DOKUWIKI_USEDBYCLASS_LIST_FORMAT = '%s %s';
     public const string DOKUWIKI_LINK_WITH_TEXT_FORMAT = '[[%s|%s]]';
     public const string DOKUWIKI_LINK_WITHOUT_TEXT_FORMAT = '[[%s]]';

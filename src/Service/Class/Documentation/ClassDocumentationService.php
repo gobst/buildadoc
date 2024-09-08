@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  *
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Service\Class\Documentation;
 
@@ -16,6 +16,7 @@ use ArrayIterator;
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\ClassDocumentationServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
+use Contract\Service\Class\Documentation\Page\TableOfContentsPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
 use Contract\Service\File\FileServiceInterface;
 use Dto\Class\ClassDto;
@@ -26,10 +27,11 @@ use Webmozart\Assert\Assert;
 final readonly class ClassDocumentationService implements ClassDocumentationServiceInterface
 {
     public function __construct(
-        private ClassDataServiceInterface $classDataService,
-        private ClassPageServiceInterface $classPageService,
-        private DocFileServiceInterface $docFileService,
-        private FileServiceInterface $fileService
+        private ClassDataServiceInterface           $classDataService,
+        private ClassPageServiceInterface           $classPageService,
+        private DocFileServiceInterface             $docFileService,
+        private FileServiceInterface                $fileService,
+        private TableOfContentsPageServiceInterface $tableOfContPageS
     )
     {
     }
@@ -55,9 +57,37 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
         while ($iterator->valid()) {
             /** @var ClassDto $class */
             $class = $iterator->current();
-            $docPages = $this->classPageService->generateClassPageIncludingMethodPages($class, $format, $lang, $name);
-            $this->docFileService->dumpDocFiles($docPages, $destDir, $name);
+
+            $docPages = $this->classPageService->generateClassPageIncludingMethodPages(
+                $class,
+                $format,
+                $lang,
+                $name
+            );
+
+            $this->docFileService->dumpClassDocFiles($docPages, $destDir, $name);
             $iterator->next();
+        }
+
+        $tableOfContents = $this->tableOfContPageS->generateTableOfContentsPage(
+            $classes,
+            $format,
+            $lang,
+            $name
+        );
+
+        $filename = sprintf(
+            '%s%s/%s.%s',
+            $destDir,
+            $name,
+            $tableOfContents->getFileName(),
+            $tableOfContents->getFileExtension()
+        );
+        if(!$this->fileService->directoryExists($filename)){
+            $this->fileService->dumpFile(
+                $filename,
+                $tableOfContents->getContent()
+            );
         }
     }
 

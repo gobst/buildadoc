@@ -46,6 +46,6 @@ final class DocFileServiceTest extends TestCase
 
         $this->fileService->expects($this->once())->method('dumpFile');
 
-        $this->docFileService->dumpDocFiles($collection, 'destDir', 'test');
+        $this->docFileService->dumpClassDocFiles($collection, 'destDir', 'test');
     }
 }

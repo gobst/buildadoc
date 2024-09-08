@@ -1,6 +1,21 @@
 <?php
+/**
+ * This file is part of BuildADoc.
+ *
+ * (c) Guido Obst
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
 
+use Contract\Service\Class\Documentation\Page\TableOfContentsPageServiceInterface;
 use Pipeline\Page\Fetcher\Class\UsedByClassListFetcher;
+use Pipeline\Page\Fetcher\TableOfContents\ClassListFetcher;
+use Pipeline\Page\Fetcher\TableOfContents\TextFetcher;
+use Pipeline\Page\Provider\TableOfContentsPageFetcherProvider;
+use Pipeline\Page\TableOfContentsPageMarkerPipeline;
+use Service\Class\Documentation\Page\TableOfContentsPageService;
 use Service\File\Template\ClassPageTemplateService;
 use Service\File\Template\MethodPageTemplateService;
 use Service\File\Template\Provider\TemplateServiceProvider;
@@ -42,6 +57,7 @@ use Service\Class\Filter\ClassNameFilter;
 use Dto\Class\ClassDto;
 use Dto\Common\File;
 use Dto\Method\Method;
+use Service\File\Template\TableOfContentsPageTemplateService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -130,10 +146,15 @@ return static function (ContainerConfigurator $configurator) {
         ->arg('$fetcherProvider', new Reference(MethodPageFetcherProvider::class))
         ->arg('$pipeline', new Reference(Pipeline::class));
 
+    $services->set(TableOfContentsPageMarkerPipeline::class)
+        ->arg('$fetcherProvider', new Reference(TableOfContentsPageFetcherProvider::class))
+        ->arg('$pipeline', new Reference(Pipeline::class));
+
     $services->alias(MethodPageMarkerPipelineInterface::class, MethodPageMarkerPipeline::class);
     $services->alias(FileServiceInterface::class, FileService::class);
     $services->alias(DocFileServiceInterface::class, DocFileService::class);
     $services->alias(ClassPageServiceInterface::class, ClassPageService::class);
+    $services->alias(TableOfContentsPageServiceInterface::class, TableOfContentsPageService::class);
 
     $services->set(SymfonyToLaravelContainerAdapter::class)
         ->arg(0, new Reference('service_container'));
@@ -169,5 +190,13 @@ return static function (ContainerConfigurator $configurator) {
         ->arg('$services', [
             'method' => new Reference(MethodPageTemplateService::class),
             'class' => new Reference(ClassPageTemplateService::class),
+            'tableofcontents' => new Reference(TableOfContentsPageTemplateService::class),
+        ]);
+
+    $services->set(TableOfContentsPageFetcherProvider::class)
+        ->arg('$fetchers', [
+            'tableofcontentsHeading' => new Reference(\Pipeline\Page\Fetcher\TableOfContents\HeadingFetcher::class),
+            'tableofcontentsText' => new Reference(TextFetcher::class),
+            'tableofcontentsClassList' => new Reference(ClassListFetcher::class),
         ]);
 };

@@ -35,4 +35,8 @@ return [
     'defaultval' => 'Standardwert',
     'name' => 'Name',
     'value' => 'Wert',
+    'tableofcontents' => [
+        'heading' => 'Inhaltsverzeichnis',
+        'text' => 'Die Dokumentation umfasst die folgenden Klassen:'
+    ]
 ];

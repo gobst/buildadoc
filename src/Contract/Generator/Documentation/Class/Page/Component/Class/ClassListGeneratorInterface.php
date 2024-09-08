@@ -10,22 +10,23 @@
  */
 declare(strict_types = 1);
 
-namespace Contract\Generator\Documentation\Class\Page\Component\Method;
+namespace Contract\Generator\Documentation\Class\Page\Component\Class;
 
 use Dto\Class\ClassDto;
+use Illuminate\Support\Collection;
 
-interface MethodListGeneratorInterface
+interface ClassListGeneratorInterface
 {
     /**
      * @psalm-param non-empty-string $format
      * @psalm-param non-empty-string $listType
+     * @param Collection<int, ClassDto> $classes
      */
     public function generate(
-        ClassDto $class,
-        string $format,
-        bool $link = true,
-        string $listType = 'ordered',
-        bool $withInheritedMethods = false,
-        string $mainDirectory = ''
+        Collection $classes,
+        string     $format,
+        bool       $link = true,
+        string     $listType = 'ordered',
+        string     $mainDirectory = ''
     ): string;
 }

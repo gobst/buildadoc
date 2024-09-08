@@ -15,6 +15,7 @@ namespace Command;
 use Contract\Formatter\DokuWikiFormatInterface;
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
+use Contract\Service\Class\Documentation\Page\TableOfContentsPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
 use Contract\Service\File\FileServiceInterface;
 use Service\Class\Documentation\ClassDocumentationService;
@@ -101,12 +102,15 @@ class DokuWikiCiCommand extends Command implements DokuWikiFormatInterface
         $fileService = $container->get(FileServiceInterface::class);
         /** @var ClassPageServiceInterface $classPageService */
         $classPageService = $container->get(ClassPageServiceInterface::class);
+        /** @var TableOfContentsPageServiceInterface $tableOfContPageS */
+        $tableOfContPageS = $container->get(TableOfContentsPageServiceInterface::class);
 
         return new ClassDocumentationService(
             $classDataService,
             $classPageService,
             $docFileService,
-            $fileService
+            $fileService,
+            $tableOfContPageS
         );
     }
 }

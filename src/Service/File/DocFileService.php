@@ -33,7 +33,7 @@ final readonly class DocFileService implements DocFileServiceInterface, FileExte
      * @param Collection<int, DocPage> $pages
      * @throws InvalidArgumentException
      */
-    public function dumpDocFiles(Collection $pages, string $destDirectory, string $mainDir): void
+    public function dumpClassDocFiles(Collection $pages, string $destDirectory, string $mainDir): void
     {
         Assert::stringNotEmpty($destDirectory);
         Assert::stringNotEmpty($mainDir);

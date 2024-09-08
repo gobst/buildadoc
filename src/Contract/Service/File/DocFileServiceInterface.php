@@ -22,7 +22,7 @@ interface DocFileServiceInterface
      * @psalm-param non-empty-string $destDirectory
      * @psalm-param non-empty-string $mainDir
      */
-    public function dumpDocFiles(Collection $pages, string $destDirectory, string $mainDir): void;
+    public function dumpClassDocFiles(Collection $pages, string $destDirectory, string $mainDir): void;
 
     /**
      * @psalm-param non-empty-string $format

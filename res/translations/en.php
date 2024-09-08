@@ -35,4 +35,8 @@ return [
     'defaultval' => 'Defaultvalue',
     'name' => 'Name',
     'value' => 'Value',
+    'tableofcontents' => [
+        'heading' => 'Table of contents',
+        'text' => 'The documentation includes the following classes:'
+    ]
 ];
