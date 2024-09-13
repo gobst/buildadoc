@@ -15,13 +15,13 @@ In addition the following features are planned:
 
 ## Installation
 
-# With composer
+### With composer
 
 You can install BuildADoc directly in your project with composer:
 
 ``` composer require gobst/buildadoc ```
 
-# With Docker
+### With Docker
 
 BuildADoc is available as [gobst/buildadoc](https://hub.docker.com/r/gobst/buildadoc) Docker image which you can directly use.
 
