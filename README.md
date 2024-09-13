@@ -35,3 +35,7 @@ The generated directories and files have to allocated under your DokuWiki instal
 For more information run:
 
 ``` php bin/console.php ```
+
+### Licence
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
