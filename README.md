@@ -36,6 +36,6 @@ For more information run:
 
 ``` php bin/console.php ```
 
-### Licence
+## License
 
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+Distributed under the BSD 3-Clause license. See [LICENSE](LICENSE) for more information.
