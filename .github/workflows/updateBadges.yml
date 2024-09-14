@@ -19,6 +19,7 @@ jobs:
       - name: Pull image
         run: |
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev pull
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up
 
       - name: Run composer
         run: |
