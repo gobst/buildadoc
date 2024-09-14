@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Generator\Documentation\Class\Page\Component\Property;
@@ -17,7 +16,9 @@ use ArrayIterator;
 use Contract\Formatter\Component\ListFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Property\PropertyListGeneratorInterface;
 use Dto\Class\ClassDto;
+use Dto\Common\Modifier;
 use Dto\Common\Property;
+use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -43,9 +44,11 @@ final readonly class PropertyListGenerator implements PropertyListGeneratorInter
             while ($iterator->valid()) {
                 /** @var Property $property */
                 $property = $iterator->current();
-                $modifiersStr = $property->getModifiers()->toString();
+
+                $propertiesStr = $this->listFormatter->implodeModifierDTOCollection($property->getModifiers());
+
                 $contentParts = [];
-                $contentParts[] = $modifiersStr;
+                $contentParts[] = $propertiesStr;
                 $contentParts[] = $property->getType();
                 $contentParts[] = $property->getName();
                 $contentParts[] = $property->getDefaultValue();

@@ -8,19 +8,19 @@
  * file that was distributed with this source code.
  *
  */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Component\Method;
 
 use ArrayIterator;
-use Collection\MethodCollection;
+use Contract\Formatter\Component\Link\MethodLinkDestinationFormatterInterface;
 use Contract\Formatter\Component\ListFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodListGeneratorInterface;
 use Dto\Class\ClassDto;
 use Dto\Method\Method;
+use Illuminate\Support\Collection;
 use Service\Class\Filter\MethodNameFilter;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
@@ -30,21 +30,26 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
     private const string LIST_TYPE = 'method_list';
 
     public function __construct(
-        private LinkGeneratorInterface $linkGenerator,
-        private MethodLineGeneratorInterface $methodLineGenerator,
-        private ListFormatterInterface $listFormatter
-    ) {}
+        private LinkGeneratorInterface                  $linkGenerator,
+        private MethodLineGeneratorInterface            $methodLineGenerator,
+        private ListFormatterInterface                  $listFormatter,
+        private MethodLinkDestinationFormatterInterface $methodLinkDestFormat
+    )
+    {
+    }
 
     /**
      * @throws InvalidArgumentException
      */
     public function generate(
         ClassDto $class,
-        string $format,
-        bool $link = true,
-        string $listType = 'ordered',
-        bool $withInheritedMethods = false
-    ): string {
+        string   $format,
+        bool     $link = true,
+        string   $listType = 'ordered',
+        bool     $withInheritedMethods = false,
+        string   $mainDirectory = ''
+    ): string
+    {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($listType);
 
@@ -53,11 +58,11 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
         $inheritedMethods = $withInheritedMethods === true ? $class->getInheritedMethods() : null;
 
         if (!$methods->isEmpty()) {
-            $list = $this->fetchList($methods, $format, $link, $listType);
+            $list = $this->fetchList($methods, $format, $link, $listType, $mainDirectory);
             if ($withInheritedMethods === true && $inheritedMethods !== null && !$inheritedMethods->isEmpty()) {
                 // @todo: switch to separated list with heading
                 $list .= chr(13) . '-------------------------------' . chr(13) . chr(13);
-                $list .= $this->fetchList($inheritedMethods, $format, $link, $listType);
+                $list .= $this->fetchList($inheritedMethods, $format, $link, $listType, $mainDirectory);
             }
         }
 
@@ -67,21 +72,30 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
     /**
      * @psalm-param non-empty-string $format
      * @psalm-param non-empty-string $listType
+     * @param Collection<int, Method> $methods
      */
-    private function fetchList(MethodCollection $methods, string $format, bool $link, string $listType): string
+    private function fetchList(
+        Collection $methods,
+        string     $format,
+        bool       $link,
+        string     $listType,
+        string     $mainDirectory
+    ): string
     {
-        $methods = new MethodCollection(
-            $methods
-                ->filter([new MethodNameFilter('__construct'), 'hasNotName'])
-                ->toArray()
-        );
+        Assert::stringNotEmpty($format);
+
+        $methods = $methods->filter(function ($value) {
+            return (new MethodNameFilter('__construct'))->hasNotName($value);
+        });
 
         $list = '';
         /** @var ArrayIterator $iterator */
         $iterator = $methods->getIterator();
 
         while ($iterator->valid()) {
-            $list .= $this->generateMethodLine($iterator->current(), $format, $link, $listType);
+            /** @var Method $method */
+            $method = $iterator->current();
+            $list .= $this->generateMethodLine($method, $format, $link, $listType, $mainDirectory);
             $iterator->next();
         }
 
@@ -94,11 +108,25 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
      *
      * @throws InvalidArgumentException
      */
-    private function generateMethodLine(Method $method, string $format, bool $link, string $listType): string
+    private function generateMethodLine(
+        Method $method,
+        string $format,
+        bool   $link,
+        string $listType,
+        string $mainDirectory
+    ): string
     {
         $line = $this->methodLineGenerator->generate($method);
+
         if ($link) {
-            $line = $this->linkGenerator->generate($format, $method->getName(), $line);
+            $destination = $this->methodLinkDestFormat->formatDestination($format, $method, $mainDirectory);
+            Assert::stringNotEmpty($destination);
+
+            $line = $this->linkGenerator->generate(
+                $format,
+                $destination,
+                $line
+            );
         }
 
         $description = $method->getDescription();

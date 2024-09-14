@@ -8,13 +8,14 @@
  * file that was distributed with this source code.
  *
  */
- 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Formatter;
 
 use Contract\Formatter\DokuWikiFormatInterface;
 use Contract\Formatter\FormatterInterface;
+use Webmozart\Assert\Assert;
+use Webmozart\Assert\InvalidArgumentException;
 
 final readonly class Formatter implements FormatterInterface, DokuWikiFormatInterface
 {
@@ -25,8 +26,14 @@ final readonly class Formatter implements FormatterInterface, DokuWikiFormatInte
         return vsprintf($formatStr, $contentParts);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function getFormat(string $format, string $type): string
     {
+        Assert::stringNotEmpty($format);
+        Assert::stringNotEmpty($type);
+
         return self::{strtoupper($format) . '_' . strtoupper($type) . self::FORMAT_SUFFIX};
     }
 }

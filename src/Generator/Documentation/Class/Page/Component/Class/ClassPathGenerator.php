@@ -8,31 +8,36 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Generator\Documentation\Class\Page\Component\Class;
 
 use ArrayIterator;
-use Collection\ClassCollection;
+use Contract\Formatter\Component\Link\ClassLinkDestinationFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Class\ClassPathGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\ClassDto;
+use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
 final readonly class ClassPathGenerator implements ClassPathGeneratorInterface
 {
-    public function __construct(private LinkGeneratorInterface $linkGenerator) {}
+    public function __construct(
+        private LinkGeneratorInterface $linkGenerator,
+        private ClassLinkDestinationFormatterInterface $classLinkDestFormat
+    )
+    {
+    }
 
     /**
      * @throws InvalidArgumentException
      */
-    public function generate(ClassDto $class, string $format): string
+    public function generate(ClassDto $class, string $format, string $mainDirectory = ''): string
     {
         Assert::stringNotEmpty($format);
 
-        $parentClassesPath = $this->generateParentClassesPath($class, $format);
+        $parentClassesPath = $this->generateParentClassesPath($class, $format, $mainDirectory);
 
         if (!empty($parentClassesPath)) {
             array_unshift($parentClassesPath, $class->getName());
@@ -44,7 +49,7 @@ final readonly class ClassPathGenerator implements ClassPathGeneratorInterface
     /**
      * @throws InvalidArgumentException
      */
-    private function generateParentClassesPath(ClassDto $class, string $format): array
+    private function generateParentClassesPath(ClassDto $class, string $format, string $mainDirectory): array
     {
         Assert::stringNotEmpty($format);
 
@@ -53,16 +58,17 @@ final readonly class ClassPathGenerator implements ClassPathGeneratorInterface
         $parentClasses = $class->getParentClasses();
 
         if ($parentClasses !== null && !$parentClasses->isEmpty()) {
-            $parentClassesPath = $this->generateClassPath($parentClasses, $format);
+            $parentClassesPath = $this->generateClassPath($parentClasses, $format, $mainDirectory);
         }
 
         return $parentClassesPath;
     }
 
     /**
+     * @param Collection<int, ClassDto> $classes
      * @throws InvalidArgumentException
      */
-    private function generateClassPath(ClassCollection $classes, string $format): array
+    private function generateClassPath(Collection $classes, string $format, string $mainDirectory): array
     {
         Assert::stringNotEmpty($format);
 
@@ -74,10 +80,12 @@ final readonly class ClassPathGenerator implements ClassPathGeneratorInterface
             /** @var ClassDto $class */
             $class = $iterator->current();
             $className = $class->getName();
-
             Assert::stringNotEmpty($className);
 
-            $classPath[] = $this->linkGenerator->generate($format, $className);
+            $destination = $this->classLinkDestFormat->formatDestination($format, $class, $mainDirectory);
+            Assert::stringNotEmpty($destination);
+
+            $classPath[] = $this->linkGenerator->generate($format, $destination);
             $iterator->next();
         }
 

@@ -8,15 +8,18 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
 namespace Contract\Service\Class\Data;
 
-use Collection\ModifierCollection;
+use Dto\Common\Modifier;
+use Illuminate\Support\Collection;
 use PhpParser\Node;
 
 interface ModifierDataServiceInterface
 {
-    public function getModifiers(Node $node): ModifierCollection;
+    /**
+     * @return Collection<int, Modifier>
+     */
+    public function getModifiers(Node $node): Collection;
 }

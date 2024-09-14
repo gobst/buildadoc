@@ -8,18 +8,25 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Contract\Service\Class\Documentation\Page;
 
-use Collection\ClassCollection;
+use Dto\Class\ClassDto;
+use Dto\Documentation\DocPage;
+use Illuminate\Support\Collection;
 
 interface ClassPageServiceInterface
 {
     /**
-     * @psalm-param non-empty-string $lang
      * @psalm-param non-empty-string $format
+     * @psalm-param non-empty-string $lang
+     * @return Collection<int, DocPage>
      */
-    public function dumpPages(ClassCollection $classes, string $destDirectory, string $lang, string $format): void;
+    public function generateClassPageIncludingMethodPages(
+        ClassDto $class,
+        string $format,
+        string $lang,
+        string $mainDirectory
+    ): Collection;
 }

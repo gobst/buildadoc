@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of PHPUnit.
+ *
+ * (c) Guido Obst
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 declare(strict_types=1);
 
 return [
@@ -27,4 +35,8 @@ return [
     'defaultval' => 'Defaultvalue',
     'name' => 'Name',
     'value' => 'Value',
+    'tableofcontents' => [
+        'heading' => 'Table of contents',
+        'text' => 'The documentation includes the following classes:'
+    ]
 ];

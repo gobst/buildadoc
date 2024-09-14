@@ -8,16 +8,18 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Dto\Common;
 
-use Collection\ModifierCollection;
+use Illuminate\Support\Collection;
 
 final class Property
 {
-    private readonly ModifierCollection $modifiers;
+    /**
+     * @var Collection<int, Modifier>
+     */
+    private readonly Collection $modifiers;
 
     /**
      * @psalm-var non-empty-string
@@ -28,16 +30,18 @@ final class Property
      * @psalm-var non-empty-string
      */
     private readonly string $name;
+
     private mixed $defaultValue;
 
     /**
      * @psalm-param non-empty-string $name
      * @psalm-param non-empty-string $type
+     * @param Collection<int, Modifier> $modifiers
      */
     private function __construct(
         string $name,
         string $type,
-        ModifierCollection $modifiers
+        Collection $modifiers
     ) {
         $this->name = $name;
         $this->type = $type;
@@ -48,11 +52,12 @@ final class Property
     /**
      * @psalm-param non-empty-string $name
      * @psalm-param non-empty-string $type
+     * @param Collection<int, Modifier> $modifiers
      */
     public static function create(
         string $name,
         string $type,
-        ModifierCollection $modifiers
+        Collection $modifiers
     ): self {
         return new self($name, $type, $modifiers);
     }
@@ -69,7 +74,10 @@ final class Property
         return $dto;
     }
 
-    public function getModifiers(): ModifierCollection
+    /**
+     * @return Collection<int, Modifier>
+     */
+    public function getModifiers(): Collection
     {
         return $this->modifiers;
     }

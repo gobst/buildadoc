@@ -8,19 +8,11 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Service\Class\Data;
 
 use ArrayIterator;
-use Collection\ClassCollection;
-use Collection\ConstantCollection;
-use Collection\FileCollection;
-use Collection\InterfaceCollection;
-use Collection\ModifierCollection;
-use Collection\PropertyCollection;
-use Collection\TraitCollection;
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Data\MethodDataServiceInterface;
 use Contract\Service\Class\Data\ModifierDataServiceInterface;
@@ -31,11 +23,11 @@ use Dto\Class\InterfaceDto;
 use Dto\Class\TraitDto;
 use Dto\Common\File;
 use Dto\Common\Property;
+use Illuminate\Support\Collection;
 use PhpParser\Node;
 use PhpParser\NodeFinder;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
-use Ramsey\Collection\Exception\NoSuchElementException;
 use Service\Class\Filter\ClassNameFilter;
 use Service\Class\Filter\ParentClassNameFilter;
 use Webmozart\Assert\Assert;
@@ -43,6 +35,10 @@ use Webmozart\Assert\InvalidArgumentException;
 
 use function gettype;
 
+/**
+ * @psalm-suppress NoInterfaceProperties
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 final class ClassDataService implements ClassDataServiceInterface
 {
     private FileServiceInterface $fileService;
@@ -79,7 +75,7 @@ final class ClassDataService implements ClassDataServiceInterface
                 $classNode[0]->name->name,
                 $file->getPath(),
                 $methods,
-                new ModifierCollection()
+                Collection::make()
             )
                 ->withConstants($this->getConstants($classAst))
                 ->withProperties($this->getProperties($classAst))
@@ -98,9 +94,10 @@ final class ClassDataService implements ClassDataServiceInterface
         return null;
     }
 
-    public function getConstants(array $ast): ConstantCollection
+    public function getConstants(array $ast): Collection
     {
-        $constants = new ConstantCollection();
+        /** @var Collection<int, Constant> $constants */
+        $constants = Collection::make();
         $constantsAst = $this->nodeFinder->findInstanceOf($ast, Node\Stmt\ClassConst::class);
 
         foreach ($constantsAst as $const) {
@@ -118,22 +115,24 @@ final class ClassDataService implements ClassDataServiceInterface
                 $modifiers
             );
 
-            $constants->add($constant);
+            $constants->push($constant);
         }
 
         return $constants;
     }
 
-    public function getProperties(array $ast): PropertyCollection
+    /**
+     * @psalm-suppress PossiblyInvalidArgument
+     */
+    public function getProperties(array $ast): Collection
     {
-        $properties = new PropertyCollection();
+        /** @var Collection<int, Property> $properties */
+        $properties = Collection::make();
         $propertiesAst = $this->nodeFinder->findInstanceOf($ast, Node\Stmt\Property::class);
         foreach ($propertiesAst as $prop) {
 
             $modifiers = $this->modifierDataService->getModifiers($prop);
             $type = !empty($prop->type->name) ? $prop->type->name : '';
-
-            Assert::stringNotEmpty($type);
 
             $defaultValue = !empty($prop->props[0]->default->value) ? $prop->props[0]->default->value : '';
             $property = Property::create(
@@ -144,15 +143,16 @@ final class ClassDataService implements ClassDataServiceInterface
             if ($defaultValue !== '') {
                 $property = $property->withDefaultValue($defaultValue);
             }
-            $properties->add($property);
+            $properties->push($property);
         }
 
         return $properties;
     }
 
-    public function getInterfaces(array $ast): InterfaceCollection
+    public function getInterfaces(array $ast): Collection
     {
-        $interfaces = new InterfaceCollection();
+        /** @var Collection<int, InterfaceDto> $interfaces */
+        $interfaces = Collection::make();
         $nodes = $this->nodeFinder->findInstanceOf($ast, Node\Stmt\Class_::class);
         if (!empty($nodes)) {
             if (is_array($nodes[0]->implements)) {
@@ -168,7 +168,7 @@ final class ClassDataService implements ClassDataServiceInterface
                     if ($namespace !== '') {
                         $interfaceDto = $interfaceDto->withNamespace($namespace);
                     }
-                    $interfaces->add($interfaceDto);
+                    $interfaces->push($interfaceDto);
                 }
             }
         }
@@ -176,9 +176,10 @@ final class ClassDataService implements ClassDataServiceInterface
         return $interfaces;
     }
 
-    public function getTraits(array $ast): TraitCollection
+    public function getTraits(array $ast): Collection
     {
-        $traits = new TraitCollection();
+        /** @var Collection<int, TraitDto> $traits */
+        $traits = Collection::make();
         $nodes = $this->nodeFinder->findInstanceOf($ast, Node\Stmt\TraitUse::class);
         if (!empty($nodes)) {
             if (is_array($nodes[0]->traits)) {
@@ -194,7 +195,7 @@ final class ClassDataService implements ClassDataServiceInterface
                     if ($namespace !== '') {
                         $traitDto = $traitDto->withNamespace($namespace);
                     }
-                    $traits->add($traitDto);
+                    $traits->push($traitDto);
                 }
             }
         }
@@ -202,13 +203,18 @@ final class ClassDataService implements ClassDataServiceInterface
         return $traits;
     }
 
-    public function getAllClasses(FileCollection $files): ClassCollection
+    /**
+     * @param Collection<int, File> $files
+     * @return Collection<int, ClassDto>
+     */
+    public function getAllClasses(Collection $files): Collection
     {
-        $classes = new ClassCollection();
+        /** @var Collection<int, ClassDto> $classes */
+        $classes = Collection::make();
         foreach ($files as $file) {
             $class = $this->getClassData($file);
             if ($class !== null) {
-                $classes->add($class);
+                $classes->push($class);
             }
         }
         /** @var ArrayIterator $iterator */
@@ -216,7 +222,7 @@ final class ClassDataService implements ClassDataServiceInterface
         while ($iterator->valid()) {
             /** @var ClassDto $class */
             $class = $iterator->current();
-            $parentClasses = $this->getAllParentClassesByClass($class, $classes, new ClassCollection());
+            $parentClasses = $this->getAllParentClassesByClass($class, $classes, Collection::make());
             $childClasses = $this->getChildClasses($class->getName(), $classes);
             $necessaryFiles = $this->getAllNecessaryFilesByClass($class, $parentClasses, $files);
 
@@ -239,45 +245,70 @@ final class ClassDataService implements ClassDataServiceInterface
         return $classes;
     }
 
+    /**
+     * @param Collection<int, ClassDto> $classes
+     * @param Collection<int, ClassDto> $parentClasses
+     * @return Collection<int, ClassDto>
+     */
     private function getAllParentClassesByClass(
         ClassDto $class,
-        ClassCollection $classes,
-        ClassCollection $parentClasses,
-    ): ClassCollection {
+        Collection $classes,
+        Collection $parentClasses,
+    ): Collection {
         $parentClassName = $class->getParentClassName();
         if (!empty($parentClassName)) {
             $parentClass = $this->getSingleClass($parentClassName, $classes);
-            $parentClasses->add($parentClass);
-            if (!empty($parentClass->getParentClassName())) {
-                $this->getAllParentClassesByClass($parentClass, $classes, $parentClasses);
+            if($parentClass !== null){
+                $parentClasses->push($parentClass);
+                if (!empty($parentClass->getParentClassName())) {
+                    $this->getAllParentClassesByClass($parentClass, $classes, $parentClasses);
+                }
             }
         }
 
         return $parentClasses;
     }
 
-    private function getAllNecessaryFilesByClass(ClassDto $class, ClassCollection $parentClasses, FileCollection $files): FileCollection
+    /**
+     * @param ClassDto $class
+     * @param Collection<int, ClassDto> $parentClasses
+     * @param Collection<int, File> $files
+     * @return Collection<int, File>
+     */
+    private function getAllNecessaryFilesByClass(
+        ClassDto $class,
+        Collection $parentClasses,
+        Collection $files
+    ): Collection
     {
-        $fileCollection = new FileCollection();
+        /** @var Collection<int, File> $fileCollection */
+        $fileCollection = Collection::make();
         $file = $this->fileService->getSingleFile($class->getFilepath(), $files);
-        $fileCollection->add($file);
-        foreach ($parentClasses as $parentClass) {
-            $file = $this->fileService->getSingleFile($parentClass->getFilepath(), $files);
-            $fileCollection->add($file);
+        if($file !== null){
+            $fileCollection->push($file);
+            foreach ($parentClasses as $parentClass) {
+                $file = $this->fileService->getSingleFile($parentClass->getFilepath(), $files);
+                if($file !== null) {
+                    $fileCollection->push($file);
+                }
+            }
         }
 
         return $fileCollection;
     }
 
     /**
+     * @param Collection<int, ClassDto> $classes
+     *
      * @throws InvalidArgumentException
-     * @throws NoSuchElementException
      */
-    public function getSingleClass(string $className, ClassCollection $classes): ClassDto
+    public function getSingleClass(string $className, Collection $classes): ?ClassDto
     {
         Assert::stringNotEmpty($className);
 
-        return $classes->filter([new ClassNameFilter($className), 'hasClassName'])->first();
+        return $classes->filter(function ($value) use ($className) {
+            return (new ClassNameFilter($className))->hasClassName($value);
+        })->first();
     }
 
     public function getAst(string $phpFile): ?array
@@ -286,16 +317,16 @@ final class ClassDataService implements ClassDataServiceInterface
     }
 
     /**
+     * @param Collection<int, ClassDto> $classes
+     * @return Collection<int, ClassDto>
      * @throws InvalidArgumentException
      */
-    private function getChildClasses(string $parentClassName, ClassCollection $classes): ClassCollection
+    private function getChildClasses(string $parentClassName, Collection $classes): Collection
     {
         Assert::stringNotEmpty($parentClassName);
 
-        return new ClassCollection(
-            $classes
-                ->filter([new ParentClassNameFilter($parentClassName), 'hasParentClass'])
-                ->toArray()
-        );
+        return $classes->filter(function ($value) use ($parentClassName) {
+            return (new ParentClassNameFilter($parentClassName))->hasParentClass($value);
+        });
     }
 }

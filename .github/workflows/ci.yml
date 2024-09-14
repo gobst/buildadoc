@@ -22,44 +22,41 @@ jobs:
 
       - name: Pull images
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up -d --build buildadoc
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
 
       - name: Run composer
         run: |
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/psalm"
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php-cs-fixer"
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php_codesniffer"
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/phpmd"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/psalm"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php-cs-fixer"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/php_codesniffer"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install -d tools/phpmd"
 
       - name: Check code
         run: |
           mkdir -p artifacts
           
           # Run PHP-CS-Fixer
-          csfixerExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
+          csfixerExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
           
           # Run Psalm
-          psalmExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
+          psalmExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
 
           # Run CodeSniffer
-          codesnifferExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/codesniffer.sh"; echo $?)
+          codesnifferExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/codesniffer.sh"; echo $?)
           
-           # Run Mess Detector
-          messdetectorExitCode=$(docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
+          # Run Mess Detector
+          messdetectorExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
           
-          if [[ $psalmExitCode -ne 0 || $csFixerExitCode -ne 0 || $messdetectorExitCode -ne 0 ]]; then
+          if [[ $psalmExitCode -ne 0 || $messdetectorExitCode -ne 0 ]]; then
             mkdir -p artifacts
           
             if [[ $psalmExitCode -ne 0 ]]; then
               docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts
             fi
-          
-            if [[ $codesnifferExitCode -ne 0 ]]; then
-              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpcs-report.log artifacts            
-            fi
 
-             if [[ $messdetectorExitCode -ne 0 ]]; then
+            if [[ $messdetectorExitCode -ne 0 ]]; then
               docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpmd-report.log artifacts    
             fi
             exit 1
@@ -78,7 +75,7 @@ jobs:
         if: success()
         run: |
           mkdir -p artifacts/unit
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run" > artifacts/unit/phpunit.log
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run" > artifacts/unit/phpunit.log
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/junit.xml artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.xml artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.txt artifacts/unit
@@ -86,7 +83,7 @@ jobs:
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage-xml artifacts/unit
 
       - name: Upload artifacts from unit tests
-        if: success()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-artifacts
@@ -95,7 +92,7 @@ jobs:
       - name: Run mutation tests
         run: |
           mkdir -p artifacts/mutation
-          docker-compose -f docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.log artifacts/mutation
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.html artifacts/mutation
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/summary.log artifacts/mutation

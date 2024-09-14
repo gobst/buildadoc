@@ -1,1 +1,1 @@
-^ Parameter ^ Typ ^ Beschreibung ^ Standardwert ^| $testInt | int |  | 0 |
+^ <nowiki>Parameter</nowiki> ^ <nowiki>Typ</nowiki> ^ <nowiki>Beschreibung</nowiki> ^ <nowiki>Standardwert</nowiki> ^| <nowiki>$testInt</nowiki> | <nowiki>int</nowiki> | <nowiki></nowiki> | <nowiki>0</nowiki> |

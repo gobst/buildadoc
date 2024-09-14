@@ -8,14 +8,13 @@
  * file that was distributed with this source code.
  *
  */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Service\Class\Filter;
 
-use ArrayIterator;
+use Dto\Common\Modifier;
 use Dto\Method\Method;
-use Webmozart\Assert\Assert;
+use Illuminate\Support\Collection;
 use Webmozart\Assert\InvalidArgumentException;
 
 final readonly class ModifierFilter
@@ -35,32 +34,34 @@ final readonly class ModifierFilter
     public function hasModifier(Method $method): bool
     {
         $modifiers = $method->getModifiers();
+        $hasModifier = !($this->where === 'or');
 
-        /** @var ArrayIterator $iterator */
-        $iterator = $modifiers->getIterator();
-        $containsModifier = !($this->where === 'or');
-
-        while ($iterator->valid()) {
-            Assert::stringNotEmpty($iterator->current()->getName());
-
-            if ($this->where === 'or') {
-                if ($this->containsModifier($iterator->current()->getName(), $this->modifiers)) {
-                    return true;
-                }
-            } elseif (!$this->containsModifier($iterator->current()->getName(), $this->modifiers)) {
+        foreach ($this->modifiers as $checkedModifier) {
+            if ($this->where === 'or'
+                && $this->containsModifier($checkedModifier, $modifiers))
+            {
+                return true;
+            }
+            if (!$this->containsModifier($checkedModifier, $modifiers))
+            {
                 return false;
             }
-            $iterator->next();
         }
 
-        return $containsModifier;
+        return $hasModifier;
     }
 
     /**
      * @psalm-param non-empty-string $modifier
+     * @param Collection<int, Modifier> $existingModifiers
      */
-    private function containsModifier(string $modifier, array $existingModifiers): bool
+    private function containsModifier(string $modifier, Collection $existingModifiers): bool
     {
-        return in_array($modifier, $existingModifiers);
+        foreach ($existingModifiers->all() as $existingModifier) {
+            if ($existingModifier->getName() === $modifier) {
+                return true;
+            }
+        }
+        return false;
     }
 }

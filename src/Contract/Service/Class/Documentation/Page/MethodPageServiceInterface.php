@@ -8,19 +8,18 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Contract\Service\Class\Documentation\Page;
 
-use Collection\DocPageCollection;
-use Collection\MethodCollection;
+use Dto\Documentation\DocPage;
+use Dto\Method\Method;
 
 interface MethodPageServiceInterface
 {
     /**
-     * @psalm-param non-empty-string $lang
      * @psalm-param non-empty-string $format
+     * @psalm-param non-empty-string $lang
      */
-    public function getPages(MethodCollection $methods, string $lang, string $format): DocPageCollection;
+    public function generateMethodPage(Method $method, string $format, string $lang): DocPage;
 }

@@ -8,25 +8,31 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
 namespace Contract\Service\Class\Data;
 
-use Collection\MethodCollection;
 use Dto\Class\ClassDto;
 use Dto\Method\Method;
+use Illuminate\Support\Collection;
 
 interface MethodDataServiceInterface
 {
-    public function getMethods(array $ast): MethodCollection;
+    /**
+     * @return Collection<int, Method>
+     */
+    public function getMethods(array $ast): Collection;
 
-    public function fetchInheritedMethods(ClassDto $class): MethodCollection;
+    /**
+     * @return Collection<int, Method>
+     */
+    public function fetchInheritedMethods(ClassDto $class): Collection;
 
     public function fetchMethodSignature(Method $method, bool $withModifiers = true): string;
 
     /**
      * @psalm-param non-empty-string $name
+     * @param Collection<int, Method> $methods
      */
-    public function fetchMethod(string $name, MethodCollection $methods): Method|bool;
+    public function fetchMethod(string $name, Collection $methods): Method|bool;
 }

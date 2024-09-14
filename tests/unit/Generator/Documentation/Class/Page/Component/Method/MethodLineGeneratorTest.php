@@ -8,16 +8,15 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Method;
 
-use Collection\ModifierCollection;
 use Contract\Service\Class\Data\MethodDataServiceInterface;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Generator\Documentation\Class\Page\Component\Method\MethodLineGenerator;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -47,8 +46,9 @@ final class MethodLineGeneratorTest extends TestCase
 
     public static function methodLineGeneratorTestDataProvider(): array
     {
-        $modifiers = new ModifierCollection();
-        $modifiers->add(Modifier::create('public'));
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
+        $modifiers->push(Modifier::create('public'));
 
         $method = Method::create('testMethod', $modifiers, 'string', 'testClass');
 

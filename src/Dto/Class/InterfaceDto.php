@@ -8,13 +8,12 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Dto\Class;
 
-use Collection\ConstantCollection;
-use Collection\MethodCollection;
+use Dto\Method\Method;
+use Illuminate\Support\Collection;
 
 final class InterfaceDto
 {
@@ -23,8 +22,8 @@ final class InterfaceDto
      */
     private readonly string $name;
     private ?string $namespace;
-    private ?ConstantCollection $constants;
-    private ?MethodCollection $methods;
+    private ?Collection $constants;
+    private ?Collection $methods;
 
     /**
      * @psalm-param non-empty-string $name
@@ -55,7 +54,10 @@ final class InterfaceDto
         return $dto;
     }
 
-    public function withConstants(ConstantCollection $constants): self
+    /**
+     * @param Collection<int, Constant> $constants
+     */
+    public function withConstants(Collection $constants): self
     {
         $dto = new self($this->name);
         $dto->namespace = $this->namespace;
@@ -65,7 +67,10 @@ final class InterfaceDto
         return $dto;
     }
 
-    public function withMethods(MethodCollection $methods): self
+    /**
+     * @param Collection<int, Method> $methods
+     */
+    public function withMethods(Collection $methods): self
     {
         $dto = new self($this->name);
         $dto->namespace = $this->namespace;
@@ -88,12 +93,18 @@ final class InterfaceDto
         return $this->namespace;
     }
 
-    public function getConstants(): ?ConstantCollection
+    /**
+     * @return Collection<int, Constant>|null
+     */
+    public function getConstants(): ?Collection
     {
         return $this->constants;
     }
 
-    public function getMethods(): ?MethodCollection
+    /**
+     * @return Collection<int, Method>|null
+     */
+    public function getMethods(): ?Collection
     {
         return $this->methods;
     }

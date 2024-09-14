@@ -8,22 +8,18 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Service\Class\Data;
 
-use Collection\ClassCollection;
-use Collection\MethodCollection;
-use Collection\ModifierCollection;
 use Contract\Service\Class\Data\MethodDataServiceInterface;
 use Contract\Service\Class\Data\ModifierDataServiceInterface;
 use Contract\Service\File\FileServiceInterface;
 use Dto\Class\ClassDto;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Collection\Exception\NoSuchElementException;
 use Service\Class\Data\ClassDataService;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -59,24 +55,25 @@ final class classDataServiceTest extends TestCase
     #[TestDox('getSingleClass() method works correctly')]
     public function testGetSingleClass(): void
     {
-        $classes = new ClassCollection();
+        /** @var Collection<int, ClassDto> $classes */
+        $classes = Collection::make();
 
         $firstClass = ClassDto::create(
             'TestClass1',
             '/path/to/file',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
 
         $secondClass = ClassDto::create(
             'TestClass2',
             '/path/to/file',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
 
-        $classes->add($firstClass);
-        $classes->add($secondClass);
+        $classes->push($firstClass);
+        $classes->push($secondClass);
 
         $expected = $secondClass;
         $actual = $this->classDataService->getSingleClass('TestClass2', $classes);
@@ -89,34 +86,7 @@ final class classDataServiceTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->classDataService->getSingleClass('', new ClassCollection());
-    }
-
-    #[TestDox('getSingleClass() method fails on NoSuchElementException')]
-    public function testGetSingleClassWillFailOnNoSuchElementException(): void
-    {
-        $this->expectException(NoSuchElementException::class);
-
-        $classes = new ClassCollection();
-
-        $firstClass = ClassDto::create(
-            'TestClass1',
-            '/path/to/file',
-            new MethodCollection(),
-            new ModifierCollection()
-        );
-
-        $secondClass = ClassDto::create(
-            'TestClass2',
-            '/path/to/file',
-            new MethodCollection(),
-            new ModifierCollection()
-        );
-
-        $classes->add($firstClass);
-        $classes->add($secondClass);
-
-        $this->classDataService->getSingleClass('TestClass3', $classes);
+        $this->classDataService->getSingleClass('', Collection::make());
     }
 
     // @todo
@@ -197,5 +167,13 @@ final class classDataServiceTest extends TestCase
     // @todo
     /*public function testGetAllClasses(): void
     {
+    }*/
+
+    // @todo
+   /* public function testGetClassData(): void
+    {
+        echo __DIR__ . '/../../../../data/classes/testClass.php';
+        $file = File::create('test.php', __DIR__ . '/../../../../data/classes/testClass.php', 'testClass', 'classes', 111);
+        $this->classDataService->getClassData($file);
     }*/
 }

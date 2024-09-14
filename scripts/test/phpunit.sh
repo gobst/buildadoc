@@ -15,10 +15,10 @@ echo $1
 
 # run unit tests with testdox
 if [[ $1 == 'run-testdox' ]]; then
-    bin/phpunit --testdox --color
+    bin/phpunit --configuration cfg/dev/phpunit.xml --testdox --color
 fi
 
 # run unit tests
 if [[ $1 == 'run' ]]; then
-    bin/phpunit
+    bin/phpunit --configuration cfg/dev/phpunit.xml
 fi

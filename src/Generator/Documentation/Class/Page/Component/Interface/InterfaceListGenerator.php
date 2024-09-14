@@ -8,17 +8,16 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Generator\Documentation\Class\Page\Component\Interface;
 
 use ArrayIterator;
-use Collection\InterfaceCollection;
 use Contract\Formatter\Component\ListFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Interface\InterfaceListGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\InterfaceDto;
+use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -32,10 +31,11 @@ final readonly class InterfaceListGenerator implements InterfaceListGeneratorInt
     ) {}
 
     /**
+     * @param Collection<int, InterfaceDto> $interfaces
      * @throws InvalidArgumentException
      */
     public function generate(
-        InterfaceCollection $interfaces,
+        Collection $interfaces,
         string $format,
         string $listType = 'ordered',
         bool $linked = true

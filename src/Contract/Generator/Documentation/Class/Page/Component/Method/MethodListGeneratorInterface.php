@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
 namespace Contract\Generator\Documentation\Class\Page\Component\Method;
@@ -26,6 +25,7 @@ interface MethodListGeneratorInterface
         string $format,
         bool $link = true,
         string $listType = 'ordered',
-        bool $withInheritedMethods = false
+        bool $withInheritedMethods = false,
+        string $mainDirectory = ''
     ): string;
 }

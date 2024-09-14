@@ -8,85 +8,94 @@
  * file that was distributed with this source code.
  *
  */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Service\Class\Documentation\Page;
 
 use ArrayIterator;
-use Collection\ClassCollection;
-use Collection\DocPageCollection;
-use Contract\Formatter\DokuWikiFormatInterface;
-use Contract\Generator\Documentation\Class\Page\Class\ClassPageGeneratorInterface;
+use Contract\Pipeline\ClassPageMarkerPipelineInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
 use Contract\Service\Class\Documentation\Page\MethodPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
+use Contract\Service\File\FileExtensionInterface;
+use Contract\Service\File\Template\TemplateServiceProviderInterface;
 use Dto\Class\ClassDto;
 use Dto\Documentation\DocPage;
+use Dto\Method\Method;
+use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
+use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ClassPageService implements ClassPageServiceInterface, DokuWikiFormatInterface
+final readonly class ClassPageService implements ClassPageServiceInterface, FileExtensionInterface
 {
-    private const string FILE_EXTENSION_SUFFIX = 'FILE_EXTENSION';
+    private const string CLASSPAGE_TEMPLATE_SERVICE_KEY = 'class';
 
     public function __construct(
-        private ClassPageGeneratorInterface $classPageGenerator,
-        private DocFileServiceInterface $docFileService,
-        private MethodPageServiceInterface $methodPageService
-    ) {}
+        private DocFileServiceInterface          $docFileService,
+        private MethodPageServiceInterface       $methodPageService,
+        private ClassPageMarkerPipelineInterface $classPageMPipeline,
+        private TemplateServiceProviderInterface $tmplServiceProvider
+    )
+    {
+    }
 
-    public function dumpPages(ClassCollection $classes, string $destDirectory, string $lang, string $format): void
+    /**
+     * @psalm-param non-empty-string $format
+     * @psalm-param non-empty-string $lang
+     * @return Collection<int, DocPage>
+     */
+    public function generateClassPageIncludingMethodPages(
+        ClassDto $class,
+        string $format,
+        string $lang,
+        string $mainDirectory
+    ): Collection
     {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 
-        $this->docFileService->dumpDocFiles($this->getPages($classes, $lang, $format), $destDirectory);
+        /** @var Collection<int, DocPage> $docPages */
+        $docPages = Collection::make();
+
+        $markers = $this->classPageMPipeline->handlePipeline($class, $format, $lang, $mainDirectory);
+        $pageContent = $this->tmplServiceProvider
+            ->getService(self::CLASSPAGE_TEMPLATE_SERVICE_KEY)
+            ->fillTemplate($markers);
+
+        Assert::stringNotEmpty($pageContent);
+
+        $docPages->push(
+            DocPage::create(
+                $pageContent,
+                $class->getName(),
+                $class->getName(),
+                $this->docFileService->getFileExtensionByFormat($format)
+            )
+        );
+
+        return $this->fetchMethodPages($class, $format, $lang, $docPages);
     }
 
     /**
-     * @psalm-param non-empty-string $lang
-     * @psalm-param non-empty-string $format
+     * @param Collection<int, DocPage> $docPages
+     * @return Collection<int, DocPage>
+     * @throws InvalidArgumentException
      */
-    private function getPages(ClassCollection $classes, string $lang, string $format): DocPageCollection
+    private function fetchMethodPages(ClassDto $class, string $format, string $lang, Collection $docPages): Collection
     {
-        $pages = new DocPageCollection();
-        $fileExtension = $this->getFileExtension($format);
+        Assert::stringNotEmpty($format);
+        Assert::stringNotEmpty($lang);
+
+        $methods = $class->getMethods();
         /** @var ArrayIterator $iterator */
-        $iterator = $classes->getIterator();
-
+        $iterator = $methods->getIterator();
         while ($iterator->valid()) {
-            /** @var ClassDto $class */
-            $class = $iterator->current();
-
-            $classPageContent = $this->classPageGenerator->generate($class, $format, $lang);
-            $className = $class->getName();
-            $classNamespace = empty($class->getNamespace()) ? '' : $class->getNamespace() . '_';
-            $fileName = sprintf('%s%s', $classNamespace, $className);
-
-            Assert::stringNotEmpty($classPageContent);
-            Assert::stringNotEmpty($fileName);
-            Assert::stringNotEmpty($fileExtension);
-
-            $page = DocPage::create(
-                $classPageContent,
-                $className,
-                $fileName,
-                $fileExtension
-            );
-            $pages->add($page);
-
-            $methods = $class->getMethods();
-            $methodPages = $this->methodPageService->getPages($methods, $lang, $format);
-            $pages = $pages->merge($methodPages);
-
+            /** @var Method $method */
+            $method = $iterator->current();
+            $docPages->push($this->methodPageService->generateMethodPage($method, $format, $lang));
             $iterator->next();
         }
 
-        return new DocPageCollection($pages->toArray());
-    }
-
-    private function getFileExtension(string $format): string
-    {
-        return self::{sprintf('%s_%s', strtoupper($format), self::FILE_EXTENSION_SUFFIX)};
+        return $docPages;
     }
 }

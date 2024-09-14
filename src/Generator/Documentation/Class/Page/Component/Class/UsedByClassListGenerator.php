@@ -53,7 +53,7 @@ final readonly class UsedByClassListGenerator implements UsedByClassListGenerato
                 $childClass = $iterator->current();
 
                 $className = $childClass->getName();
-                $modifiersStr = $childClass->getModifiers()->toString();
+                $modifiersStr = $childClass->getModifiers()->toArray();
 
                 $contentParts = [];
                 $contentParts[] = $modifiersStr;

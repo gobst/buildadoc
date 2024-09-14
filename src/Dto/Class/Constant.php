@@ -8,16 +8,19 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Dto\Class;
 
-use Collection\ModifierCollection;
+use Dto\Common\Modifier;
+use Illuminate\Support\Collection;
 
 final readonly class Constant
 {
-    private ModifierCollection $modifiers;
+    /**
+     * @var Collection<int, Modifier> $modifiers
+     */
+    private Collection $modifiers;
 
     /**
      * @psalm-var non-empty-string
@@ -28,17 +31,19 @@ final readonly class Constant
      * @psalm-var non-empty-string
      */
     private string $name;
+
     private mixed $value;
 
     /**
      * @psalm-param non-empty-string $name
      * @psalm-param non-empty-string $type
+     * @param Collection<int, Modifier> $modifiers
      */
     private function __construct(
         string $name,
         string $type,
         mixed $value,
-        ModifierCollection $modifiers
+        Collection $modifiers
     ) {
         $this->name = $name;
         $this->type = $type;
@@ -49,17 +54,18 @@ final readonly class Constant
     /**
      * @psalm-param non-empty-string $name
      * @psalm-param non-empty-string $type
+     * @param Collection<int, Modifier> $modifiers
      */
     public static function create(
         string $name,
         string $type,
         mixed $value,
-        ModifierCollection $modifiers
+        Collection $modifiers
     ): self {
         return new self($name, $type, $value, $modifiers);
     }
 
-    public function getModifiers(): ModifierCollection
+    public function getModifiers(): Collection
     {
         return $this->modifiers;
     }

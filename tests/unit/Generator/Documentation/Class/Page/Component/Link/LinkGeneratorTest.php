@@ -13,7 +13,7 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Link;
 
-use Contract\Formatter\Component\LinkFormatterInterface;
+use Contract\Formatter\Component\Link\LinkFormatterInterface;
 use Generator\Documentation\Class\Page\Component\Link\LinkGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

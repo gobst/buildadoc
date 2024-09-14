@@ -8,13 +8,12 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Dto\Class;
 
-use Collection\ConstantCollection;
-use Collection\MethodCollection;
+use Dto\Method\Method;
+use Illuminate\Support\Collection;
 
 final class TraitDto
 {
@@ -22,9 +21,18 @@ final class TraitDto
      * @psalm-var non-empty-string
      */
     private readonly string $name;
+
     private ?string $namespace;
-    private ?ConstantCollection $constants;
-    private ?MethodCollection $methods;
+
+    /**
+     * @var Collection<int, Constant>|null
+     */
+    private ?Collection $constants;
+
+    /**
+     * @var Collection<int, Method>|null
+     */
+    private ?Collection $methods;
 
     /**
      * @psalm-param non-empty-string $name
@@ -55,7 +63,10 @@ final class TraitDto
         return $dto;
     }
 
-    public function withConstants(ConstantCollection $constants): self
+    /**
+     * @param Collection<int, Constant> $constants
+     */
+    public function withConstants(Collection $constants): self
     {
         $dto = new self($this->name);
         $dto->namespace = $this->namespace;
@@ -65,7 +76,10 @@ final class TraitDto
         return $dto;
     }
 
-    public function withMethods(MethodCollection $methods): self
+    /**
+     * @param Collection<int, Method> $methods
+     */
+    public function withMethods(Collection $methods): self
     {
         $dto = new self($this->name);
         $dto->namespace = $this->namespace;
@@ -88,12 +102,12 @@ final class TraitDto
         return $this->namespace;
     }
 
-    public function getConstants(): ?ConstantCollection
+    public function getConstants(): ?Collection
     {
         return $this->constants;
     }
 
-    public function getMethods(): ?MethodCollection
+    public function getMethods(): ?Collection
     {
         return $this->methods;
     }

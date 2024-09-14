@@ -20,5 +20,5 @@ interface ClassPathGeneratorInterface
     /**
      * @psalm-param non-empty-string $format
      */
-    public function generate(ClassDto $class, string $format): string;
+    public function generate(ClassDto $class, string $format, string $mainDirectory = ''): string;
 }

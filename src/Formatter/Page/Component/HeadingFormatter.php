@@ -8,17 +8,17 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Formatter\Page\Component;
 
 use Contract\Formatter\Component\HeadingFormatterInterface;
+use Contract\Formatter\DokuWikiFormatInterface;
 use Contract\Formatter\FormatterInterface;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class HeadingFormatter implements HeadingFormatterInterface
+final readonly class HeadingFormatter implements HeadingFormatterInterface, DokuWikiFormatInterface
 {
     private const string HEADING_LEVEL_TYPE = 'heading_level%s';
 
@@ -33,14 +33,13 @@ final readonly class HeadingFormatter implements HeadingFormatterInterface
         Assert::positiveInteger($level);
 
         return match ($format) {
-            'dokuwiki' => $this->formatHeadingToDokuWiki($format, $contentParts, $level),
+            self::DOKUWIKI_FORMAT_KEY => $this->formatHeadingToDokuWiki($format, $contentParts, $level),
             default => throw new InvalidArgumentException('Error: Unknown format!'),
         };
     }
 
     /**
      * @psalm-param non-empty-string $format
-     *
      * @throws InvalidArgumentException
      */
     private function formatHeadingToDokuWiki(string $format, array $contentParts, int $level): string

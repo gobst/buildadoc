@@ -8,17 +8,19 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Dto\Method;
 
-use Collection\MethodParameterCollection;
-use Collection\ModifierCollection;
+use Dto\Common\Modifier;
+use Illuminate\Support\Collection;
 
 final class Method
 {
-    private readonly ModifierCollection $modifiers;
+    /**
+     * @var Collection<int, Modifier>
+     */
+    private readonly Collection $modifiers;
 
     /**
      * @psalm-var non-empty-string
@@ -35,14 +37,19 @@ final class Method
      */
     private readonly string $class;
     private ?string $description;
-    private ?MethodParameterCollection $parameters;
+
+    /**
+     * @var Collection<int, MethodParameter>|null
+     */
+    private ?Collection $parameters;
 
     /**
      * @psalm-param non-empty-string $name
      * @psalm-param non-empty-string $returnType
      * @psalm-param non-empty-string $class
+     * @param Collection<int, Modifier> $modifiers
      */
-    private function __construct(string $name, ModifierCollection $modifiers, string $returnType, string $class)
+    private function __construct(string $name, Collection $modifiers, string $returnType, string $class)
     {
         $this->name = $name;
         $this->modifiers = $modifiers;
@@ -56,8 +63,9 @@ final class Method
      * @psalm-param non-empty-string $name
      * @psalm-param non-empty-string $returnType
      * @psalm-param non-empty-string $class
+     * @param Collection<int, Modifier> $modifiers
      */
-    public static function create(string $name, ModifierCollection $modifiers, string $returnType, string $class): self
+    public static function create(string $name, Collection $modifiers, string $returnType, string $class): self
     {
         return new self($name, $modifiers, $returnType, $class);
     }
@@ -76,7 +84,10 @@ final class Method
         return $dto;
     }
 
-    public function withParameters(MethodParameterCollection $parameters): self
+    /**
+     * @param Collection<int, MethodParameter> $parameters
+     */
+    public function withParameters(Collection $parameters): self
     {
         $dto = new self(
             $this->name,
@@ -90,7 +101,10 @@ final class Method
         return $dto;
     }
 
-    public function getModifiers(): ModifierCollection
+    /**
+     * @return Collection<int, Modifier>
+     */
+    public function getModifiers(): Collection
     {
         return $this->modifiers;
     }
@@ -124,7 +138,10 @@ final class Method
         return $this->description;
     }
 
-    public function getParameters(): ?MethodParameterCollection
+    /**
+     * @return Collection<int, MethodParameter>|null
+     */
+    public function getParameters(): ?Collection
     {
         return $this->parameters;
     }

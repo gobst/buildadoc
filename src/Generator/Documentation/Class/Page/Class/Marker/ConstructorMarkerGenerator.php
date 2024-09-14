@@ -8,22 +8,23 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Generator\Documentation\Class\Page\Class\Marker;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ConstructorMarkerGeneratorInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPageMarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
 use Dto\Class\ClassDto;
 use Dto\Method\Method;
+use Illuminate\Support\Collection;
 use Service\Class\Filter\MethodNameFilter;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ConstructorMarkerGenerator implements ConstructorMarkerGeneratorInterface
+final readonly class ConstructorMarkerGenerator implements ConstructorMarkerGeneratorInterface, ClassPageMarkerInterface
 {
     public function __construct(
         private TranslationServiceInterface $translationService,
@@ -50,8 +51,8 @@ final readonly class ConstructorMarkerGenerator implements ConstructorMarkerGene
             Assert::stringNotEmpty($text);
             Assert::isInstanceOf($constructor, Method::class);
 
-            $marker['###CONSTRUCTOR_HEADING###'] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker['###CONSTRUCTOR###'] = $this->methodLineGenerator->generate($constructor) . $lineBreak;
+            $marker[self::CONSTRUCTOR_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
+            $marker[self::CONSTRUCTOR_MARKER] = $this->methodLineGenerator->generate($constructor) . $lineBreak;
         }
 
         return $marker;
@@ -59,11 +60,14 @@ final readonly class ConstructorMarkerGenerator implements ConstructorMarkerGene
 
     private function getConstructor(ClassDto $class): Method|bool
     {
-        $collection = $class->getMethods()->filter([new MethodNameFilter('__construct'), 'hasName']);
+        $collection = Collection::make($class->getMethods()->filter(function ($value) {
+            return (new MethodNameFilter('__construct'))->hasName($value);
+        }));
+
         if ($collection->isEmpty()) {
             return false;
         }
 
-        return $collection->first();
+        return $collection->first() ?? false;
     }
 }

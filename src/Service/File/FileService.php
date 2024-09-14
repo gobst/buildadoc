@@ -8,15 +8,13 @@
  * file that was distributed with this source code.
  *
  */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Service\File;
 
-use Collection\FileCollection;
 use Contract\Service\File\FileServiceInterface;
 use Dto\Common\File;
-use Ramsey\Collection\Exception\NoSuchElementException;
+use Illuminate\Support\Collection;
 use Service\File\Filter\FileNameFilter;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -27,27 +25,29 @@ final readonly class FileService implements FileServiceInterface
 {
     private Filesystem $filesystem;
 
-    public function __construct()
+    public function __construct(Filesystem $filesystem)
     {
-        $this->filesystem = new Filesystem();
+        $this->filesystem = $filesystem;
     }
 
     /**
      * Find all files in a directory and add these to an FileCollection.
      *
-     * @param string         $directory    Path of the directory to be searched
-     * @param FileCollection $files        The FileCollection that should be filled
-     * @param array          $excludeFiles Excluded files. For example: $excludeFiles[0] = 'test.php'
-     * @param string         $extension    Find only files with the given extension (optional)(default:'php')
+     * @param string $directory Path of the directory to be searched
+     * @param Collection<int, File> $files The Collection that should be filled
+     * @param array $excludeFiles Excluded files. For example: $excludeFiles[0] = 'test.php'
+     * @param string $extension Find only files with the given extension (optional)(default:'php')
+     * @return Collection<int, File>
      *
      * @throws InvalidArgumentException
      */
     public function getAllFilesWithinDir(
-        string $directory,
-        FileCollection $files,
-        array $excludeFiles = [],
-        string $extension = 'php'
-    ): FileCollection {
+        string     $directory,
+        Collection $files,
+        array      $excludeFiles = [],
+        string     $extension = 'php'
+    ): Collection
+    {
         Assert::stringNotEmpty($directory);
         Assert::stringNotEmpty($extension);
         if (is_dir($directory)) {
@@ -74,7 +74,7 @@ final readonly class FileService implements FileServiceInterface
                             $fileSize
                         )->withExtension($rfile['extension']);
 
-                        $files->add($file);
+                        $files->push($file);
                     }
                 } elseif ($this->isValidDirectory($path, $value)) {
                     $files = $this->getAllFilesWithinDir($path . '/', $files, $excludeFiles, $extension);
@@ -93,6 +93,26 @@ final readonly class FileService implements FileServiceInterface
     {
         Assert::stringNotEmpty($filename);
         $this->filesystem->dumpFile($filename, $content);
+    }
+
+    /**
+     * @throws IOException
+     * @throws InvalidArgumentException
+     */
+    public function makeDirectory(string $dir): void
+    {
+        Assert::stringNotEmpty($dir);
+        $this->filesystem->mkdir($dir);
+    }
+
+    /**
+     * @throws IOException
+     * @throws InvalidArgumentException
+     */
+    public function directoryExists(string $dir): bool
+    {
+        Assert::stringNotEmpty($dir);
+        return $this->filesystem->exists($dir);
     }
 
     /**
@@ -123,12 +143,13 @@ final readonly class FileService implements FileServiceInterface
 
     /**
      * @throws InvalidArgumentException
-     * @throws NoSuchElementException
      */
-    public function getSingleFile(string $phpFile, FileCollection $files): File
+    public function getSingleFile(string $phpFile, Collection $files): ?File
     {
         Assert::stringNotEmpty($phpFile);
 
-        return $files->filter([new FileNameFilter($phpFile), 'hasFileName'])->first();
+        return $files->filter(function ($value) use ($phpFile) {
+            return (new FileNameFilter($phpFile))->hasFileName($value);
+        })->first();
     }
 }

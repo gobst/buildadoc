@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
+         bootstrap="../../vendor/autoload.php"
+         cacheDirectory="../../bin/output/.phpunit.cache"
+         executionOrder="depends,defects"
+         requireCoverageMetadata="false"
+         beStrictAboutCoverageMetadata="true"
+         beStrictAboutOutputDuringTests="true"
+         failOnRisky="true"
+         failOnWarning="true">
+  <testsuites>
+    <testsuite name="default">
+      <directory>../../tests</directory>
+    </testsuite>
+  </testsuites>
+  <coverage>
+    <report>
+      <clover outputFile="../../bin/output/unit/coverage.xml" />
+      <html outputDirectory="../../bin/output/unit/coverage" />
+      <text outputFile="../../bin/output/unit/coverage.txt" showUncoveredFiles="false" showOnlySummary="true" />
+      <xml outputDirectory="../../bin/output/unit/coverage-xml" />
+    </report>
+  </coverage>
+  <logging>
+    <junit outputFile="../../bin/output/unit/junit.xml"/>
+  </logging>
+  <source>
+    <include>
+      <directory suffix=".php">../../src</directory>
+    </include>
+    <exclude>
+      <directory>../../src/Contract</directory>
+      <directory>../../src/Dto</directory>
+      <directory>../../src/Exception</directory>
+      <directory>../../src/Command</directory>
+      <directory>../../src/Adapter</directory>
+    </exclude>
+  </source>
+</phpunit>

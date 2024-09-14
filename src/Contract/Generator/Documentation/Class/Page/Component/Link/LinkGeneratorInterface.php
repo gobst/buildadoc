@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
 namespace Contract\Generator\Documentation\Class\Page\Component\Link;
@@ -19,5 +18,9 @@ interface LinkGeneratorInterface
      * @psalm-param non-empty-string $format
      * @psalm-param non-empty-string $dest
      */
-    public function generate(string $format, string $dest, string $text = ''): string;
+    public function generate(
+        string $format,
+        string $dest,
+        string $text = ''
+    ): string;
 }

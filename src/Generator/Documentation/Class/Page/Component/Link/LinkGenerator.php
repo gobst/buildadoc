@@ -8,12 +8,11 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Generator\Documentation\Class\Page\Component\Link;
 
-use Contract\Formatter\Component\LinkFormatterInterface;
+use Contract\Formatter\Component\Link\LinkFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
@@ -25,7 +24,11 @@ final readonly class LinkGenerator implements LinkGeneratorInterface
     /**
      * @throws InvalidArgumentException
      */
-    public function generate(string $format, string $dest, string $text = ''): string
+    public function generate(
+        string $format,
+        string $dest,
+        string $text = ''
+    ): string
     {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($dest);

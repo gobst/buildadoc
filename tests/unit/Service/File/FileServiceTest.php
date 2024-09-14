@@ -8,111 +8,169 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Service\File;
 
-use Collection\FileCollection;
 use Dto\Common\File;
+use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Service\File\FileService;
+use Service\File\Filter\FileNameFilter;
+use Symfony\Component\Filesystem\Filesystem;use Webmozart\Assert\InvalidArgumentException;
 
+#[CoversClass(FileService::class)]
+#[UsesClass(File::class)]
+#[UsesClass(FileNameFilter::class)]
 final class FileServiceTest extends TestCase
 {
+    private Filesystem&MockObject $filesystem;
     private FileService $fileService;
 
     public function setUp(): void
     {
-        $this->fileService = new FileService();
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
+            ->getMock();
+        $this->fileService = new FileService($this->filesystem);
     }
 
-   public function testGetFileListOfDir(): void
+    #[TestDox('getAllFilesWithinDir() method works correctly with no excluded files')]
+    public function testGetFileListOfDir(): void
     {
-       /* $actualFiles = $this->fileService->getAllFilesWithinDir(
-            __DIR__ . '/../../../data/classes/',
-            new FileCollection()
-        );
-
-        $this->assertInstanceOf(FileCollection::class, $actualFiles);
-        $this->assertEquals($this->getTestFileList(), $actualFiles);*/
-        $this->assertEquals(1,1);
-    }
-
-    private function getTestFileList(): FileCollection
-    {
-        $files = new FileCollection();
-
-        $dto = File::create(
+        /** @var Collection<int, File> $collection */
+        $collection = Collection::make();
+        $file1 = File::create(
             'parentTest2Class',
-            __DIR__ . '/../../../data/classes/more/parentTest2Class.php',
+            __DIR__.'/../../../data/classes/more/parentTest2Class.php',
             'parentTest2Class.php',
-            __DIR__ . '/../../../data/classes/more',
-            66
-        );
-        $dto = $dto->withExtension('php');
-        $files->add($dto);
-
-        $dto = File::create(
+            __DIR__.'/../../../data/classes/more',
+            91
+        )->withExtension('php');
+        $file2 = File::create(
             'test2Class',
-            __DIR__ . '/../../../data/classes/more/test2Class.php',
+            __DIR__.'/../../../data/classes/more/test2Class.php',
             'test2Class.php',
-            __DIR__ . '/../../../data/classes/more',
-            652
-        );
-        $dto = $dto->withExtension('php');
-        $files->add($dto);
+            __DIR__.'/../../../data/classes/more',
+            642
+        )->withExtension('php');
+        $collection->push($file1);
+        $collection->push($file2);
 
-        $dto = File::create(
-            'parentTestClass',
-            __DIR__ . '/../../../data/classes/parentTestClass.php',
-            'parentTestClass.php',
-            __DIR__ . '/../../../data/classes',
-            382
+        $actualFiles = $this->fileService->getAllFilesWithinDir(
+            __DIR__.'/../../../data/classes/more/',
+            Collection::make()
         );
-        $dto = $dto->withExtension('php');
-        $files->add($dto);
 
-        $dto = File::create(
-            'testClass',
-            __DIR__ . '/../../../data/classes/testClass.php',
-            'testClass.php',
-            __DIR__ . '/../../../data/classes',
-            617
-        );
-        $dto = $dto->withExtension('php');
-        $files->add($dto);
-
-        $dto = File::create(
-            'testInterface',
-            __DIR__ . '/../../../data/classes/testInterface.php',
-            'testInterface.php',
-            __DIR__ . '/../../../data/classes',
-            123
-        );
-        $dto = $dto->withExtension('php');
-        $files->add($dto);
-
-        $dto = File::create(
-            'testInterface2',
-            __DIR__ . '/../../../data/classes/testInterface2.php',
-            'testInterface2.php',
-            __DIR__ . '/../../../data/classes',
-            132
-        );
-        $dto = $dto->withExtension('php');
-        $files->add($dto);
-
-        $dto = File::create(
-            'testTrait',
-            __DIR__ . '/../../../data/classes/testTrait.php',
-            'testTrait.php',
-            __DIR__ . '/../../../data/classes',
-            132
-        );
-        $dto = $dto->withExtension('php');
-        $files->add($dto);
-
-        return $files;
+        $this->assertEquals($collection, $actualFiles);
     }
+
+    #[TestDox('getAllFilesWithinDir() method works correctly with excluded files')]
+    public function testGetFileListOfDirWithExcludeFiles(): void
+    {
+        $collection = Collection::make();
+        $file1 = File::create(
+            'test2Class',
+                __DIR__.'/../../../data/classes/more/test2Class.php',
+            'test2Class.php',
+            __DIR__.'/../../../data/classes/more',
+            642
+        )->withExtension('php');
+        $collection->push($file1);
+
+        $actualFiles = $this->fileService->getAllFilesWithinDir(
+            __DIR__.'/../../../data/classes/more/',
+            Collection::make(),
+            ['parentTest2Class.php']
+        );
+
+        $this->assertEquals($collection, $actualFiles);
+    }
+
+    #[TestDox('getAllFilesWithinDir() method works correctly with extension')]
+    public function testGetFileListOfDirWithExtension(): void
+    {
+        $collection = Collection::make();
+
+        $actualFiles = $this->fileService->getAllFilesWithinDir(
+            __DIR__.'/../../../data/classes/more/',
+            Collection::make(),
+            [],
+            'txt'
+        );
+
+        $this->assertEquals($collection, $actualFiles);
+    }
+
+    #[DataProvider('fileServiceFailsOnInvalidArgumentExceptionTestDataProvider')]
+    #[TestDox('getAllFilesWithinDir() fails on InvalidArgumentException with parameters: $directory, $excludeFiles, $extension')]
+    public function testGetFileListOfDirFailsOnInvalidArgumentException($directory, $excludeFiles, $extension): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->fileService->getAllFilesWithinDir(
+            $directory,
+            Collection::make(),
+            $excludeFiles,
+            $extension
+        );
+    }
+
+    #[TestDox('dumpFile() method works correctly')]
+    public function testDumpFile(): void
+    {
+        $this->filesystem->expects(self::once())->method('dumpFile');
+        $this->fileService->dumpFile('testfile', 'superContent');
+    }
+
+    #[TestDox('dumpFile() method fails on InvalidArgumentException')]
+    public function testDumpFileFailsOnInvalidArgumentException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->filesystem->expects(self::never())->method('dumpFile');
+        $this->fileService->dumpFile('', 'superContent');
+    }
+
+    #[TestDox('dumpFile() method works correctly')]
+    public function testGetSingleFile(): void
+    {
+        $collection = Collection::make();
+        $file1 = File::create(
+            'parentTest2Class',
+            __DIR__.'/../../../data/classes/more/parentTest2Class.php',
+            'parentTest2Class.php',
+            __DIR__.'/../../../data/classes/more',
+            91
+        )->withExtension('php');
+        $file2 = File::create(
+            'test2Class',
+            __DIR__.'/../../../data/classes/more/test2Class.php',
+            'test2Class.php',
+            __DIR__.'/../../../data/classes/more',
+            642
+        )->withExtension('php');
+        $collection->push($file1);
+        $collection->push($file2);
+
+        $actualDto = $this->fileService->getSingleFile(
+            __DIR__.'/../../../data/classes/more/test2Class.php',
+            $collection
+        );
+
+        $this->assertEquals($file2, $actualDto);
+    }
+
+    public static function fileServiceFailsOnInvalidArgumentExceptionTestDataProvider(): array
+    {
+        return [
+            'testcase 1' => ['', [], 'php'],
+            'testcase 2' => [__DIR__ . '/../../../data/classes/more', [], '']
+        ];
+    }
+
 }

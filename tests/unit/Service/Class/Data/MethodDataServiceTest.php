@@ -8,18 +8,16 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Service\Class\Data;
 
-use Collection\MethodParameterCollection;
-use Collection\ModifierCollection;
 use Contract\Service\Class\Data\DescriptionDataServiceInterface;
 use Contract\Service\Class\Data\ModifierDataServiceInterface;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -74,14 +72,16 @@ final class MethodDataServiceTest extends TestCase
 
     public static function methodSignatureTestDataProvider(): array
     {
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, Modifier> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testString', 'string');
         $parameterDto = $parameterDto->withDefaultValue('test');
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create('testMethodWithoutPHPDoc', $modifiers, 'string', 'testClass');
         $methodDto = $methodDto->withParameters($parameters);
 

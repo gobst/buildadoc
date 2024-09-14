@@ -8,87 +8,124 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Class;
 
-use Collection\ClassCollection;
-use Collection\MethodCollection;
-use Collection\MethodParameterCollection;
-use Collection\ModifierCollection;
+use Contract\Formatter\Component\Link\ClassLinkDestinationFormatterInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\ClassDto;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
 use Generator\Documentation\Class\Page\Component\Class\ClassPathGenerator;
+use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Webmozart\Assert\InvalidArgumentException;
 
+#[CoversClass(ClassPathGenerator::class)]
+#[UsesClass(Modifier::class)]
+#[UsesClass(MethodParameter::class)]
+#[UsesClass(Method::class)]
+#[UsesClass(ClassDto::class)]
+#[UsesClass(Collection::class)]
 class ClassPathGeneratorTest extends TestCase
 {
     private LinkGeneratorInterface&MockObject $linkGenerator;
+    private ClassLinkDestinationFormatterInterface&MockObject $classLinkDestFormat;
     private ClassPathGenerator $classPathGenerator;
 
     public function setUp(): void
     {
-        $this->linkGenerator = $this->getMockBuilder(LinkGeneratorInterface::class)->getMock();
-        $this->classPathGenerator = new ClassPathGenerator($this->linkGenerator);
+        $this->linkGenerator = $this->getMockBuilder(LinkGeneratorInterface::class)
+            ->getMock();
+        $this->classLinkDestFormat = $this->getMockBuilder(ClassLinkDestinationFormatterInterface::class)
+            ->getMock();
+
+        $this->classPathGenerator = new ClassPathGenerator($this->linkGenerator, $this->classLinkDestFormat);
     }
 
-   public function testGenerateWithDokuWikiFormat(): void
+    #[TestDox('generate() method returns correct class path in DokuWiki format')]
+    public function testGenerateWithDokuWikiFormat(): void
     {
-       /* $class = $this->getTestClassDto();
+        $class = $this->getTestClassDto();
+
+        $this->classLinkDestFormat->expects(self::once())
+            ->method('formatDestination')
+            ->willReturn('parenttestclass');
+
         $this->linkGenerator->expects(self::once())
             ->method('generate')
             ->willReturn('[[parenttestclass|parentTestClass]]');
 
         $actualOutput = $this->classPathGenerator->generate($class, 'dokuwiki');
-        $expectedOutput = file_get_contents('tests/data/DokuWiki/classPath.txt');
 
-        $this->assertEquals($expectedOutput, $actualOutput, 'Output is not as expected.');*/
-        $this->assertEquals(1,1);
+        $this->assertSame('testClass --> [[parenttestclass|parentTestClass]]', $actualOutput);
+    }
+
+    #[TestDox('generate() method fails on InvalidArgumentException with invalid output format')]
+    public function testGenerateFailsOnInvalidArgumentExceptionWithInvalidFormat(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $class = $this->getTestClassDto();
+
+        $this->classLinkDestFormat->expects(self::never())
+            ->method('formatDestination');
+
+        $this->linkGenerator->expects(self::never())
+            ->method('generate');
+
+        $this->classPathGenerator->generate($class, '');
     }
 
     private function getTestClassDto(): ClassDto
     {
-        $methods = new MethodCollection();
+        /** @var Collection<int, Method> $methods */
+        $methods = Collection::make();
 
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testString', 'string');
         $parameterDto = $parameterDto->withDefaultValue('test');
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create('testMethodWithoutPHPDoc', $modifiers, 'string', 'testClass');
         $methodDto->withParameters($parameters);
-        $methods->add($methodDto);
+        $methods->push($methodDto);
 
-        $parameters = new MethodParameterCollection();
+        /** @var Collection<int, MethodParameter> $parameters */
+        $parameters = Collection::make();
         $parameterDto = MethodParameter::create('testInt', 'int');
         $parameterDto = $parameterDto->withDefaultValue(0);
-        $parameters->add($parameterDto);
+        $parameters->push($parameterDto);
         $methodDto = Method::create('testMethodWithPHPDoc', $modifiers, 'string', 'testClass');
         $methodDto->withParameters($parameters);
-        $methods->add($methodDto);
+        $methods->push($methodDto);
 
-        $parentClasses = new ClassCollection();
+        /** @var Collection<int, ClassDto> $parentClasses */
+        $parentClasses = Collection::make();
         $parentClassDto = ClassDto::create(
             'parentTestClass',
             __DIR__ . '/../../../data/classes/parentTestClass.php',
-            new MethodCollection(),
-            new ModifierCollection()
+            Collection::make(),
+            Collection::make()
         );
-        $parentClasses->add($parentClassDto);
+        $parentClasses->push($parentClassDto);
 
         $classDto = ClassDto::create(
             'testClass',
             __DIR__ . '/../../../data/classes/testClass.php',
             $methods,
-            new ModifierCollection()
+            Collection::make()
         );
 
         return $classDto->withParentClasses($parentClasses);

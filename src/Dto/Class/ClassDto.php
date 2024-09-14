@@ -13,19 +13,23 @@ declare(strict_types = 1);
 
 namespace Dto\Class;
 
-use Collection\ClassCollection;
-use Collection\ConstantCollection;
-use Collection\FileCollection;
-use Collection\InterfaceCollection;
-use Collection\MethodCollection;
-use Collection\ModifierCollection;
-use Collection\PropertyCollection;
-use Collection\TraitCollection;
+use Dto\Common\File;
+use Dto\Common\Modifier;
+use Dto\Common\Property;
+use Dto\Method\Method;
+use Illuminate\Support\Collection;
 
 final class ClassDto
 {
-    private readonly MethodCollection $methods;
-    private readonly ModifierCollection $modifiers;
+    /**
+     * @var Collection<int, Method>
+     */
+    private readonly Collection $methods;
+
+    /**
+     * @var Collection<int, Modifier>
+     */
+    private readonly Collection $modifiers;
 
     /**
      * @psalm-var non-empty-string
@@ -36,26 +40,62 @@ final class ClassDto
      * @psalm-var non-empty-string
      */
     private readonly string $filepath;
-    private ?PropertyCollection $properties;
-    private ?ConstantCollection $constants;
+
+    /**
+     * @var Collection<int, Property>|null
+     */
+    private ?Collection $properties;
+
+    /**
+     * @var Collection<int, Constant>|null
+     */
+    private ?Collection $constants;
+
     private ?string $namespace;
-    private ?InterfaceCollection $interfaces;
-    private ?TraitCollection $traits;
-    private ?ClassCollection $parentClasses;
-    private ?ClassCollection $childClasses;
+
+    /**
+     * @var Collection<int, InterfaceDto>|null
+     */
+    private ?Collection $interfaces;
+
+    /**
+     * @var Collection<int, TraitDto>|null
+     */
+    private ?Collection $traits;
+
+    /**
+     * @var Collection<int, ClassDto>|null
+     */
+    private ?Collection $parentClasses;
+
+    /**
+     * @var Collection<int, ClassDto>|null
+     */
+    private ?Collection $childClasses;
+
     private ?string $parentClassName;
-    private ?FileCollection $necessaryFiles;
-    private ?MethodCollection $inheritedMethods;
+
+    /**
+     * @var Collection<int, File>|null
+     */
+    private ?Collection $necessaryFiles;
+
+    /**
+     * @var Collection<int, Method>|null
+     */
+    private ?Collection $inheritedMethods;
 
     /**
      * @psalm-param non-empty-string $name
      * @psalm-param non-empty-string $filepath
+     * @param Collection<int, Method> $methods
+     * @param Collection<int, Modifier> $modifiers
      */
     private function __construct(
         string $name,
         string $filepath,
-        MethodCollection $methods,
-        ModifierCollection $modifiers
+        Collection $methods,
+        Collection $modifiers
     ) {
         $this->name = $name;
         $this->filepath = $filepath;
@@ -76,17 +116,22 @@ final class ClassDto
     /**
      * @psalm-param non-empty-string $name
      * @psalm-param non-empty-string $filepath
+     * @param Collection<int, Method> $methods
+     * @param Collection<int, Modifier> $modifiers
      */
     public static function create(
         string $name,
         string $filepath,
-        MethodCollection $methods,
-        ModifierCollection $modifiers
+        Collection $methods,
+        Collection $modifiers
     ): self {
         return new self($name, $filepath, $methods, $modifiers);
     }
 
-    public function withProperties(PropertyCollection $properties): self
+    /**
+     * @param Collection<int, Property> $properties
+     */
+    public function withProperties(Collection $properties): self
     {
         $dto = new self(
             $this->name,
@@ -108,7 +153,10 @@ final class ClassDto
         return $dto;
     }
 
-    public function withParentClasses(ClassCollection $parentClasses): self
+    /**
+     * @param Collection<int, ClassDto> $parentClasses
+     */
+    public function withParentClasses(Collection $parentClasses): self
     {
         $dto = new self(
             $this->name,
@@ -130,7 +178,10 @@ final class ClassDto
         return $dto;
     }
 
-    public function withNecessaryFiles(FileCollection $necessaryFiles): self
+    /**
+     * @param Collection<int, File> $necessaryFiles
+     */
+    public function withNecessaryFiles(Collection $necessaryFiles): self
     {
         $dto = new self(
             $this->name,
@@ -152,7 +203,10 @@ final class ClassDto
         return $dto;
     }
 
-    public function withTraits(TraitCollection $traits): self
+    /**
+     * @param Collection<int, TraitDto> $traits
+     */
+    public function withTraits(Collection $traits): self
     {
         $dto = new self(
             $this->name,
@@ -174,7 +228,10 @@ final class ClassDto
         return $dto;
     }
 
-    public function withInterfaces(InterfaceCollection $interfaces): self
+    /**
+     * @param Collection<int, InterfaceDto> $interfaces
+     */
+    public function withInterfaces(Collection $interfaces): self
     {
         $dto = new self(
             $this->name,
@@ -218,7 +275,10 @@ final class ClassDto
         return $dto;
     }
 
-    public function withConstants(ConstantCollection $constants): self
+    /**
+     * @param Collection<int, Constant> $constants
+     */
+    public function withConstants(Collection $constants): self
     {
         $dto = new self(
             $this->name,
@@ -262,7 +322,10 @@ final class ClassDto
         return $dto;
     }
 
-    public function withInheritedMethods(MethodCollection $inheritedMethods): self
+    /**
+     * @param Collection<int, Method> $inheritedMethods
+     */
+    public function withInheritedMethods(Collection $inheritedMethods): self
     {
         $dto = new self(
             $this->name,
@@ -284,7 +347,10 @@ final class ClassDto
         return $dto;
     }
 
-    public function withChildClasses(ClassCollection $childClasses): self
+    /**
+     * @param Collection<int, ClassDto> $childClasses
+     */
+    public function withChildClasses(Collection $childClasses): self
     {
         $dto = new self(
             $this->name,
@@ -306,7 +372,10 @@ final class ClassDto
         return $dto;
     }
 
-    public function getMethods(): MethodCollection
+    /**
+     * @return Collection<int, Method>
+     */
+    public function getMethods(): Collection
     {
         return $this->methods;
     }
@@ -327,12 +396,18 @@ final class ClassDto
         return $this->filepath;
     }
 
-    public function getProperties(): ?PropertyCollection
+    /**
+     * @return Collection<int, Property>|null
+     */
+    public function getProperties(): ?Collection
     {
         return $this->properties;
     }
 
-    public function getConstants(): ?ConstantCollection
+    /**
+     * @return Collection<int, Constant>|null
+     */
+    public function getConstants(): ?Collection
     {
         return $this->constants;
     }
@@ -342,27 +417,41 @@ final class ClassDto
         return $this->namespace;
     }
 
-    public function getInterfaces(): ?InterfaceCollection
+    /**
+     * @return Collection<int, InterfaceDto>|null
+     */
+    public function getInterfaces(): ?Collection
     {
         return $this->interfaces;
     }
 
-    public function getTraits(): ?TraitCollection
+    /**
+     * @return Collection<int, TraitDto>|null
+     */
+    public function getTraits(): ?Collection
     {
         return $this->traits;
     }
 
-    public function getParentClasses(): ?ClassCollection
+    /**
+     * @return Collection<int, ClassDto>|null
+     */
+    public function getParentClasses(): ?Collection
     {
         return $this->parentClasses;
     }
-
-    public function getNecessaryFiles(): ?FileCollection
+    /**
+     * @return Collection<int, File>|null
+     */
+    public function getNecessaryFiles(): ?Collection
     {
         return $this->necessaryFiles;
     }
 
-    public function getModifiers(): ModifierCollection
+    /**
+     * @return Collection<int, Modifier>
+     */
+    public function getModifiers(): Collection
     {
         return $this->modifiers;
     }
@@ -372,12 +461,18 @@ final class ClassDto
         return $this->parentClassName;
     }
 
-    public function getInheritedMethods(): ?MethodCollection
+    /**
+     * @return Collection<int, Method>|null
+     */
+    public function getInheritedMethods(): ?Collection
     {
         return $this->inheritedMethods;
     }
 
-    public function getChildClasses(): ?ClassCollection
+    /**
+     * @return Collection<int, ClassDto>|null
+     */
+    public function getChildClasses(): ?Collection
     {
         return $this->childClasses;
     }

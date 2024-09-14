@@ -8,22 +8,27 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Method;
 
-use Collection\ModifierCollection;
 use Contract\Formatter\Component\TableFormatterInterface;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Generator\Documentation\Class\Page\Component\Method\MethodTableGenerator;
+use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
+#[CoversClass(MethodTableGenerator::class)]
+#[UsesClass(Collection::class)]
+#[UsesClass(Modifier::class)]
+#[UsesClass(Method::class)]
 class MethodTableGeneratorTest extends TestCase
 {
     private TableFormatterInterface&MockObject $tableFormatter;
@@ -36,7 +41,7 @@ class MethodTableGeneratorTest extends TestCase
     }
 
     #[DataProvider('methodTableGeneratorTestDataProvider')]
-    #[TestDox('generate() method works correctly with parameters $method, "$format", $headerLabels')]
+    #[TestDox('generate() method works correctly with parameters $method, $format, $headerLabels')]
     public function testGenerate(Method $method, string $format, array $headerLabels): void
     {
         $this->tableFormatter->expects(self::once())
@@ -51,9 +56,10 @@ class MethodTableGeneratorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
         $methodDto = Method::create(
             'testMethodWithoutPHPDoc',
             $modifiers,
@@ -69,9 +75,10 @@ class MethodTableGeneratorTest extends TestCase
 
     public static function methodTableGeneratorTestDataProvider(): array
     {
-        $modifiers = new ModifierCollection();
+        /** @var Collection<int, Modifier> $modifiers */
+        $modifiers = Collection::make();
         $publicModifierDto = Modifier::create('public');
-        $modifiers->add($publicModifierDto);
+        $modifiers->push($publicModifierDto);
         $methodDto = Method::create(
             'testMethodWithoutPHPDoc',
             $modifiers,

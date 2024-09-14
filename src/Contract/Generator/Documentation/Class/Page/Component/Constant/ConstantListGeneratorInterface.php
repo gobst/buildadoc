@@ -8,18 +8,19 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
 namespace Contract\Generator\Documentation\Class\Page\Component\Constant;
 
-use Collection\ConstantCollection;
+use Dto\Class\Constant;
+use Illuminate\Support\Collection;
 
 interface ConstantListGeneratorInterface
 {
     /**
      * @psalm-param non-empty-string $format
      * @psalm-param non-empty-string $listType
+     * @param Collection<int, Constant> $constants
      */
-    public function generate(ConstantCollection $constants, string $format, string $listType = 'ordered'): string;
+    public function generate(Collection $constants, string $format, string $listType = 'ordered'): string;
 }

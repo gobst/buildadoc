@@ -8,16 +8,16 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Formatter\Page\Component;
 
 use Contract\Formatter\Component\TableFormatterInterface;
+use Contract\Formatter\DokuWikiFormatInterface;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class TableFormatter implements TableFormatterInterface
+final readonly class TableFormatter implements TableFormatterInterface, DokuWikiFormatInterface
 {
     /**
      * @throws InvalidArgumentException
@@ -46,7 +46,7 @@ final readonly class TableFormatter implements TableFormatterInterface
     private function formatTableRowToFormat(string $format, array $row, bool $header): string
     {
         return match ($format) {
-            'dokuwiki' => $this->formatTableRowToDokuWiki($row, $header),
+            self::DOKUWIKI_FORMAT_KEY => $this->formatTableRowToDokuWiki($row, $header),
             default => throw new InvalidArgumentException('Error: Unknown format!'),
         };
     }

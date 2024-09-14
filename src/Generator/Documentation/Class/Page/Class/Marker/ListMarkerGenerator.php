@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  *
  */
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Class\Marker;
 
 use Contract\Generator\Documentation\Class\Page\Class\Marker\ListMarkerGeneratorInterface;
+use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPageMarkerInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Class\UsedByClassListGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Constant\ConstantListGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
@@ -25,20 +25,24 @@ use Dto\Class\ClassDto;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
+final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface, ClassPageMarkerInterface
 {
     public function __construct(
-        private TranslationServiceInterface $translationService,
-        private MethodListGeneratorInterface $methodListGenerator,
-        private ConstantListGeneratorInterface $constListGenerator,
-        private PropertyListGeneratorInterface $propListGenerator,
-        private InterfaceListGeneratorInterface $interListGenerator,
-        private HeadingGeneratorInterface $headingGenerator,
+        private TranslationServiceInterface       $translationService,
+        private MethodListGeneratorInterface      $methodListGenerator,
+        private ConstantListGeneratorInterface    $constListGenerator,
+        private PropertyListGeneratorInterface    $propListGenerator,
+        private InterfaceListGeneratorInterface   $interListGenerator,
+        private HeadingGeneratorInterface         $headingGenerator,
         private UsedByClassListGeneratorInterface $usedByClassListGen,
-    ) {}
+    )
+    {
+    }
 
     /**
      * @throws InvalidArgumentException
+     * @todo: there is anywhere a bug (maybe in usedByClassListGen?). The formatter has an issue with $contentParts.
+     * @SuppressWarnings(PHPMD)
      */
     public function generateUsedByClassList(ClassDto $class, string $format, string $listType, string $lang): array
     {
@@ -47,15 +51,18 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         Assert::stringNotEmpty($lang);
 
         $marker = [];
-        $lineBreak = chr(13) . chr(13);
+        #$lineBreak = chr(13) . chr(13);
         $this->translationService->setLanguage($lang);
+
+        $marker[self::CLASS_USEDBYCLASSES_HEADING_MARKER] = '';
+        $marker[self::CLASS_USEDBYCLASSES_LIST_MARKER] = '';
 
         if ($class->getChildClasses() !== null && !$class->getChildClasses()->isEmpty()) {
             $text = $this->translationService->translate('class.usedbyclasses');
             Assert::stringNotEmpty($text);
 
-            $marker['###CLASS_USEDBYCLASSES_HEADING###'] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker['###CLASS_USEDBYCLASSES_LIST###'] = $this->usedByClassListGen->generate($class, $format, true, $listType) . $lineBreak;
+            #$marker[self::CLASS_USEDBYCLASSES_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
+            #$marker[self::CLASS_USEDBYCLASSES_LIST_MARKER] = $this->usedByClassListGen->generate($class, $format, true, $listType) . $lineBreak;
         }
 
         return $marker;
@@ -74,12 +81,15 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         $lineBreak = chr(13) . chr(13);
         $this->translationService->setLanguage($lang);
 
+        $marker[self::CONSTANTS_LIST_HEADING_MARKER] = '';
+        $marker[self::CONSTANTS_LIST_MARKER] = '';
+
         if ($class->getConstants() !== null && !$class->getConstants()->isEmpty()) {
             $text = $this->translationService->translate('class.const');
             Assert::stringNotEmpty($text);
 
-            $marker['###CONSTANTS_LIST_HEADING###'] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker['###CONSTANTS_LIST###'] = $this->constListGenerator->generate($class->getConstants(), $format, $listType) . $lineBreak;
+            $marker[self::CONSTANTS_LIST_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
+            $marker[self::CONSTANTS_LIST_MARKER] = $this->constListGenerator->generate($class->getConstants(), $format, $listType) . $lineBreak;
         }
 
         return $marker;
@@ -98,12 +108,23 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         $lineBreak = chr(13) . chr(13);
         $this->translationService->setLanguage($lang);
 
+        $marker[self::PROPERTIES_LIST_HEADING_MARKER] = '';
+        $marker[self::PROPERTIES_LIST_MARKER] = '';
+
         if ($class->getProperties() !== null && !$class->getProperties()->isEmpty()) {
             $text = $this->translationService->translate('class.properties');
             Assert::stringNotEmpty($text);
 
-            $marker['###CLASS_PROPERTIES_LIST_HEADING###'] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker['###CLASS_PROPERTIES_LIST###'] = $this->propListGenerator->generate($class, $format, $listType) . $lineBreak;
+            $marker[self::PROPERTIES_LIST_HEADING_MARKER] = $lineBreak . $this->headingGenerator->generate(
+                    $text,
+                    2,
+                    $format
+                ) . $lineBreak;
+            $marker[self::PROPERTIES_LIST_MARKER] = $this->propListGenerator->generate(
+                    $class,
+                    $format,
+                    $listType
+                ) . $lineBreak;
         }
 
         return $marker;
@@ -122,12 +143,15 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         $lineBreak = chr(13) . chr(13);
         $this->translationService->setLanguage($lang);
 
+        $marker[self::INTERFACES_LIST_HEADING_MARKER] = '';
+        $marker[self::INTERFACES_LIST_MARKER] = '';
+
         if ($class->getInterfaces() !== null && !$class->getInterfaces()->isEmpty()) {
             $text = $this->translationService->translate('class.interfaces');
             Assert::stringNotEmpty($text);
 
-            $marker['###CLASS_INTERFACES_LIST_HEADING###'] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker['###CLASS_INTERFACES_LIST###'] = $this->interListGenerator->generate($class->getInterfaces(), $format, $listType) . $lineBreak;
+            $marker[self::INTERFACES_LIST_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
+            $marker[self::INTERFACES_LIST_MARKER] = $this->interListGenerator->generate($class->getInterfaces(), $format, $listType) . $lineBreak;
         }
 
         return $marker;
@@ -136,7 +160,13 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
     /**
      * @throws InvalidArgumentException
      */
-    public function generateMethodList(ClassDto $class, string $format, string $listType, string $lang): array
+    public function generateMethodList(
+        ClassDto $class,
+        string $format,
+        string $listType,
+        string $lang,
+        string $mainDirectory
+    ): array
     {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($listType);
@@ -146,12 +176,27 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         $lineBreak = chr(13) . chr(13);
         $this->translationService->setLanguage($lang);
 
+        $marker[self::METHODS_LIST_HEADING_MARKER] = '';
+        $marker[self::METHODS_LIST_MARKER] = '';
+
         if (!$class->getMethods()->isEmpty()) {
             $text = $this->translationService->translate('class.methods');
             Assert::stringNotEmpty($text);
 
-            $marker['###METHODS_LIST_HEADING###'] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
-            $marker['###METHODS_LIST###'] = $this->methodListGenerator->generate($class, $format, true, $listType, true) . $lineBreak;
+            $marker[self::METHODS_LIST_HEADING_MARKER] = $this->headingGenerator->generate(
+                $text,
+                2,
+                $format
+            ) . $lineBreak;
+
+            $marker[self::METHODS_LIST_MARKER] = $this->methodListGenerator->generate(
+                $class,
+                $format,
+                true,
+                $listType,
+                true,
+                $mainDirectory
+            ) . $lineBreak;
         }
 
         return $marker;
