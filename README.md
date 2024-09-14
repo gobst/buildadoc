@@ -1,3 +1,6 @@
+![Build Status](https://img.shields.io/github/actions/workflow/status/username/projectname/ci.yml)
+![Packagist Version](https://img.shields.io/packagist/v/gobst/buildadoc)
+![License](https://img.shields.io/github/license/gobst/buildadoc)
 [![Code Coverage](https://img.shields.io/badge/Code_Coverage-20.31%25-brightgreen)](https://img.shields.io/badge/Code_Coverage-20.31%25-brightgreen)
 [![Mutation Score](https://img.shields.io/badge/Mutation_Score-13.20%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-13.20%25-brightgreen)
 
