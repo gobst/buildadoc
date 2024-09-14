@@ -52,7 +52,6 @@ php bin/console.php DokuWiki:create-doc path/to/src/ /path/to/destination/dir/ p
 ```
 
 The generated directories and files must be placed under your DokuWiki installation at /data/pages.
-
 For more options and information run:
 
 ```bash 
