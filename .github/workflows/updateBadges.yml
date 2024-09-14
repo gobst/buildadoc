@@ -20,9 +20,12 @@ jobs:
         run: |
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev pull
 
+      - name: Start container
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up -d
+
       - name: Run composer
         run: |
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
 
       - name: Run unit tests
@@ -90,3 +93,8 @@ jobs:
                          --base develop \
                          --head main
           fi
+
+      - name: Stop container
+        if: always()
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev down
