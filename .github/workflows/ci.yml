@@ -20,10 +20,13 @@ jobs:
       - name: Login to GitHub packages
         run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Pull images
+      - name: Pull image
         run: |
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up -d --build buildadoc
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev pull
+
+      - name: Start container
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up -d
 
       - name: Run composer
         run: |
@@ -137,3 +140,8 @@ jobs:
             echo "Code coverage and mutation score improved or remained the same."
             exit 0
           fi
+
+      - name: Stop container
+        if: always()
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev down
