@@ -60,7 +60,7 @@ php bin/console.php
 
 ## Support
 
-If you encounter any issues or have questions,feel free to open an issue in the [GitHub Issue Tracker](https://github.com/gobst/buildadoc/issues).
+If you encounter any issues or have questions, feel free to open an issue in the [GitHub Issue Tracker](https://github.com/gobst/buildadoc/issues).
 
 ## License
 
