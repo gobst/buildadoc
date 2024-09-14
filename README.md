@@ -21,7 +21,7 @@ It parses your PHP classes and converts them into DokuWiki-compatible syntax for
 ## Requirements
 - PHP 8.3 or higher
 - [Composer](https://getcomposer.org/)
-- [Docker (optional)](https://www.docker.com/)
+- [Docker](https://www.docker.com/) (optional)
 
 ## Installation
 
