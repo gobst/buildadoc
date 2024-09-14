@@ -1,4 +1,4 @@
-![Build Status](https://img.shields.io/github/actions/workflow/status/username/projectname/ci.yml)
+![Build Status](https://img.shields.io/github/actions/workflow/status/gobst/buildadoc/ci.yml)
 ![Packagist Version](https://img.shields.io/packagist/v/gobst/buildadoc)
 ![License](https://img.shields.io/github/license/gobst/buildadoc)
 [![Code Coverage](https://img.shields.io/badge/Code_Coverage-20.31%25-brightgreen)](https://img.shields.io/badge/Code_Coverage-20.31%25-brightgreen)
@@ -7,38 +7,65 @@
 # BuildADoc
 
 ## About
-BuildADoc generates a PHP class documentation for [DokuWiki](https://github.com/dokuwiki/dokuwiki). 
-The code will be parsed and then converted into the right syntax.
-This tool is inspired by [ApiGen](https://github.com/ApiGen/ApiGen).
 
-In addition the following features are planned:
+BuildADoc is a PHP documentation generator designed specifically for [DokuWiki](https://github.com/dokuwiki/dokuwiki). 
+It parses your PHP classes and converts them into DokuWiki-compatible syntax for seamless integration with your documentation workflow.
 
-- Markdown format support
-- usedByClasses feature
+### Key Features:
+- Automatic generation of class documentation.
+- Easy integration with DokuWiki installations.
+- **Planned Features:**
+    - Support for Markdown format.
+    - `usedByClasses` feature for enhanced class relationship tracking.
+
+## Requirements
+- PHP 8.3 or higher
+- [Composer](https://getcomposer.org/)
+- [Docker (optional)](https://www.docker.com/)
 
 ## Installation
 
-### With composer
+You can install BuildADoc using either Composer or Docker, depending on your preference.
 
-You can install BuildADoc directly in your project with composer:
+### 1. With Composer
 
-``` composer require gobst/buildadoc ```
+To install BuildADoc directly into your project using [Composer](https://getcomposer.org/), run:
 
-### With Docker
+```bash
+composer require gobst/buildadoc
+```
 
-BuildADoc is available as [gobst/buildadoc](https://hub.docker.com/r/gobst/buildadoc) Docker image which you can directly use.
+### 2. With Docker
+
+You can also use the [gobst/buildadoc](https://hub.docker.com/r/gobst/buildadoc) Docker image to avoid setting up PHP dependencies directly on your system:
+
+```bash
+docker pull gobst/buildadoc
+```
 
 ## Usage
 
-To generate a class documentaion for DokuWiki you can use the following command. 
-The generated directories and files have to allocated under your DokuWiki installation in /data/pages.
+To generate class documentation for DokuWiki, use the following command:
 
-``` php bin/console.php DokuWiki:create-doc path/to/src/ /path/to/destination/dir/ projectname ```
+```bash 
+php bin/console.php DokuWiki:create-doc path/to/src/ /path/to/destination/dir/ projectname 
+```
 
-For more information run:
+The generated directories and files must be placed under your DokuWiki installation at /data/pages.
+
+For more options and information run:
 
 ``` php bin/console.php ```
+
+## Support
+
+If you encounter any issues or have questions,feel free to open an issue in the [GitHub Issue Tracker](https://github.com/gobst/buildadoc/issues).
 
 ## License
 
 Distributed under the BSD 3-Clause license. See [LICENSE](LICENSE) for more information.
+
+## Acknowledgments
+
+- [ApiGen](https://github.com/ApiGen/ApiGen) for inspiration.
+- [DokuWiki](https://github.com/dokuwiki/dokuwiki) for providing an excellent documentation platform.

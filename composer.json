@@ -1,4 +1,17 @@
 {
+  "name": "gobst/buildadoc",
+  "description": "BuildADoc is a PHP documentation generator designed specifically for DokuWiki.",
+  "type": "library",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Guido Obst",
+      "role": "Web Application Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/gobst/buildadoc/issues"
+  },
   "autoload": {
     "psr-4": {
       "Command\\": "src/Command/",
