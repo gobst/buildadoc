@@ -23,7 +23,8 @@ jobs:
 
       - name: Build and push docker images
         run: |
-          docker compose build
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up -d --build buildadoc
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up -d --build buildadoc-dev
           docker compose push
           
       - name: List images
