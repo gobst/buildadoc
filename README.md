@@ -55,7 +55,9 @@ The generated directories and files must be placed under your DokuWiki installat
 
 For more options and information run:
 
-``` php bin/console.php ```
+```bash 
+php bin/console.php
+```
 
 ## Support
 
