@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Link;
 
-use Contract\Decorator\Component\Link\LinkFormatterInterface;
 use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Decorator\TextDecoratorInterface;
 use Generator\Documentation\Class\Page\Component\Link\LinkGenerator;
