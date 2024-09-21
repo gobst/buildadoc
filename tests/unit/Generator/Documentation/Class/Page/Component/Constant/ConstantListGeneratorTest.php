@@ -12,7 +12,9 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Constant;
 
-use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
+use Contract\Decorator\TextDecoratorInterface;
+use Contract\Service\Class\Data\ModifierDataServiceInterface;
 use Dto\Class\Constant;
 use Dto\Common\Modifier;
 use Generator\Documentation\Class\Page\Component\Constant\ConstantListGenerator;
@@ -23,20 +25,33 @@ use Webmozart\Assert\InvalidArgumentException;
 
 final class ConstantListGeneratorTest extends TestCase
 {
-    private ListFormatterInterface&MockObject $listFormatter;
+    private TextDecoratorInterface&MockObject $listDecorator;
+    private TextDecoratorFactoryInterface&MockObject $textDecoratorFactory;
+    private ModifierDataServiceInterface&MockObject $modifierDataService;
     private ConstantListGenerator $constListGenerator;
 
     public function setUp(): void
     {
-        $this->listFormatter = $this->getMockBuilder(ListFormatterInterface::class)->getMock();
-        $this->constListGenerator = new ConstantListGenerator($this->listFormatter);
+        $this->textDecoratorFactory = $this->getMockBuilder(TextDecoratorFactoryInterface::class)->getMock();
+        $this->listDecorator = $this->getMockBuilder(TextDecoratorInterface::class)->getMock();
+        $this->modifierDataService = $this->getMockBuilder(ModifierDataServiceInterface::class)->getMock();
+
+        $this->constListGenerator = new ConstantListGenerator($this->textDecoratorFactory, $this->modifierDataService);
     }
 
     public function testGenerateWithDokuWikiFormatAndOrderedList(): void
     {
-        $this->listFormatter->expects(self::exactly(6))
-            ->method('formatListItem')
+        $this->textDecoratorFactory->expects($this->once())
+            ->method('createListDecorator')
+            ->willReturn($this->listDecorator);
+
+        $this->listDecorator->expects(self::exactly(6))
+            ->method('format')
             ->willReturn('');
+
+        $this->modifierDataService->expects(self::exactly(6))
+            ->method('implodeModifierDTOCollection')
+            ->willReturn('public');
 
         $this->constListGenerator->generate($this->getTestConstantsData(), 'dokuwiki');
     }
@@ -45,8 +60,14 @@ final class ConstantListGeneratorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->listFormatter->expects(self::never())
-            ->method('formatListItem');
+        $this->textDecoratorFactory->expects(self::never())
+            ->method('createListDecorator');
+
+        $this->listDecorator->expects(self::never())
+            ->method('format');
+
+        $this->modifierDataService->expects(self::never())
+            ->method('implodeModifierDTOCollection');
 
         $this->constListGenerator->generate($this->getTestConstantsData(), '');
     }
@@ -55,8 +76,14 @@ final class ConstantListGeneratorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->listFormatter->expects(self::never())
-            ->method('formatListItem');
+        $this->textDecoratorFactory->expects(self::never())
+            ->method('createListDecorator');
+
+        $this->listDecorator->expects(self::never())
+            ->method('format');
+
+        $this->modifierDataService->expects(self::never())
+            ->method('implodeModifierDTOCollection');
 
         $this->constListGenerator->generate($this->getTestConstantsData(), 'dokuwiki', '');
     }

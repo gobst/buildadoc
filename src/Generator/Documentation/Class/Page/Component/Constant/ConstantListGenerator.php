@@ -13,8 +13,9 @@ declare(strict_types = 1);
 namespace Generator\Documentation\Class\Page\Component\Constant;
 
 use ArrayIterator;
-use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Constant\ConstantListGeneratorInterface;
+use Contract\Service\Class\Data\ModifierDataServiceInterface;
 use Dto\Class\Constant;
 use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
@@ -24,7 +25,12 @@ final readonly class ConstantListGenerator implements ConstantListGeneratorInter
 {
     private const string LIST_TYPE = 'constant_list';
 
-    public function __construct(private ListFormatterInterface $listFormatter) {}
+    public function __construct(
+        private TextDecoratorFactoryInterface $textDecoratorFactory,
+        private ModifierDataServiceInterface $modifierDataService
+    )
+    {
+    }
 
     /**
      * @param Collection<int, Constant> $constants
@@ -36,6 +42,8 @@ final readonly class ConstantListGenerator implements ConstantListGeneratorInter
         Assert::stringNotEmpty($listType);
 
         $list = '';
+        $listDecorator = $this->textDecoratorFactory->createListDecorator(self::LIST_TYPE, $listType);
+
         if (!$constants->isEmpty()) {
             /** @var ArrayIterator $iterator */
             $iterator = $constants->getIterator();
@@ -43,22 +51,17 @@ final readonly class ConstantListGenerator implements ConstantListGeneratorInter
                 /** @var Constant $constant */
                 $constant = $iterator->current();
 
-                $modifiersStr = $this->listFormatter->implodeModifierDTOCollection($constant->getModifiers());
+                $modifiersStr = $this->modifierDataService->implodeModifierDTOCollection($constant->getModifiers());
 
-                $contentParts = [];
-                $contentParts[] = $modifiersStr;
-                $contentParts[] = $constant->getType();
-                $contentParts[] = $constant->getName();
-                $contentParts[] = $constant->getValue();
+                $textParts = [];
+                $textParts[] = $modifiersStr;
+                $textParts[] = $constant->getType();
+                $textParts[] = $constant->getName();
+                $textParts[] = $constant->getValue();
 
                 Assert::stringNotEmpty(self::LIST_TYPE);
 
-                $list .= $this->listFormatter->formatListItem(
-                    $format,
-                    self::LIST_TYPE,
-                    $contentParts,
-                    $listType
-                );
+                $list .= $listDecorator->format($format, $textParts);
 
                 $iterator->next();
             }

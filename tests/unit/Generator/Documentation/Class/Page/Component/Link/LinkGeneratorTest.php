@@ -8,32 +8,40 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Link;
 
-use Contract\Formatter\Component\Link\LinkFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
+use Contract\Decorator\TextDecoratorInterface;
 use Generator\Documentation\Class\Page\Component\Link\LinkGenerator;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
+#[CoversClass(LinkGenerator::class)]
 class LinkGeneratorTest extends TestCase
 {
-    private LinkFormatterInterface&MockObject $linkFormatter;
+    private TextDecoratorFactoryInterface&MockObject $textDecoratorFactory;
+    private TextDecoratorInterface&MockObject $linkDecorator;
     private LinkGenerator $linkGenerator;
 
     public function setUp(): void
     {
-        $this->linkFormatter = $this->getMockBuilder(LinkFormatterInterface::class)->getMock();
-        $this->linkGenerator = new LinkGenerator($this->linkFormatter);
+        $this->textDecoratorFactory = $this->getMockBuilder(TextDecoratorFactoryInterface::class)->getMock();
+        $this->linkDecorator = $this->getMockBuilder(TextDecoratorInterface::class)->getMock();
+        $this->linkGenerator = new LinkGenerator($this->textDecoratorFactory);
     }
 
     public function testGenerateWithDokuWikiFormat(): void
     {
-        $this->linkFormatter->expects(self::once())
-            ->method('formatLink')
+        $this->textDecoratorFactory->expects(self::once())
+            ->method('createLinkDecorator')
+            ->willReturn($this->linkDecorator);
+
+        $this->linkDecorator->expects(self::once())
+            ->method('format')
             ->willReturn('');
 
         $this->linkGenerator->generate('dokuwiki', 'testDest', 'testTxt');
@@ -41,8 +49,12 @@ class LinkGeneratorTest extends TestCase
 
     public function testGenerateWithDokuWikiFormatAndEmptyText(): void
     {
-        $this->linkFormatter->expects(self::once())
-            ->method('formatLink')
+        $this->textDecoratorFactory->expects(self::once())
+            ->method('createLinkDecorator')
+            ->willReturn($this->linkDecorator);
+
+        $this->linkDecorator->expects(self::once())
+            ->method('format')
             ->willReturn('');
 
         $this->linkGenerator->generate('dokuwiki', 'testDest', '');
@@ -52,8 +64,11 @@ class LinkGeneratorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->linkFormatter->expects(self::never())
-            ->method('formatLink');
+        $this->textDecoratorFactory->expects(self::never())
+            ->method('createLinkDecorator');
+
+        $this->linkDecorator->expects(self::never())
+            ->method('format');
 
         $this->linkGenerator->generate('', 'testDest', 'testTxt');
     }
@@ -62,8 +77,11 @@ class LinkGeneratorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->linkFormatter->expects(self::never())
-            ->method('formatLink');
+        $this->textDecoratorFactory->expects(self::never())
+            ->method('createLinkDecorator');
+
+        $this->linkDecorator->expects(self::never())
+            ->method('format');
 
         $this->linkGenerator->generate('dokuwiki', '', 'testTxt');
     }

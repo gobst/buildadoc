@@ -12,7 +12,8 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Class;
 
-use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
+use Contract\Decorator\TextDecoratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\ClassDto;
 use Dto\Common\Modifier;
@@ -36,16 +37,18 @@ use Webmozart\Assert\InvalidArgumentException;
 #[UsesClass(ClassDto::class)]
 class UsedByClassListGeneratorTest extends TestCase
 {
-    private ListFormatterInterface&MockObject $listFormatter;
+    private TextDecoratorInterface&MockObject $listDecorator;
+    private TextDecoratorFactoryInterface&MockObject $textDecoratorFactory;
     private LinkGeneratorInterface&MockObject $linkGenerator;
     private UsedByClassListGenerator $usedByClassListGen;
 
     public function setUp(): void
     {
         $this->linkGenerator = $this->getMockBuilder(LinkGeneratorInterface::class)->getMock();
-        $this->listFormatter = $this->getMockBuilder(ListFormatterInterface::class)->getMock();
+        $this->listDecorator = $this->getMockBuilder(TextDecoratorInterface::class)->getMock();
+        $this->textDecoratorFactory = $this->getMockBuilder(TextDecoratorFactoryInterface::class)->getMock();
 
-        $this->usedByClassListGen = new UsedByClassListGenerator($this->listFormatter, $this->linkGenerator);
+        $this->usedByClassListGen = new UsedByClassListGenerator($this->textDecoratorFactory, $this->linkGenerator);
     }
 
     #[TestDox('generate() method returns correct class path in DokuWiki format')]
@@ -57,8 +60,12 @@ class UsedByClassListGeneratorTest extends TestCase
             ->method('generate')
             ->willReturn('linktest');
 
-        $this->listFormatter->expects(self::exactly(2))
-            ->method('formatListItem')
+        $this->textDecoratorFactory ->expects(self::exactly(2))
+            ->method('createListDecorator')
+            ->willReturnOnConsecutiveCalls($this->listDecorator, $this->listDecorator);
+
+        $this->listDecorator->expects(self::exactly(2))
+            ->method('format')
             ->willReturnOnConsecutiveCalls('test1 ', 'test2');
 
         $actualOutput = $this->usedByClassListGen->generate($class, 'dokuwiki');
@@ -74,8 +81,11 @@ class UsedByClassListGeneratorTest extends TestCase
         $this->linkGenerator->expects(self::never())
             ->method('generate');
 
-        $this->listFormatter->expects(self::never())
-            ->method('formatListItem');
+        $this->textDecoratorFactory ->expects(self::never())
+            ->method('createListDecorator');
+
+        $this->listDecorator->expects(self::never())
+            ->method('format');
 
         $this->usedByClassListGen->generate($class, $format, $link, $listType);
     }

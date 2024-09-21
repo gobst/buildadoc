@@ -12,8 +12,9 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Method;
 
-use Contract\Formatter\Component\Link\MethodLinkDestinationFormatterInterface;
-use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Decorator\Component\Link\LinkDestinationDecoratorInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
+use Contract\Decorator\TextDecoratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
 use Dto\Class\ClassDto;
@@ -42,21 +43,28 @@ final class MethodListGeneratorTest extends TestCase
 {
     private LinkGeneratorInterface&MockObject $linkGenerator;
     private MethodLineGeneratorInterface&MockObject $methodLineGenerator;
-    private ListFormatterInterface&MockObject $listFormatter;
-    private MethodLinkDestinationFormatterInterface&MockObject $methodLinkDestFormat;
+    private TextDecoratorFactoryInterface&MockObject $textDecoratorFactory;
+    private TextDecoratorInterface&MockObject $listDecorator;
+    private LinkDestinationDecoratorInterface&MockObject $methodLinkDestDec;
     private MethodListGenerator $methodListGenerator;
 
     public function setUp(): void
     {
-        $this->linkGenerator = $this->getMockBuilder(LinkGeneratorInterface::class)->getMock();
-        $this->methodLineGenerator = $this->getMockBuilder(MethodLineGeneratorInterface::class)->getMock();
-        $this->listFormatter = $this->getMockBuilder(ListFormatterInterface::class)->getMock();
-        $this->methodLinkDestFormat = $this->getMockBuilder(MethodLinkDestinationFormatterInterface::class)->getMock();
+        $this->linkGenerator = $this->getMockBuilder(LinkGeneratorInterface::class)
+            ->getMock();
+        $this->methodLineGenerator = $this->getMockBuilder(MethodLineGeneratorInterface::class)
+            ->getMock();
+        $this->textDecoratorFactory = $this->getMockBuilder(TextDecoratorFactoryInterface::class)
+            ->getMock();
+        $this->listDecorator = $this->getMockBuilder(TextDecoratorInterface::class)
+            ->getMock();
+        $this->methodLinkDestDec = $this->getMockBuilder(LinkDestinationDecoratorInterface::class)
+            ->getMock();
+
         $this->methodListGenerator = new MethodListGenerator(
             $this->linkGenerator,
             $this->methodLineGenerator,
-            $this->listFormatter,
-            $this->methodLinkDestFormat
+            $this->textDecoratorFactory
         );
     }
 
@@ -68,13 +76,21 @@ final class MethodListGeneratorTest extends TestCase
             ->method('generate')
             ->willReturn('');
 
-        $this->listFormatter->expects(self::exactly(2))
-            ->method('formatListItem')
+        $this->textDecoratorFactory->expects(self::exactly(2))
+            ->method('createListDecorator')
+            ->willReturn($this->listDecorator);
+
+        $this->listDecorator->expects(self::exactly(2))
+            ->method('format')
             ->willReturn('');
 
         if ($link === true) {
-            $this->methodLinkDestFormat->expects(self::exactly(2))
-                ->method('formatDestination')
+            $this->textDecoratorFactory->expects(self::exactly(2))
+                ->method('createMethodLinkDestinationDecorator')
+                ->willReturn($this->methodLinkDestDec);
+
+            $this->methodLinkDestDec->expects(self::exactly(2))
+                ->method('format')
                 ->willReturn('test123');
 
             $this->linkGenerator->expects(self::exactly(2))
@@ -99,11 +115,17 @@ final class MethodListGeneratorTest extends TestCase
         $this->methodLineGenerator->expects(self::never())
             ->method('generate');
 
-        $this->listFormatter->expects(self::never())
-            ->method('formatListItem');
+        $this->textDecoratorFactory->expects(self::never())
+            ->method('createListDecorator');
 
-        $this->methodLinkDestFormat->expects(self::never())
-            ->method('formatDestination');
+        $this->textDecoratorFactory->expects(self::never())
+            ->method('createMethodLinkDestinationDecorator');
+
+        $this->methodLinkDestDec->expects(self::never())
+            ->method('format');
+
+        $this->listDecorator->expects(self::never())
+            ->method('format');
 
         $this->linkGenerator->expects(self::never())
             ->method('generate');

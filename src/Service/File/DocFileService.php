@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Service\File;
 
-use Contract\Formatter\DokuWikiFormatInterface;
+use Contract\Decorator\DokuWikiFormatInterface;
 use Contract\Service\File\DocFileServiceInterface;
 use Contract\Service\File\FileExtensionInterface;
 use Contract\Service\File\FileServiceInterface;

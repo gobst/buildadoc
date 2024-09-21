@@ -10,7 +10,7 @@
  */
 declare(strict_types = 1);
 
-namespace Contract\Formatter;
+namespace Contract\Decorator;
 
 interface DokuWikiFormatInterface
 {

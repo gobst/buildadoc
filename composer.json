@@ -19,7 +19,7 @@
       "Exception\\": "src/Exception/",
       "Service\\": "src/Service/",
       "Contract\\": "src/Contract/",
-      "Formatter\\": "src/Formatter/",
+      "Decorator\\": "src/Decorator/",
       "": "src/"
     }
   },

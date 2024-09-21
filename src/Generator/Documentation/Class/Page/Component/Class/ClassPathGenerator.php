@@ -13,7 +13,7 @@ declare(strict_types = 1);
 namespace Generator\Documentation\Class\Page\Component\Class;
 
 use ArrayIterator;
-use Contract\Formatter\Component\Link\ClassLinkDestinationFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Class\ClassPathGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\ClassDto;
@@ -25,7 +25,7 @@ final readonly class ClassPathGenerator implements ClassPathGeneratorInterface
 {
     public function __construct(
         private LinkGeneratorInterface $linkGenerator,
-        private ClassLinkDestinationFormatterInterface $classLinkDestFormat
+        private TextDecoratorFactoryInterface $textDecoratorFactory
     )
     {
     }
@@ -82,8 +82,9 @@ final readonly class ClassPathGenerator implements ClassPathGeneratorInterface
             $className = $class->getName();
             Assert::stringNotEmpty($className);
 
-            $destination = $this->classLinkDestFormat->formatDestination($format, $class, $mainDirectory);
-            Assert::stringNotEmpty($destination);
+            $destination = $this->textDecoratorFactory
+                ->createClassLinkDestinationDecorator($class, $mainDirectory)
+                ->format($format);
 
             $classPath[] = $this->linkGenerator->generate($format, $destination);
             $iterator->next();

@@ -14,7 +14,7 @@ declare(strict_types = 1);
 namespace Generator\Documentation\Class\Page\Component\File;
 
 use ArrayIterator;
-use Contract\Formatter\Component\TableFormatterInterface;
+use Contract\Decorator\Component\TableDecoratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\File\FilesTableGeneratorInterface;
 use Dto\Class\ClassDto;
 use Webmozart\Assert\Assert;
@@ -23,7 +23,7 @@ use Webmozart\Assert\InvalidArgumentException;
 final readonly class FilesTableGenerator implements FilesTableGeneratorInterface
 {
     public function __construct(
-        private TableFormatterInterface $tableFormatter
+        private TableDecoratorInterface $tableFormatter
     ) {}
 
     /**
@@ -52,6 +52,6 @@ final readonly class FilesTableGenerator implements FilesTableGeneratorInterface
             }
         }
 
-        return rtrim($this->tableFormatter->formatTable($format, $headerLabels, $rows, true));
+        return rtrim($this->tableFormatter->format($format, $headerLabels, $rows, true));
     }
 }

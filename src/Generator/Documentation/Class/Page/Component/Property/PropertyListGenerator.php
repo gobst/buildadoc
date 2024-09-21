@@ -13,12 +13,11 @@ declare(strict_types = 1);
 namespace Generator\Documentation\Class\Page\Component\Property;
 
 use ArrayIterator;
-use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Property\PropertyListGeneratorInterface;
+use Contract\Service\Class\Data\ModifierDataServiceInterface;
 use Dto\Class\ClassDto;
-use Dto\Common\Modifier;
 use Dto\Common\Property;
-use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -26,7 +25,12 @@ final readonly class PropertyListGenerator implements PropertyListGeneratorInter
 {
     private const string LIST_TYPE = 'property_list';
 
-    public function __construct(private ListFormatterInterface $listFormatter) {}
+    public function __construct(
+        private TextDecoratorFactoryInterface $textDecoratorFactory,
+        private ModifierDataServiceInterface $modifierDataService
+    )
+    {
+    }
 
     /**
      * @throws InvalidArgumentException
@@ -41,23 +45,21 @@ final readonly class PropertyListGenerator implements PropertyListGeneratorInter
         if ($properties !== null && !$properties->isEmpty()) {
             /** @var ArrayIterator $iterator */
             $iterator = $properties->getIterator();
+
+            $listDecorator = $this->textDecoratorFactory->createListDecorator(self::LIST_TYPE, $listType);
+
             while ($iterator->valid()) {
                 /** @var Property $property */
                 $property = $iterator->current();
 
-                $propertiesStr = $this->listFormatter->implodeModifierDTOCollection($property->getModifiers());
+                $propertiesStr = $this->modifierDataService->implodeModifierDTOCollection($property->getModifiers());
 
-                $contentParts = [];
-                $contentParts[] = $propertiesStr;
-                $contentParts[] = $property->getType();
-                $contentParts[] = $property->getName();
-                $contentParts[] = $property->getDefaultValue();
-                $list .= $this->listFormatter->formatListItem(
-                    $format,
-                    self::LIST_TYPE,
-                    $contentParts,
-                    $listType
-                );
+                $textParts = [];
+                $textParts[] = $propertiesStr;
+                $textParts[] = $property->getType();
+                $textParts[] = $property->getName();
+                $textParts[] = $property->getDefaultValue();
+                $list .= $listDecorator->format($format, $textParts);
                 $iterator->next();
             }
         }

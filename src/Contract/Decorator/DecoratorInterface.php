@@ -8,17 +8,16 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
-namespace Contract\Formatter;
+namespace Contract\Decorator;
 
-interface FormatterInterface
+interface DecoratorInterface
 {
     /**
      * @psalm-param non-empty-string $formatStr
      */
-    public function formatContent(string $formatStr, array $contentParts): string;
+    public function formatText(string $formatStr, array $textParts): string;
 
     /**
      * @psalm-param non-empty-string $format

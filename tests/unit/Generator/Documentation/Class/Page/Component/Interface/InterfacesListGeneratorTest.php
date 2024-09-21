@@ -8,32 +8,35 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Interface;
 
-use Collection\InterfaceCollection;
-use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
+use Contract\Decorator\TextDecoratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\InterfaceDto;
 use Generator\Documentation\Class\Page\Component\Interface\InterfaceListGenerator;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
+#[CoversClass(InterfaceListGenerator::class)]
 final class InterfacesListGeneratorTest extends TestCase
 {
-    private ListFormatterInterface&MockObject $listFormatter;
+    private TextDecoratorInterface&MockObject $listDecorator;
+    private TextDecoratorFactoryInterface&MockObject $textDecoratorFactory;
     private LinkGeneratorInterface&MockObject $linkGenerator;
     private InterfaceListGenerator $interListGenerator;
 
     public function setUp(): void
     {
-        $this->listFormatter = $this->getMockBuilder(ListFormatterInterface::class)->getMock();
+        $this->listDecorator = $this->getMockBuilder(TextDecoratorInterface::class)->getMock();
+        $this->textDecoratorFactory = $this->getMockBuilder(TextDecoratorFactoryInterface::class)->getMock();
         $this->linkGenerator = $this->getMockBuilder(LinkGeneratorInterface::class)->getMock();
-        $this->interListGenerator = new InterfaceListGenerator($this->linkGenerator, $this->listFormatter);
+        $this->interListGenerator = new InterfaceListGenerator($this->linkGenerator, $this->textDecoratorFactory);
     }
 
     public function testGenerateWithDokuWikiFormatAndOrderedList(): void
@@ -41,8 +44,13 @@ final class InterfacesListGeneratorTest extends TestCase
         $this->linkGenerator->expects(self::exactly(2))
             ->method('generate')
             ->willReturn('');
-        $this->listFormatter->expects(self::exactly(2))
-            ->method('formatListItem')
+
+        $this->textDecoratorFactory->expects(self::exactly(1))
+            ->method('createListDecorator')
+            ->willReturn($this->listDecorator);
+
+        $this->listDecorator->expects(self::exactly(2))
+            ->method('format')
             ->willReturn('');
 
         $this->interListGenerator->generate($this->getTestInterfaceData(), 'dokuwiki');
@@ -53,8 +61,13 @@ final class InterfacesListGeneratorTest extends TestCase
         $this->linkGenerator->expects(self::exactly(2))
             ->method('generate')
             ->willReturn('');
-        $this->listFormatter->expects(self::exactly(2))
-            ->method('formatListItem')
+
+        $this->textDecoratorFactory->expects(self::exactly(1))
+            ->method('createListDecorator')
+            ->willReturn($this->listDecorator);
+
+        $this->listDecorator->expects(self::exactly(2))
+            ->method('format')
             ->willReturn('');
 
         $this->interListGenerator->generate($this->getTestInterfaceData(), 'dokuwiki', 'unordered');
@@ -65,10 +78,13 @@ final class InterfacesListGeneratorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         $this->linkGenerator->expects(self::never())
-            ->method('generate')
-            ->willReturn('');
-        $this->listFormatter->expects(self::never())
-            ->method('formatListItem');
+            ->method('generate');
+
+        $this->textDecoratorFactory->expects(self::never())
+            ->method('createListDecorator');
+
+        $this->listDecorator->expects(self::never())
+            ->method('format');
 
         $this->interListGenerator->generate($this->getTestInterfaceData(), '');
     }
@@ -80,8 +96,12 @@ final class InterfacesListGeneratorTest extends TestCase
         $this->linkGenerator->expects(self::never())
             ->method('generate')
             ->willReturn('');
-        $this->listFormatter->expects(self::never())
-            ->method('formatListItem');
+
+        $this->textDecoratorFactory->expects(self::never())
+            ->method('createListDecorator');
+
+        $this->listDecorator->expects(self::never())
+            ->method('format');
 
         $this->interListGenerator->generate($this->getTestInterfaceData(), 'dokuwiki', '');
     }

@@ -10,20 +10,25 @@
  */
 declare(strict_types=1);
 
-namespace Formatter;
+namespace Decorator;
 
-use Contract\Formatter\DokuWikiFormatInterface;
-use Contract\Formatter\FormatterInterface;
+use Contract\Decorator\DokuWikiFormatInterface;
+use Contract\Decorator\DecoratorInterface;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class Formatter implements FormatterInterface, DokuWikiFormatInterface
+final readonly class TextDecorator implements DecoratorInterface, DokuWikiFormatInterface
 {
     private const string FORMAT_SUFFIX = '_FORMAT';
 
-    public function formatContent(string $formatStr, array $contentParts): string
+    /**
+     * @psalm-param non-empty-string $formatStr
+     * @throws InvalidArgumentException
+     */
+    public function formatText(string $formatStr, array $textParts): string
     {
-        return vsprintf($formatStr, $contentParts);
+        Assert::stringNotEmpty($formatStr);
+        return vsprintf($formatStr, $textParts);
     }
 
     /**

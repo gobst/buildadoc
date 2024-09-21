@@ -12,7 +12,7 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Method;
 
-use Contract\Formatter\Component\TableFormatterInterface;
+use Contract\Decorator\Component\TableDecoratorInterface;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Generator\Documentation\Class\Page\Component\Method\MethodTableGenerator;
@@ -31,12 +31,12 @@ use Webmozart\Assert\InvalidArgumentException;
 #[UsesClass(Method::class)]
 class MethodTableGeneratorTest extends TestCase
 {
-    private TableFormatterInterface&MockObject $tableFormatter;
+    private TableDecoratorInterface&MockObject $tableFormatter;
     private MethodTableGenerator $methodTableGenerator;
 
     public function setUp(): void
     {
-        $this->tableFormatter = $this->getMockBuilder(TableFormatterInterface::class)->getMock();
+        $this->tableFormatter = $this->getMockBuilder(TableDecoratorInterface::class)->getMock();
         $this->methodTableGenerator = new MethodTableGenerator($this->tableFormatter);
     }
 
@@ -45,7 +45,7 @@ class MethodTableGeneratorTest extends TestCase
     public function testGenerate(Method $method, string $format, array $headerLabels): void
     {
         $this->tableFormatter->expects(self::once())
-            ->method('formatTable')
+            ->method('format')
             ->willReturn('');
 
         $this->methodTableGenerator->generate($method, $format, $headerLabels);
@@ -68,7 +68,7 @@ class MethodTableGeneratorTest extends TestCase
         );
 
         $this->tableFormatter->expects(self::never())
-            ->method('formatTable');
+            ->method('format');
 
         $this->methodTableGenerator->generate($methodDto, '', []);
     }

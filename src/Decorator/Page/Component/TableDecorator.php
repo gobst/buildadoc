@@ -10,19 +10,19 @@
  */
 declare(strict_types = 1);
 
-namespace Formatter\Page\Component;
+namespace Decorator\Page\Component;
 
-use Contract\Formatter\Component\TableFormatterInterface;
-use Contract\Formatter\DokuWikiFormatInterface;
+use Contract\Decorator\Component\TableDecoratorInterface;
+use Contract\Decorator\DokuWikiFormatInterface;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class TableFormatter implements TableFormatterInterface, DokuWikiFormatInterface
+final readonly class TableDecorator implements TableDecoratorInterface, DokuWikiFormatInterface
 {
     /**
      * @throws InvalidArgumentException
      */
-    public function formatTable(string $format, array $header, array $rows, bool $withHeader): string
+    public function format(string $format, array $header, array $rows, bool $withHeader): string
     {
         Assert::stringNotEmpty($format);
         $table = '';
@@ -40,7 +40,6 @@ final readonly class TableFormatter implements TableFormatterInterface, DokuWiki
 
     /**
      * @psalm-param non-empty-string $format
-     *
      * @throws InvalidArgumentException
      */
     private function formatTableRowToFormat(string $format, array $row, bool $header): string

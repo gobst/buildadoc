@@ -13,7 +13,7 @@ declare(strict_types = 1);
 namespace Generator\Documentation\Class\Page\Component\Interface;
 
 use ArrayIterator;
-use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Interface\InterfaceListGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\InterfaceDto;
@@ -27,7 +27,7 @@ final readonly class InterfaceListGenerator implements InterfaceListGeneratorInt
 
     public function __construct(
         private LinkGeneratorInterface $linkGenerator,
-        private ListFormatterInterface $listFormatter
+        private TextDecoratorFactoryInterface $textDecoratorFactory
     ) {}
 
     /**
@@ -48,6 +48,8 @@ final readonly class InterfaceListGenerator implements InterfaceListGeneratorInt
             /** @var ArrayIterator $iterator */
             $iterator = $interfaces->getIterator();
 
+            $listDecorator = $this->textDecoratorFactory->createListDecorator(self::LIST_TYPE, $listType);
+
             while ($iterator->valid()) {
                 /** @var InterfaceDto $interface */
                 $interface = $iterator->current();
@@ -64,12 +66,7 @@ final readonly class InterfaceListGenerator implements InterfaceListGeneratorInt
 
                 Assert::stringNotEmpty(self::LIST_TYPE);
 
-                $list .= $this->listFormatter->formatListItem(
-                    $format,
-                    self::LIST_TYPE,
-                    [$interfaceStr],
-                    $listType
-                );
+                $list .= $listDecorator->format($format, [$interfaceStr]);
 
                 $iterator->next();
             }

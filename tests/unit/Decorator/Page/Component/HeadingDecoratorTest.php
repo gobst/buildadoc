@@ -8,75 +8,73 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types=1);
 
-namespace unit\Formatter\Page\Component;
+namespace unit\Decorator\Page\Component;
 
-use Contract\Formatter\FormatterInterface;
-use Formatter\Page\Component\HeadingFormatter;
+use Contract\Decorator\DecoratorInterface;
+use Decorator\Page\Component\HeadingDecorator;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
-/**
- * @psalm-suppress ArgumentTypeCoercion
- */
-final class HeadingFormatterTest extends TestCase
+#[CoversClass(HeadingDecorator::class)]
+final class HeadingDecoratorTest extends TestCase
 {
-    private FormatterInterface&MockObject $formatter;
-    private HeadingFormatter $headingFormatter;
+    private DecoratorInterface&MockObject $textDecorator;
 
     public function setUp(): void
     {
-        $this->formatter = $this->getMockBuilder(FormatterInterface::class)->getMock();
-        $this->headingFormatter = new HeadingFormatter($this->formatter);
+        $this->textDecorator = $this->getMockBuilder(DecoratorInterface::class)->getMock();
     }
 
     #[DataProvider('formatHeadingTestDataProvider')]
-    #[TestDox('formatHeading() method works correctly with parameters $format, $contentParts, $level')]
-    public function testformatHeading(string $format, array $contentParts, int $level): void
+    #[TestDox('formatHeading() method works correctly with parameters $format, $textParts, $level')]
+    public function testformatHeading(string $format, array $textParts, int $level): void
     {
-        $this->formatter->expects(self::once())
-            ->method('formatContent')
+        $headingDecorator = new HeadingDecorator($this->textDecorator, $level);
+
+        $this->textDecorator->expects(self::once())
+            ->method('formatText')
             ->willReturn('test');
 
-        switch ([$format, $contentParts, $level]) {
+        switch ([$format, $textParts, $level]) {
             case ['dokuwiki', ['test'], 1]:
-                $this->formatter->expects(self::once())
+                $this->textDecorator->expects(self::once())
                     ->method('getFormat')
                     ->with('dokuwiki', 'heading_level1')
                     ->willReturn('test');
                 break;
             case ['dokuwiki', ['test'], 2]:
-                $this->formatter->expects(self::once())
+                $this->textDecorator->expects(self::once())
                     ->method('getFormat')
                     ->with('dokuwiki', 'heading_level2')
                     ->willReturn('test');
                 break;
             case ['dokuwiki', ['test'], 3]:
-                $this->formatter->expects(self::once())
+                $this->textDecorator->expects(self::once())
                     ->method('getFormat')
                     ->with('dokuwiki', 'heading_level3')
                     ->willReturn('test');
                 break;
             case ['dokuwiki', ['test'], 4]:
-                $this->formatter->expects(self::once())
+                $this->textDecorator->expects(self::once())
                     ->method('getFormat')
                     ->with('dokuwiki', 'heading_level4')
                     ->willReturn('test');
                 break;
             case ['dokuwiki', ['test'], 5]:
-                $this->formatter->expects(self::once())
+                $this->textDecorator->expects(self::once())
                     ->method('getFormat')
                     ->with('dokuwiki', 'heading_level5')
                     ->willReturn('test');
                 break;
         }
 
-        $this->headingFormatter->formatHeading($format, $contentParts, $level);
+        $headingDecorator->format($format, $textParts);
     }
 
     #[TestDox('formatHeading() method throws InvalidArgumentException on invalid format')]
@@ -84,7 +82,8 @@ final class HeadingFormatterTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->headingFormatter->formatHeading('xyz', [], 1);
+        $headingDecorator = new HeadingDecorator($this->textDecorator, 1);
+        $headingDecorator->format('xyz', []);
     }
 
     #[TestDox('formatHeading() method throws InvalidArgumentException on empty format string')]
@@ -92,13 +91,15 @@ final class HeadingFormatterTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->formatter->expects(self::once())
+        $headingDecorator = new HeadingDecorator($this->textDecorator, 1);
+
+        $this->textDecorator->expects(self::once())
             ->method('getFormat')
             ->willReturn('');
-        $this->formatter->expects(self::never())
-            ->method('formatContent');
+        $this->textDecorator->expects(self::never())
+            ->method('formatText');
 
-        $this->headingFormatter->formatHeading('dokuwiki', ['test'], 1);
+        $headingDecorator->format('dokuwiki', ['test']);
     }
 
     public static function formatHeadingTestDataProvider(): array

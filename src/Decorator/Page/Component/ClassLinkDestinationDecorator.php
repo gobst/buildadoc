@@ -10,51 +10,58 @@
  */
 declare(strict_types=1);
 
-namespace Formatter\Page\Component;
+namespace Decorator\Page\Component;
 
-use Contract\Formatter\Component\Link\ClassLinkDestinationFormatterInterface;
-use Contract\Formatter\Component\Link\LinkDestinationFormatInterface;
-use Contract\Formatter\DokuWikiFormatInterface;
+use Contract\Decorator\Component\Link\LinkDestinationDecoratorInterface;
+use Contract\Decorator\Component\Link\LinkDestinationFormatInterface;
+use Contract\Decorator\DokuWikiFormatInterface;
+use Contract\Service\File\DocFileServiceInterface;
 use Dto\Class\ClassDto;
-use Service\File\DocFileService;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
-final readonly class ClassLinkDestinationFormatter implements ClassLinkDestinationFormatterInterface, LinkDestinationFormatInterface, DokuWikiFormatInterface
+final readonly class ClassLinkDestinationDecorator implements LinkDestinationDecoratorInterface, LinkDestinationFormatInterface, DokuWikiFormatInterface
 {
-    public function __construct(private DocFileService $docFileService)
+    public function __construct(
+        private DocFileServiceInterface $docFileService,
+        private ClassDto $classDto,
+        private string $mainDirectory
+    )
     {
     }
 
     /**
+     * @psalm-param non-empty-string $format
+     * @psalm-return non-empty-string
      * @throws InvalidArgumentException
      */
-    public function formatDestination(string $format, ClassDto $class, string $mainDirectory): string
+    public function format(string $format): string
     {
         Assert::stringNotEmpty($format);
-
-        return $this->fetchClassDestination($format, $class, $mainDirectory);
+        $destination =$this->fetchClassDestination($format);
+        assert::stringNotEmpty($destination);
+        return $destination;
     }
 
     /**
      * @psalm-param non-empty-string $format
      * @psalm-return non-empty-string
      */
-    private function fetchClassDestination(string $format, ClassDto $class, string $mainDirectory): string
+    private function fetchClassDestination(string $format): string
     {
         if ($format === self::DOKUWIKI_FORMAT_KEY) {
-            return $this->fetchDokuWikiLinkDestination($class, $mainDirectory);
+            return $this->fetchDokuWikiLinkDestination();
         }
 
-        return $this->fetchLinkDestination($format, $class, $mainDirectory);
+        return $this->fetchLinkDestination($format);
     }
 
     /**
      * @psalm-return non-empty-string
      */
-    private function fetchDokuWikiLinkDestination(ClassDto $class, string $mainDirectory): string
+    private function fetchDokuWikiLinkDestination(): string
     {
-        $className = $class->getName();
+        $className = $this->classDto->getName();
         $filename = sprintf(
             self::CLASS_DOKUWIKI_DEST_FILENAME_FORMAT,
             $className
@@ -62,7 +69,7 @@ final readonly class ClassLinkDestinationFormatter implements ClassLinkDestinati
         return strtolower(
             sprintf(
                 self::CLASS_DOKUWIKI_DESTINATION_FORMAT,
-                $mainDirectory,
+                $this->mainDirectory,
                 $className,
                 $filename
             )
@@ -73,9 +80,9 @@ final readonly class ClassLinkDestinationFormatter implements ClassLinkDestinati
      * @psalm-param non-empty-string $format
      * @psalm-return non-empty-string
      */
-    private function fetchLinkDestination(string $format, ClassDto $class, string $mainDirectory): string
+    private function fetchLinkDestination(string $format): string
     {
-        $className = $class->getName();
+        $className = $this->classDto->getName();
         $filename = sprintf(
             self::CLASS_DEST_FILENAME_FORMAT,
             $className,
@@ -84,7 +91,7 @@ final readonly class ClassLinkDestinationFormatter implements ClassLinkDestinati
         return strtolower(
             sprintf(
                 self::CLASS_DESTINATION_FORMAT,
-                $mainDirectory,
+                $this->mainDirectory,
                 $className,
                 $filename
             )

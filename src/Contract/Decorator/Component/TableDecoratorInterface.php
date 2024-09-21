@@ -10,15 +10,12 @@
  */
 declare(strict_types = 1);
 
-namespace Contract\Formatter\Component\Link;
+namespace Contract\Decorator\Component;
 
-interface LinkFormatterInterface
+interface TableDecoratorInterface
 {
     /**
      * @psalm-param non-empty-string $format
      */
-    public function formatLink(
-        string $format,
-        array $contentParts
-    ): string;
+    public function format(string $format, array $header, array $rows, bool $withHeader): string;
 }

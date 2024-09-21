@@ -12,7 +12,7 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\File;
 
-use Contract\Formatter\Component\TableFormatterInterface;
+use Contract\Decorator\Component\TableDecoratorInterface;
 use Dto\Class\ClassDto;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
@@ -34,12 +34,12 @@ use Webmozart\Assert\InvalidArgumentException;
 #[UsesClass(Method::class)]
 final class FilesTableGeneratorTest extends TestCase
 {
-    private TableFormatterInterface&MockObject $tableFormatter;
+    private TableDecoratorInterface&MockObject $tableFormatter;
     private FilesTableGenerator $filesTableGenerator;
 
     public function setUp(): void
     {
-        $this->tableFormatter = $this->getMockBuilder(TableFormatterInterface::class)->getMock();
+        $this->tableFormatter = $this->getMockBuilder(TableDecoratorInterface::class)->getMock();
         $this->filesTableGenerator = new FilesTableGenerator($this->tableFormatter);
     }
 
@@ -49,7 +49,7 @@ final class FilesTableGeneratorTest extends TestCase
         $classDto = $this->getTestClassDto();
 
         $this->tableFormatter->expects(self::once())
-            ->method('formatTable')
+            ->method('format')
             ->willReturn('');
 
         $this->filesTableGenerator->generate($classDto, 'dokuwiki', ['test1', 'test2']);

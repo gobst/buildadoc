@@ -12,14 +12,14 @@ declare(strict_types = 1);
 
 namespace Generator\Documentation\Class\Page\Component\Link;
 
-use Contract\Formatter\Component\Link\LinkFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
 final readonly class LinkGenerator implements LinkGeneratorInterface
 {
-    public function __construct(private LinkFormatterInterface $linkFormatter) {}
+    public function __construct(private TextDecoratorFactoryInterface $textDecoratorFactory) {}
 
     /**
      * @throws InvalidArgumentException
@@ -33,6 +33,6 @@ final readonly class LinkGenerator implements LinkGeneratorInterface
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($dest);
 
-        return $this->linkFormatter->formatLink($format, [$dest, $text]);
+        return $this->textDecoratorFactory->createLinkDecorator()->format($format, [$dest, $text]);
     }
 }

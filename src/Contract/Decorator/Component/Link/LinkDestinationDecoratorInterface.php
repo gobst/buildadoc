@@ -10,18 +10,13 @@
  */
 declare(strict_types = 1);
 
-namespace Contract\Formatter\Component\Link;
+namespace Contract\Decorator\Component\Link;
 
-use Dto\Method\Method;
-
-interface MethodLinkDestinationFormatterInterface
+interface LinkDestinationDecoratorInterface
 {
     /**
      * @psalm-param non-empty-string $format
+     * @psalm-return non-empty-string
      */
-    public function formatDestination(
-        string $format,
-        Method $method,
-        string $mainDirectory
-    ): string;
+    public function format(string $format): string;
 }

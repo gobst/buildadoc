@@ -10,7 +10,7 @@
  */
 declare(strict_types = 1);
 
-namespace Contract\Formatter\Component\Link;
+namespace Contract\Decorator\Component\Link;
 
 interface LinkDestinationFormatInterface
 {

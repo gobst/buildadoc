@@ -8,48 +8,45 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
-namespace unit\Formatter\Page;
+namespace unit\Decorator\Page;
 
-use Formatter\Formatter;
+use Decorator\TextDecorator;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
-/**
- * @SuppressWarnings(PHPMD)
- * @psalm-suppress ArgumentTypeCoercion
- */
-final class FormatterTest extends TestCase
+#[CoversClass(TextDecorator::class)]
+final class TextDecoratorTest extends TestCase
 {
-    private Formatter $formatter;
+    private TextDecorator $textDecorator;
 
     public function setUp(): void
     {
-        $this->formatter = new Formatter();
+        $this->textDecorator = new TextDecorator();
     }
 
-    #[TestDox('formatContent() method works correctly with single string replacement')]
-    public function testFormatContentWithSingleStringReplacement(): void
+    #[TestDox('formatText() method works correctly with single string replacement')]
+    public function testFormatTextWithSingleStringReplacement(): void
     {
         $formatStr = '====== %s ======';
         $contentParts = ['test'];
 
-        $actualString = $this->formatter->formatContent($formatStr, $contentParts);
+        $actualString = $this->textDecorator->formatText($formatStr, $contentParts);
 
         $this->assertSame('====== test ======', $actualString);
     }
 
-    #[TestDox('formatContent() method works correctly with multiple string replacement')]
-    public function testFormatContentWithMultipleStringReplacement(): void
+    #[TestDox('formatText() method works correctly with multiple string replacement')]
+    public function testFormatTextWithMultipleStringReplacement(): void
     {
         $formatStr = '%s %s **$%s**%s';
         $contentParts = ['test', 'test2', 'test3', 'test4'];
 
-        $actualString = $this->formatter->formatContent($formatStr, $contentParts);
+        $actualString = $this->textDecorator->formatText($formatStr, $contentParts);
 
         $this->assertSame('test test2 **$test3**test4', $actualString);
     }
@@ -58,7 +55,7 @@ final class FormatterTest extends TestCase
     #[TestDox('getFormat() method works correctly with parameters $format, $type')]
     public function testGetFormat(string $format, string $type): void
     {
-        $actualString = $this->formatter->getFormat($format, $type);
+        $actualString = $this->textDecorator->getFormat($format, $type);
 
         switch ([$format, $type]) {
             case ['dokuwiki', 'heading_level1']:
@@ -107,7 +104,7 @@ final class FormatterTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->formatter->getFormat($format, $type);
+        $this->textDecorator->getFormat($format, $type);
     }
 
     public static function getFormatTestDataProvider(): array

@@ -8,13 +8,12 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types=1);
 
-namespace unit\Formatter\Page\Component;
+namespace unit\Decorator\Page\Component;
 
-use Contract\Formatter\FormatterInterface;
-use Formatter\Page\Component\ListFormatter;
+use Contract\Decorator\DecoratorInterface;
+use Decorator\Page\Component\ListDecorator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -22,86 +21,84 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
-/**
- * @psalm-suppress ArgumentTypeCoercion
- */
-#[CoversClass(ListFormatter::class)]
-final class ListFormatterTest extends TestCase
+#[CoversClass(ListDecorator::class)]
+final class ListDecoratorTest extends TestCase
 {
-    private FormatterInterface&MockObject $formatter;
-    private ListFormatter $listFormatter;
+    private DecoratorInterface&MockObject $decorator;
 
     public function setUp(): void
     {
-        $this->formatter = $this->getMockBuilder(FormatterInterface::class)->getMock();
-        $this->listFormatter = new ListFormatter($this->formatter);
+        $this->decorator = $this->getMockBuilder(DecoratorInterface::class)->getMock();
     }
 
-    #[TestDox('formatListItem() method returns ordered list item in DokuWiki format')]
-    public function testformatListItemWithOrderedAndDokuWikiFormat(): void
+    #[TestDox('format() method returns ordered list item in DokuWiki format')]
+    public function testformatWithOrderedAndDokuWikiFormat(): void
     {
-        $this->formatter->expects(self::once())
+        $listDecorator = new ListDecorator($this->decorator, 'constant_list');
+
+        $this->decorator->expects(self::once())
             ->method('getFormat')
             ->with('dokuwiki', 'constant_list')
             ->willReturn('%s');
 
-        $this->formatter->expects(self::once())
-            ->method('formatContent')
+        $this->decorator->expects(self::once())
+            ->method('formatText')
             ->with('%s', ['list'])
             ->willReturn('list');
 
         $expectedString =  '  - list'. chr(13);
-        $actualString = $this->listFormatter->formatListItem(
+        $actualString = $listDecorator->format(
             'dokuwiki',
-            'constant_list',
             ['list']
         );
 
         $this->assertSame($expectedString, $actualString);
     }
 
-    #[TestDox('formatListItem() method returns unordered list item in DokuWiki format')]
-    public function testformatListItemWithUnorderedAndDokuWikiFormat(): void
+    #[TestDox('format() method returns unordered list item in DokuWiki format')]
+    public function testformatWithUnorderedAndDokuWikiFormat(): void
     {
-        $this->formatter->expects(self::once())
+        $listDecorator = new ListDecorator($this->decorator, 'constant_list', 'unordered');
+
+        $this->decorator->expects(self::once())
             ->method('getFormat')
             ->with('dokuwiki', 'constant_list')
             ->willReturn('%s');
 
-        $this->formatter->expects(self::once())
-            ->method('formatContent')
+        $this->decorator->expects(self::once())
+            ->method('formatText')
             ->with('%s', ['list'])
             ->willReturn('list');
 
         $expectedString =  '  * list'. chr(13);
-        $actualString = $this->listFormatter->formatListItem(
+        $actualString = $listDecorator->format(
             'dokuwiki',
-            'constant_list',
-            ['list'],
-            'unordered'
+            ['list']
         );
 
         $this->assertSame($expectedString, $actualString);
     }
 
     #[DataProvider('formatListTestDataProvider')]
-    #[TestDox('formatListItem() method fails on InvalidArgumentException with parameters $format, $listType, $contentParts, $listItemType')]
+    #[TestDox('format() method fails on InvalidArgumentException with parameters $format, $listType, $contentParts, $listItemType')]
     public function testformatListItemFailsOnInvalidArgumentException(
         string $format,
         string $listType,
-        array $contentParts,
+        array  $textParts,
         string $listItemType
     ): void
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->formatter->expects(self::never())
+        $listDecorator = new ListDecorator($this->decorator, $listType, $listItemType);
+
+        $this->decorator->expects(self::never())
             ->method('getFormat');
 
-        $this->formatter->expects(self::never())
-            ->method('formatContent');
+        $this->decorator->expects(self::never())
+            ->method('formatText');
 
-        $this->listFormatter->formatListItem($format, $listType, $contentParts, $listItemType);
+        $listDecorator->format($format, $textParts);
     }
 
     public static function formatListTestDataProvider(): array

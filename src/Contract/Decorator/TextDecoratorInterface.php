@@ -8,16 +8,15 @@
  * file that was distributed with this source code.
  *
  */
- 
 declare(strict_types = 1);
 
-namespace Contract\Formatter\Component;
+namespace Contract\Decorator;
 
-interface HeadingFormatterInterface
+interface TextDecoratorInterface
 {
     /**
      * @psalm-param non-empty-string $format
-     * @psalm-param positive-int $level
+     * @psalm-param non-empty-list $textParts
      */
-    public function formatHeading(string $format, array $contentParts, int $level): string;
+    public function format(string $format, array $textParts): string;
 }

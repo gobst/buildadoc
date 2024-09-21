@@ -8,54 +8,52 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types=1);
 
-namespace unit\Formatter\Page\Component;
+namespace unit\Decorator\Page\Component;
 
-use Contract\Formatter\FormatterInterface;
-use Formatter\Page\Component\LinkFormatter;
+use Contract\Decorator\DecoratorInterface;
+use Decorator\Page\Component\LinkDecorator;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
-/**
- * @psalm-suppress ArgumentTypeCoercion
- */
-final class LinkFormatterTest extends TestCase
+#[CoversClass(LinkDecorator::class)]
+final class LinkDecoratorTest extends TestCase
 {
-    private FormatterInterface&MockObject $formatter;
-    private LinkFormatter $linkFormatter;
+    private DecoratorInterface&MockObject $textDecorator;
+    private LinkDecorator $linkDecorator;
 
     public function setUp(): void
     {
-        $this->formatter = $this->getMockBuilder(FormatterInterface::class)->getMock();
-        $this->linkFormatter = new LinkFormatter($this->formatter);
+        $this->textDecorator = $this->getMockBuilder(DecoratorInterface::class)->getMock();
+        $this->linkDecorator = new LinkDecorator($this->textDecorator);
     }
 
     #[DataProvider('formatLinkTestDataProvider')]
-    #[TestDox('formatLink() method works correctly with parameters $format, $contentParts')]
-    public function testformatLink(string $format, array $contentParts): void
+    #[TestDox('formatLink() method works correctly with parameters $format, $textParts')]
+    public function testformatLink(string $format, array $textParts): void
     {
-        $this->formatter->expects(self::once())
-            ->method('formatContent')
+        $this->textDecorator->expects(self::once())
+            ->method('formatText')
             ->willReturn('test');
 
-        if(!empty($contentParts[1])){
-            $this->formatter->expects(self::once())
+        if(!empty($textParts[1])){
+            $this->textDecorator->expects(self::once())
                 ->method('getFormat')
                 ->with('dokuwiki', 'link_with_text')
                 ->willReturn('test');
         }else{
-            $this->formatter->expects(self::once())
+            $this->textDecorator->expects(self::once())
                 ->method('getFormat')
                 ->with('dokuwiki', 'link_without_text')
                 ->willReturn('test');
         }
 
-        $this->linkFormatter->formatLink($format, $contentParts);
+        $this->linkDecorator->format($format, $textParts);
     }
 
     #[TestDox('formatLink() method throws InvalidArgumentException on invalid format')]
@@ -63,7 +61,7 @@ final class LinkFormatterTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->linkFormatter->formatLink('xyz', []);
+        $this->linkDecorator->format('xyz', []);
     }
 
     #[TestDox('formatLink() method throws InvalidArgumentException on empty format string')]
@@ -71,13 +69,13 @@ final class LinkFormatterTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->formatter->expects(self::once())
+        $this->textDecorator->expects(self::once())
             ->method('getFormat')
             ->willReturn('');
-        $this->formatter->expects(self::never())
-            ->method('formatContent');
+        $this->textDecorator->expects(self::never())
+            ->method('formatText');
 
-        $this->linkFormatter->formatLink('dokuwiki', ['test']);
+        $this->linkDecorator->format('dokuwiki', ['test']);
     }
 
     public static function formatLinkTestDataProvider(): array

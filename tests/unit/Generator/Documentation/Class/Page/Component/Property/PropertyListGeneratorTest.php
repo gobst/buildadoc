@@ -12,7 +12,9 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Property;
 
-use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
+use Contract\Decorator\TextDecoratorInterface;
+use Contract\Service\Class\Data\ModifierDataServiceInterface;
 use Dto\Class\ClassDto;
 use Dto\Common\Modifier;
 use Dto\Common\Property;
@@ -32,21 +34,37 @@ use Webmozart\Assert\InvalidArgumentException;
 #[UsesClass(Property::class)]
 final class PropertyListGeneratorTest extends TestCase
 {
-    private ListFormatterInterface&MockObject $listFormatter;
+    private TextDecoratorInterface&MockObject $listDecorator;
+    private TextDecoratorFactoryInterface&MockObject $textDecoratorFactory;
+    private ModifierDataServiceInterface&MockObject $modifierDataService;
     private PropertyListGenerator $propListGenerator;
 
     public function setUp(): void
     {
-        $this->listFormatter = $this->getMockBuilder(ListFormatterInterface::class)->getMock();
-        $this->propListGenerator = new PropertyListGenerator($this->listFormatter);
+        $this->listDecorator = $this->getMockBuilder(TextDecoratorInterface::class)
+            ->getMock();
+        $this->textDecoratorFactory = $this->getMockBuilder(TextDecoratorFactoryInterface::class)
+            ->getMock();
+        $this->modifierDataService = $this->getMockBuilder(ModifierDataServiceInterface::class)
+            ->getMock();
+
+        $this->propListGenerator = new PropertyListGenerator($this->textDecoratorFactory, $this->modifierDataService);
     }
 
     #[DataProvider('propertyListGeneratorTestDataProvider')]
     #[TestDox('generate() method works correctly with parameters $classDto, $format, $listType')]
     public function testGenerate(ClassDto $classDto, string $format, string $listType): void
     {
-        $this->listFormatter->expects(self::once())
-            ->method('formatListItem')
+        $this->modifierDataService->expects(self::once())
+            ->method('implodeModifierDTOCollection')
+            ->willReturn('public');
+
+        $this->textDecoratorFactory->expects(self::once())
+            ->method('createListDecorator')
+            ->willReturn($this->listDecorator);
+
+        $this->listDecorator ->expects(self::once())
+            ->method('format')
             ->willReturn('');
 
         $this->propListGenerator->generate($classDto, $format, $listType);
@@ -58,8 +76,14 @@ final class PropertyListGeneratorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->listFormatter->expects(self::never())
-            ->method('formatListItem');
+        $this->modifierDataService->expects(self::never())
+            ->method('implodeModifierDTOCollection');
+
+        $this->textDecoratorFactory->expects(self::never())
+            ->method('createListDecorator');
+
+        $this->listDecorator ->expects(self::never())
+            ->method('format');
 
         $this->propListGenerator->generate($classDto, $format, $listType);
     }
