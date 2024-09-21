@@ -8,13 +8,12 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Generator\Documentation\Class\Page\Component\Class;
 
 use ArrayIterator;
-use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Class\UsedByClassListGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Dto\Class\ClassDto;
@@ -26,7 +25,7 @@ final readonly class UsedByClassListGenerator implements UsedByClassListGenerato
     private const string LIST_TYPE = 'usedbyclass_list';
 
     public function __construct(
-        private ListFormatterInterface $listFormatter,
+        private TextDecoratorFactoryInterface $textDecoratorFactory,
         private LinkGeneratorInterface $linkGenerator
     ) {}
 
@@ -55,18 +54,15 @@ final readonly class UsedByClassListGenerator implements UsedByClassListGenerato
                 $className = $childClass->getName();
                 $modifiersStr = $childClass->getModifiers()->toArray();
 
-                $contentParts = [];
-                $contentParts[] = $modifiersStr;
-                $contentParts[] = $link ? $this->linkGenerator->generate($format, $className, $className) : $className;
+                $textParts = [];
+                $textParts[] = $modifiersStr;
+                $textParts[] = $link ? $this->linkGenerator->generate($format, $className, $className) : $className;
 
                 Assert::stringNotEmpty(self::LIST_TYPE);
 
-                $list .= $this->listFormatter->formatListItem(
-                    $format,
-                    self::LIST_TYPE,
-                    $contentParts,
-                    $listType
-                );
+                $list .= $this->textDecoratorFactory
+                    ->createListDecorator(self::LIST_TYPE, $listType)
+                    ->format($format, $textParts);
 
                 $iterator->next();
             }

@@ -14,7 +14,7 @@ declare(strict_types = 1);
 namespace Generator\Documentation\Class\Page\Component\Method;
 
 use ArrayIterator;
-use Contract\Formatter\Component\TableFormatterInterface;
+use Contract\Decorator\Component\TableDecoratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodTableGeneratorInterface;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
@@ -24,7 +24,7 @@ use Webmozart\Assert\InvalidArgumentException;
 final readonly class MethodTableGenerator implements MethodTableGeneratorInterface
 {
     public function __construct(
-        private TableFormatterInterface $tableFormatter
+        private TableDecoratorInterface $tableFormatter
     ) {}
 
     /**
@@ -60,6 +60,6 @@ final readonly class MethodTableGenerator implements MethodTableGeneratorInterfa
             }
         }
 
-        return rtrim($this->tableFormatter->formatTable($format, $headerLabels, $rows, true));
+        return rtrim($this->tableFormatter->format($format, $headerLabels, $rows, true));
     }
 }

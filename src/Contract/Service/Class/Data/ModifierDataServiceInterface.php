@@ -22,4 +22,9 @@ interface ModifierDataServiceInterface
      * @return Collection<int, Modifier>
      */
     public function getModifiers(Node $node): Collection;
+
+    /**
+     * @param Collection<int, Modifier> $collection
+     */
+    public function implodeModifierDTOCollection(Collection $collection, string $delimiter = ' '): string;
 }

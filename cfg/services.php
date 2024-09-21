@@ -10,6 +10,11 @@
  */
 
 use Contract\Service\Class\Documentation\Page\TableOfContentsPageServiceInterface;
+use Decorator\Page\Component\ClassLinkDestinationDecorator;
+use Decorator\Page\Component\HeadingDecorator;
+use Decorator\Page\Component\ListDecorator;
+use Decorator\Page\Component\MethodLinkDestinationDecorator;
+use Generator\Documentation\Class\Page\Component\Class\ClassListGenerator;
 use Pipeline\Page\Fetcher\Class\UsedByClassListFetcher;
 use Pipeline\Page\Fetcher\TableOfContents\ClassListFetcher;
 use Pipeline\Page\Fetcher\TableOfContents\TextFetcher;
@@ -73,7 +78,7 @@ return static function (ContainerConfigurator $configurator) {
     $services->load('Service\\', '../src/Service/*');
     $services->load('Exception\\', '../src/Exception/*');
     $services->load('Dto\\', '../src/Dto/*');
-    $services->load('Formatter\\', '../src/Formatter/*');
+    $services->load('Decorator\\', '../src/Decorator/*');
     $services->load('Contract\\', '../src/Contract/*');
     $services->load('Pipeline\\', '../src/Pipeline/*');
 
@@ -199,4 +204,16 @@ return static function (ContainerConfigurator $configurator) {
             'tableofcontentsText' => new Reference(TextFetcher::class),
             'tableofcontentsClassList' => new Reference(ClassListFetcher::class),
         ]);
+
+    $services->set(ClassLinkDestinationDecorator::class)
+        ->arg('$mainDirectory', '');
+
+    $services->set(HeadingDecorator::class)
+        ->arg('$level', 1);
+
+    $services->set(ListDecorator::class)
+        ->arg('$listType', 'method_list');
+
+    $services->set(MethodLinkDestinationDecorator::class)
+        ->arg('$mainDirectory', '');
 };

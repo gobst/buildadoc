@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Component\Heading;
 
-use Contract\Formatter\Component\HeadingFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
+use Contract\Decorator\TextDecoratorInterface;
 use Generator\Documentation\Class\Page\Component\Heading\HeadingGenerator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -25,20 +25,26 @@ use Webmozart\Assert\InvalidArgumentException;
 #[CoversClass(HeadingGenerator::class)]
 final class HeadingGeneratorTest extends TestCase
 {
-    private HeadingFormatterInterface&MockObject $headingFormatter;
+    private TextDecoratorFactoryInterface&MockObject $textDecoratorFactory;
+    private TextDecoratorInterface&MockObject $headingDecorator;
     private HeadingGenerator $headingGenerator;
 
     public function setUp(): void
     {
-        $this->headingFormatter = $this->getMockBuilder(HeadingFormatterInterface::class)->getMock();
-        $this->headingGenerator = new HeadingGenerator($this->headingFormatter);
+        $this->textDecoratorFactory = $this->getMockBuilder(TextDecoratorFactoryInterface::class)->getMock();
+        $this->headingDecorator = $this->getMockBuilder(TextDecoratorInterface::class)->getMock();
+        $this->headingGenerator = new HeadingGenerator($this->textDecoratorFactory);
     }
 
     #[TestDox('generate() method works correctly')]
     public function testGenerate(): void
     {
-        $this->headingFormatter->expects(self::once())
-            ->method('formatHeading')
+        $this->textDecoratorFactory->expects(self::once())
+            ->method('createHeadingDecorator')
+            ->willReturn($this->headingDecorator);
+
+        $this->headingDecorator->expects(self::once())
+            ->method('format')
             ->willReturn('');
 
         $this->headingGenerator->generate('text1', 1, 'dokuwiki');

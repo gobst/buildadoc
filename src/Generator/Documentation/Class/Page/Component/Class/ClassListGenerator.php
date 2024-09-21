@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace Generator\Documentation\Class\Page\Component\Class;
 
 use ArrayIterator;
-use Contract\Formatter\Component\Link\ClassLinkDestinationFormatterInterface;
-use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Class\ClassLineGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Class\ClassListGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
@@ -28,10 +27,9 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
     private const string LIST_TYPE = 'class_list';
 
     public function __construct(
-        private LinkGeneratorInterface                 $linkGenerator,
-        private ListFormatterInterface                 $listFormatter,
-        private ClassLinkDestinationFormatterInterface $classLinkDestFormat,
-        private ClassLineGeneratorInterface            $classLineGenerator
+        private LinkGeneratorInterface        $linkGenerator,
+        private TextDecoratorFactoryInterface $textDecoratorFactory,
+        private ClassLineGeneratorInterface   $classLineGenerator
     )
     {
     }
@@ -106,8 +104,9 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
         $line = $this->classLineGenerator->generate($class);
 
         if ($link) {
-            $destination = $this->classLinkDestFormat->formatDestination($format, $class, $mainDirectory);
-            Assert::stringNotEmpty($destination);
+            $destination = $this->textDecoratorFactory
+                ->createClassLinkDestinationDecorator($class, $mainDirectory)
+                ->format($format);
 
             $line = $this->linkGenerator->generate(
                 $format,
@@ -118,6 +117,8 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
 
         Assert::stringNotEmpty(self::LIST_TYPE);
 
-        return $this->listFormatter->formatListItem($format, self::LIST_TYPE, [$line], $listType);
+        return $this->textDecoratorFactory
+            ->createListDecorator(self::LIST_TYPE, $listType)
+            ->format($format, [$line]);
     }
 }

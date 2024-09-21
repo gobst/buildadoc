@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace Generator\Documentation\Class\Page\Component\Method;
 
 use ArrayIterator;
-use Contract\Formatter\Component\Link\MethodLinkDestinationFormatterInterface;
-use Contract\Formatter\Component\ListFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Method\MethodListGeneratorInterface;
@@ -30,10 +29,9 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
     private const string LIST_TYPE = 'method_list';
 
     public function __construct(
-        private LinkGeneratorInterface                  $linkGenerator,
-        private MethodLineGeneratorInterface            $methodLineGenerator,
-        private ListFormatterInterface                  $listFormatter,
-        private MethodLinkDestinationFormatterInterface $methodLinkDestFormat
+        private LinkGeneratorInterface $linkGenerator,
+        private MethodLineGeneratorInterface $methodLineGenerator,
+        private TextDecoratorFactoryInterface $textDecoratorFactory
     )
     {
     }
@@ -119,7 +117,9 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
         $line = $this->methodLineGenerator->generate($method);
 
         if ($link) {
-            $destination = $this->methodLinkDestFormat->formatDestination($format, $method, $mainDirectory);
+            $destination = $this->textDecoratorFactory
+                ->createMethodLinkDestinationDecorator($method, $mainDirectory)
+                ->format($format);
             Assert::stringNotEmpty($destination);
 
             $line = $this->linkGenerator->generate(
@@ -134,6 +134,8 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
 
         Assert::stringNotEmpty(self::LIST_TYPE);
 
-        return $this->listFormatter->formatListItem($format, self::LIST_TYPE, [$line . $desc], $listType);
+        return $this->textDecoratorFactory
+            ->createListDecorator(self::LIST_TYPE, $listType)
+            ->format($format, [$line . $desc]);
     }
 }

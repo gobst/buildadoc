@@ -12,7 +12,7 @@ declare(strict_types = 1);
 
 namespace Command;
 
-use Contract\Formatter\DokuWikiFormatInterface;
+use Contract\Decorator\DokuWikiFormatInterface;
 use Contract\Service\Class\Data\ClassDataServiceInterface;
 use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
 use Contract\Service\Class\Documentation\Page\TableOfContentsPageServiceInterface;

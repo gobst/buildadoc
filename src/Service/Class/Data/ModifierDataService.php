@@ -77,4 +77,14 @@ final class ModifierDataService implements ModifierDataServiceInterface
 
         return $modifiers;
     }
+
+    /**
+     * @param Collection<int, Modifier> $collection
+     */
+    public function implodeModifierDTOCollection(Collection $collection, string $delimiter = ' '): string
+    {
+        return $collection
+            ->map(fn($dto) => $dto->getName())
+            ->implode($delimiter);
+    }
 }

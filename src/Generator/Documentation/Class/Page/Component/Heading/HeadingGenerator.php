@@ -8,19 +8,18 @@
  * file that was distributed with this source code.
  *
  */
-
 declare(strict_types = 1);
 
 namespace Generator\Documentation\Class\Page\Component\Heading;
 
-use Contract\Formatter\Component\HeadingFormatterInterface;
+use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
 final readonly class HeadingGenerator implements HeadingGeneratorInterface
 {
-    public function __construct(private HeadingFormatterInterface $headingFormatter) {}
+    public function __construct(private TextDecoratorFactoryInterface $textDecoratorFactory) {}
 
     /**
      * @throws InvalidArgumentException
@@ -31,6 +30,6 @@ final readonly class HeadingGenerator implements HeadingGeneratorInterface
         Assert::stringNotEmpty($text);
         Assert::positiveInteger($level);
 
-        return $this->headingFormatter->formatHeading($format, [$text], $level);
+        return $this->textDecoratorFactory->createHeadingDecorator($level)->format($format, [$text]);
     }
 }
