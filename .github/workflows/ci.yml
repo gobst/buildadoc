@@ -96,7 +96,7 @@ jobs:
 
       - name: Fetch all branches with token
         run: |
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "GIT_TERMINAL_PROMPT=0 git -c http.extraheader='Authorization: Basic $(echo -n '${{ github.actor }}:${{ secrets.TOKEN }}' | base64)' fetch --all"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git -c http.extraheader='Authorization: Basic $(echo -n '${{ github.actor }}:${{ secrets.TOKEN }}' | base64)' fetch --all"
 
       - name: Check remote URL
         run: |
