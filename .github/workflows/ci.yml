@@ -94,7 +94,7 @@ jobs:
           name: unit-test-artifacts
           path: ./artifacts/unit
 
-      - name: Run mutation tests
+      - name: Prepare mutation tests
         run: |
           git fetch --all
           git stash --include-untracked
@@ -103,6 +103,9 @@ jobs:
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "chown -R root:root .git"
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git stash --include-untracked && git checkout develop"
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
+
+      - name: Run mutation tests
+        run: |
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHPMinMSI.sh"
           
           mkdir -p artifacts/mutation
@@ -117,7 +120,7 @@ jobs:
           
           if docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "test -f /var/www/html/BuildADoc/bin/output/mutation/summary.log"; then
             docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/summary.log artifacts/mutation
-          fi
+          fi    
 
       - name: Upload artifacts from mutation tests
         uses: actions/upload-artifact@v4
