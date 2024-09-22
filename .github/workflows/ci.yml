@@ -87,9 +87,6 @@ jobs:
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage-xml artifacts/unit
 
-          git fetch --all
-          git branch -a
-
       - name: Upload artifacts from unit tests
         if: always()
         uses: actions/upload-artifact@v4
@@ -99,6 +96,8 @@ jobs:
 
       - name: Run mutation tests
         run: |
+          git fetch --all
+          git branch -a
           mkdir -p artifacts/mutation
           docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc/.git
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git branch -a"
