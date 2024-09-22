@@ -102,6 +102,7 @@ jobs:
           mkdir -p artifacts/mutation
 
           docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "chown -R gobst:gobst /var/www/html/BuildADoc"
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cd .git && ls -a"
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git branch -a"
 
