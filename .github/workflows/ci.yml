@@ -101,7 +101,7 @@ jobs:
         run: |
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "GIT_ASKPASS=/bin/echo git fetch --all"
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          TOKEN: ${{ secrets.TOKEN }}
 
       - name: Run mutation tests
         run: |
