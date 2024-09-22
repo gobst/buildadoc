@@ -100,6 +100,12 @@ jobs:
       - name: Check if main branch exists
         run: docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git branch -a"
 
+      - name: Fetch all branches
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "GIT_ASKPASS=/bin/echo git fetch --all"
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
       - name: Run mutation tests
         run: |
           mkdir -p artifacts/mutation
