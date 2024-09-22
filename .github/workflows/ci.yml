@@ -99,10 +99,9 @@ jobs:
           git fetch --all
           git stash --include-untracked
           git checkout -b main origin/main
-          git stash --include-untracked
           docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "chown -R root:root .git"
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git checkout develop"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git stash --include-untracked && git checkout develop"
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHPMinMSI.sh"
           
           mkdir -p artifacts/mutation
