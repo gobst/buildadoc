@@ -94,9 +94,9 @@ jobs:
           name: unit-test-artifacts
           path: ./artifacts/unit
 
-      - name: Fetch all branches with token
+      - name: Fetch all branches with username and token
         run: |
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git -c http.extraheader='Authorization: Basic $(echo -n '${{ github.actor }}:${{ secrets.TOKEN }}' | base64)' fetch --all"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git remote set-url origin https://gobst:${{ secrets.TOKEN }}@github.com/gobst/buildadoc.git && git fetch --all"
 
       - name: Check remote URL
         run: |
