@@ -96,7 +96,7 @@ jobs:
 
       - name: Fetch all branches with username and token
         run: |
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git remote set-url origin https://gobst:"${{ secrets.TOKEN }}"@github.com/gobst/buildadoc.git && git fetch --all"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "echo "${{ secrets.TOKEN }}" | git fetch --all -u ${{ github.actor }}"
 
       - name: Check remote URL
         run: |
