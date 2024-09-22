@@ -100,7 +100,7 @@ jobs:
           git branch -a
           mkdir -p artifacts/mutation
           
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "rm -R .git"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "dir -ls"
           docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc/.git
           
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git branch -a"
