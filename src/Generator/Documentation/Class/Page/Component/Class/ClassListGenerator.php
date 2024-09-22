@@ -68,10 +68,10 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
      */
     private function fetchList(
         Collection $classes,
-        string     $format,
-        bool       $link,
-        string     $listType,
-        string     $mainDirectory
+        string $format,
+        bool $link,
+        string $listType,
+        string $mainDirectory
     ): string
     {
         $list = '';
