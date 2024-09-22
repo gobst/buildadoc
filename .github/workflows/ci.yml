@@ -19,11 +19,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check working directory
-        run: |
-          pwd
-          ls -la
-
       - name: Login to GitHub packages
         run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
@@ -98,11 +93,6 @@ jobs:
         with:
           name: unit-test-artifacts
           path: ./artifacts/unit
-
-      - name: Check working directory
-        run: |
-          pwd
-          ls -la
 
       - name: Check Git status in container
         run: docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git status"
