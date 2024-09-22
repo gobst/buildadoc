@@ -94,9 +94,6 @@ jobs:
           name: unit-test-artifacts
           path: ./artifacts/unit
 
-      - name: Check Git status in container
-        run: docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git status"
-
       - name: Check if main branch exists
         run: docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git branch -a"
 
