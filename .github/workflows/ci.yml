@@ -96,7 +96,7 @@ jobs:
 
       - name: Fetch all branches with username and token
         run: |
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "echo "${{ secrets.TOKEN }}" | git fetch --all -u ${{ github.actor }}"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "echo "${{ secrets.TOKEN }}" | git fetch --all"
 
       - name: Check remote URL
         run: |
