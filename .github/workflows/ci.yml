@@ -100,7 +100,7 @@ jobs:
           git checkout -b main origin/main
           docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "chown -R root:root .git"
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git checkout -b develop origin/develop"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git checkout develop"
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHPMinMSI.sh"
           
           mkdir -p artifacts/mutation
