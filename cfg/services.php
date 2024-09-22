@@ -14,7 +14,6 @@ use Decorator\Page\Component\ClassLinkDestinationDecorator;
 use Decorator\Page\Component\HeadingDecorator;
 use Decorator\Page\Component\ListDecorator;
 use Decorator\Page\Component\MethodLinkDestinationDecorator;
-use Generator\Documentation\Class\Page\Component\Class\ClassListGenerator;
 use Pipeline\Page\Fetcher\Class\UsedByClassListFetcher;
 use Pipeline\Page\Fetcher\TableOfContents\ClassListFetcher;
 use Pipeline\Page\Fetcher\TableOfContents\TextFetcher;
@@ -73,7 +72,7 @@ return static function (ContainerConfigurator $configurator) {
         ->autoconfigure()
         ->public();
 
-    $services->load('Command\\', '../src/Command/*');
+    $services->load('Command\\', '../src/Command/DokuWikiCommand.php');
     $services->load('Generator\\', '../src/Generator/*');
     $services->load('Service\\', '../src/Service/*');
     $services->load('Exception\\', '../src/Exception/*');

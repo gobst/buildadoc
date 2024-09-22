@@ -55,7 +55,7 @@ The generated directories and files must be placed under your DokuWiki installat
 For more options and information run:
 
 ```bash 
-php bin/console.php
+php bin/console.php DokuWiki:create-doc -help
 ```
 
 ## Support
