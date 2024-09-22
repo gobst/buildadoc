@@ -98,6 +98,7 @@ jobs:
         run: |
           git fetch --all
           git branch -a
+          git checkout -b main origin/main
           mkdir -p artifacts/mutation
 
           docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc
