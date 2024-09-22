@@ -92,6 +92,9 @@ jobs:
           name: unit-test-artifacts
           path: ./artifacts/unit
 
+      - name: Fetch main branch
+        run: git fetch origin main:main
+
       - name: Run mutation tests
         run: |
           mkdir -p artifacts/mutation
