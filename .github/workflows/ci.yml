@@ -98,7 +98,6 @@ jobs:
         run: |
           git fetch --all
           git checkout -b main origin/main
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "dir -ls"
           docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "chown -R root:root .git"
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHPMinMSI.sh"
@@ -116,7 +115,6 @@ jobs:
           if docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "test -f /var/www/html/BuildADoc/bin/output/mutation/summary.log"; then
             docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/summary.log artifacts/mutation
           fi
-          
 
       - name: Upload artifacts from mutation tests
         uses: actions/upload-artifact@v4
