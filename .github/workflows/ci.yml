@@ -99,6 +99,11 @@ jobs:
           name: unit-test-artifacts
           path: ./artifacts/unit
 
+      - name: Check working directory
+        run: |
+          pwd
+          ls -la
+
       - name: Check Git status in container
         run: docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git status"
 
