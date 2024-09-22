@@ -15,8 +15,9 @@ It parses your PHP classes and converts them into DokuWiki-compatible syntax for
 - Automatic generation of class documentation.
 - Easy integration with DokuWiki installations.
 - **Planned Features:**
-    - Support for Markdown format.
+    - Markdown format support.
     - `usedByClasses` feature for enhanced class relationship tracking.
+    - `trait` support.
 
 ## Requirements
 - PHP 8.3 or higher
@@ -48,7 +49,7 @@ docker pull gobst/buildadoc
 To generate class documentation for DokuWiki, use the following command:
 
 ```bash 
-php bin/console.php DokuWiki:create-doc path/to/src/ /path/to/destination/dir/ projectname 
+php bin/console.php DokuWiki:create-doc path/to/src/ /path/to/destination/dir/ projectname
 ```
 
 The generated directories and files must be placed under your DokuWiki installation at /data/pages.
