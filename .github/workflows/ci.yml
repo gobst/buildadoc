@@ -94,12 +94,21 @@ jobs:
           name: unit-test-artifacts
           path: ./artifacts/unit
 
-      - name: Check if main branch exists
-        run: docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git branch -a"
+      - name: Set up Git credentials
+        run: |
+          echo "https://${{ secrets.TOKEN }}:x-oauth-basic@github.com" > ~/.git-credentials
+          git config --global credential.helper store
+
+      - name: Set remote URL with token
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git remote set-url origin https://${{ secrets.TOKEN }}:x-oauth-basic@github.com/gobst/buildadoc.git"
 
       - name: Fetch all branches
         run: |
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git fetch --all"
+
+      - name: Check if main branch exists
+        run: docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git branch -a"
 
       - name: Run mutation tests
         run: |
