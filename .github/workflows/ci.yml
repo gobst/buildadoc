@@ -100,6 +100,7 @@ jobs:
 
       - name: Check remote URL
         run: |
+          git fetch --all
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git remote -v"
 
       - name: Check if main branch exists
