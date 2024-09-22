@@ -11,5 +11,6 @@
 #
 ############################################################################
 
+git fetch origin main:main
 # Run mutation tests
 bin/infection --threads=4 --configuration=cfg/dev/infection.json5 --min-msi=95 --git-diff-base=main --git-diff-lines
