@@ -97,7 +97,6 @@ jobs:
       - name: Check if main branch exists
         run: |
           git fetch origin main
-          git branch -a
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git branch -a"
 
       - name: Fetch all branches with username and token
