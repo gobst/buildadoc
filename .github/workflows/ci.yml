@@ -102,9 +102,11 @@ jobs:
         run: |
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git remote -v"
 
-      - name: Fetch all branches
+      - name: Fetch all branches with token
         run: |
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "GIT_TERMINAL_PROMPT=0 git fetch --all"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "GIT_TERMINAL_PROMPT=0 git -c http.extraheader='Authorization: Bearer $TOKEN' fetch --all"
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
 
       - name: Check if main branch exists
         run: docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git branch -a"
