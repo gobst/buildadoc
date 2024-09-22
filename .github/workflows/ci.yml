@@ -94,13 +94,17 @@ jobs:
           name: unit-test-artifacts
           path: ./artifacts/unit
 
-      - name: Check remote URL
+      - name: Set remote URL with token
         run: |
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git remote -v"
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git remote set-url origin https://${{ secrets.TOKEN }}:x-oauth-basic@github.com/gobst/buildadoc.git"
 
       - name: Fetch all branches with token
         run: |
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git remote set-url origin https://${{ secrets.TOKEN }}:x-oauth-basic@github.com/gobst/buildadoc.git && git fetch --all"
+
+      - name: Check remote URL
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git remote -v"
 
       - name: Check if main branch exists
         run: docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git branch -a"
