@@ -86,7 +86,6 @@ jobs:
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.txt artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage artifacts/unit
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage-xml artifacts/unit
-          git fetch --all
 
       - name: Upload artifacts from unit tests
         if: always()
@@ -100,9 +99,7 @@ jobs:
 
       - name: Fetch all branches
         run: |
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "GIT_ASKPASS=/bin/echo git fetch --all"
-        env:
-          TOKEN: ${{ secrets.TOKEN }}
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git fetch --all"
 
       - name: Run mutation tests
         run: |
