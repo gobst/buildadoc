@@ -99,9 +99,8 @@ jobs:
           git fetch --all
           git branch -a
           mkdir -p artifacts/mutation
-          
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "ls -a"
-          docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc/.git
+
+          docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "ls -a"
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cd .git && ls -a"
 
