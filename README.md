@@ -2,7 +2,7 @@
 ![Packagist Version](https://img.shields.io/packagist/v/gobst/buildadoc)
 ![License](https://img.shields.io/github/license/gobst/buildadoc)
 [![Code Coverage](https://img.shields.io/badge/Code_Coverage-44.69%25-brightgreen)](https://img.shields.io/badge/Code_Coverage-44.69%25-brightgreen)
-[![Mutation Score](https://img.shields.io/badge/Mutation_Score-36.57%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-36.57%25-brightgreen)
+[![Mutation Score](https://img.shields.io/badge/Mutation_Score-35.87%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-35.87%25-brightgreen)
 
 # BuildADoc
 
