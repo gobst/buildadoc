@@ -111,7 +111,6 @@ jobs:
 
             docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc
             docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "chown -R root:root .git"
-            docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git fetch --all"
             docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
 
           fi
