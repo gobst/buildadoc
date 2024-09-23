@@ -74,17 +74,18 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
         string $mainDirectory
     ): string
     {
-        $list = '';
+        $classList = '';
+
         /** @var ArrayIterator $iterator */
         $iterator = $classes->getIterator();
         while ($iterator->valid()) {
             /** @var ClassDto $class */
             $class = $iterator->current();
-            $list .= $this->generateClassLine($class, $format, $link, $listType, $mainDirectory);
+            $classList .= $this->generateClassLine($class, $format, $link, $listType, $mainDirectory);
             $iterator->next();
         }
 
-        return $list;
+        return $classList;
     }
 
     /**
