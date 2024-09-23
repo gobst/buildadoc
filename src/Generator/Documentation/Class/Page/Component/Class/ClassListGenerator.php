@@ -71,7 +71,7 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
         string $format,
         bool $link,
         string $listType,
-        string $mainDirectory
+        string $mainDirectory,
     ): string
     {
         $list = '';
