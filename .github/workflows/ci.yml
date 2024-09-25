@@ -118,6 +118,7 @@ jobs:
           fi    
 
       - name: Upload artifacts from mutation tests
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mutation-test-artifacts
