@@ -106,6 +106,7 @@ jobs:
           mkdir -p artifacts/mutation
 
           if docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "test -f /var/www/html/BuildADoc/bin/output/mutation/infection.log"; then
+            docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cat /var/www/html/BuildADoc/bin/output/mutation/infection.log"
             docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.log artifacts/mutation
           fi
           
