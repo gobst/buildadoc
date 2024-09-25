@@ -105,7 +105,7 @@ jobs:
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHPMinMSI.sh"
           mkdir -p artifacts/mutation
 
-          $(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cat /var/www/html/BuildADoc/bin/output/mutation/infection.log"; echo $?)
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "cat /var/www/html/BuildADoc/bin/output/mutation/infection.log"; echo $?
 
           if docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "test -f /var/www/html/BuildADoc/bin/output/mutation/infection.log"; then
             docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.log artifacts/mutation
