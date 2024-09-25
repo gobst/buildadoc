@@ -28,4 +28,4 @@ jobs:
         uses: coverallsapp/github-action@v1
         with:
           github-token: ${{ secrets.TOKEN }}
-          path-to-lcov: coverage.xml
+          path-to-lcov: bin/output/unit/coverage.xml
