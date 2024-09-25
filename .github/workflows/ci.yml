@@ -97,7 +97,7 @@ jobs:
       - name: Prepare mutation tests
         run: |
           if ! git show-ref --quiet refs/heads/develop; then
-            git fetch origin/develop
+            git fetch develop origin/develop
             docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc
             docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "chown -R root:root .git"
             docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git checkout develop && git stash pop"
