@@ -3,10 +3,6 @@ name: "CI"
 on:
   pull_request:
     branches:
-      - "main"
-      - "develop"
-  push:
-    branches:
       - "develop"
 
 jobs:
@@ -16,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Login to GitHub packages
         run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -42,19 +40,19 @@ jobs:
           
           # Run PHP-CS-Fixer
           csfixerExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
-          
+
           # Run Psalm
           psalmExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
 
           # Run CodeSniffer
           codesnifferExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/codesniffer.sh"; echo $?)
-          
+
           # Run Mess Detector
           messdetectorExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
-          
+
           if [[ $psalmExitCode -ne 0 || $messdetectorExitCode -ne 0 ]]; then
             mkdir -p artifacts
-          
+
             if [[ $psalmExitCode -ne 0 ]]; then
               docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts
             fi
@@ -62,6 +60,7 @@ jobs:
             if [[ $messdetectorExitCode -ne 0 ]]; then
               docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpmd-report.log artifacts    
             fi
+
             exit 1
           fi
           exit 0
@@ -92,54 +91,41 @@ jobs:
           name: unit-test-artifacts
           path: ./artifacts/unit
 
+      - name: Prepare mutation tests
+        run: |
+          if ! git show-ref --quiet refs/heads/develop; then
+            git fetch origin develop:develop
+            docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc
+            docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "chown -R root:root .git"
+          fi
+
       - name: Run mutation tests
         run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHPMinMSI.sh"
+
+      - name: Copy reports from mutation tests
+        if: always()
+        run: |
           mkdir -p artifacts/mutation
-          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
-          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.log artifacts/mutation
-          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.html artifacts/mutation
-          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/summary.log artifacts/mutation
+
+          if docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "test -f /var/www/html/BuildADoc/bin/output/mutation/infection.log"; then
+            docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.log artifacts/mutation
+          fi
+
+          if docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "test -f /var/www/html/BuildADoc/bin/output/mutation/infection.html"; then
+            docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.html artifacts/mutation
+          fi
+
+          if docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "test -f /var/www/html/BuildADoc/bin/output/mutation/summary.log"; then
+            docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/summary.log artifacts/mutation
+          fi  
 
       - name: Upload artifacts from mutation tests
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mutation-test-artifacts
           path: ./artifacts/mutation
-
-      - name: Check if Code Coverage and Mutation Score improved
-        run: |
-          
-          # Get previous coverage and mutation score
-          previous_coverage=$(grep -oP '(?<=\[Code Coverage\]\(https:\/\/img\.shields\.io\/badge\/Code_Coverage-)[0-9.]+' README.md)
-          previous_mutation_score=$(grep -oP '(?<=\[Mutation Score\]\(https:\/\/img\.shields\.io\/badge\/Mutation_Score-)[0-9.]+' README.md)
-
-          # Get current coverage
-          current_coverage=$(grep -oP 'Lines:\s+\K[0-9.]+' artifacts/unit/coverage.txt)
-
-          # Get current mutation score
-          total=$(grep -E 'Total' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
-          killed=$(grep -E 'Killed' artifacts/mutation/summary.log | grep -Eo '[0-9]+')
-          current_mutation_score=$(echo "scale=4; $killed / $total * 100" | bc)
-          current_mutation_score=$(printf "%.2f\n" $current_mutation_score)
-
-          # Convert floating point numbers to integers for comparison
-          current_coverage_int=$(echo "($current_coverage * 100 + 0.5)/1" | bc)
-          previous_coverage_int=$(echo "($previous_coverage * 100 + 0.5)/1" | bc)
-          current_mutation_score_int=$(echo "($current_mutation_score * 100 + 0.5)/1" | bc)
-          previous_mutation_score_int=$(echo "($previous_mutation_score * 100 + 0.5)/1" | bc)
-
-          # Check if coverage or mutation score got worse
-          if (( $current_coverage_int < $previous_coverage_int )) || (( $current_mutation_score_int < $previous_mutation_score_int )); then
-            echo "Code coverage or mutation score got worse."
-            echo "Current Code Coverage: $current_coverage %"
-            echo "Previous Code Coverage: $previous_coverage %"
-            echo "Current Mutation Score: $current_mutation_score %"
-            echo "Previous Mutation Score: $previous_mutation_score %"
-            exit 1
-          else
-            echo "Code coverage and mutation score improved or remained the same."
-            exit 0
-          fi
 
       - name: Stop container
         if: always()

@@ -24,5 +24,3 @@ services:
       dockerfile: res/docker/images/Dockerfile-dev
     image: ghcr.io/gobst/buildadoc/buildadoc-dev:1.0.0
     container_name: buildadoc-dev_container
-    environment:
-      - "PHP_IDE_CONFIG=serverName=docker_buildadoc"

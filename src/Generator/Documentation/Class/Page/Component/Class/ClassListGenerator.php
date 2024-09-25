@@ -51,14 +51,13 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($listType);
 
-        $list = '';
-
+        $classList = '';
         if (!$classes->isEmpty()) {
             $sortedClasses = $classes->sortBy('name');
-            $list = $this->fetchList($sortedClasses, $format, $link, $listType, $mainDirectory);
+            $classList = $this->fetchList($sortedClasses, $format, $link, $listType, $mainDirectory);
         }
 
-        return rtrim($list);
+        return rtrim($classList);
     }
 
     /**
@@ -68,24 +67,23 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
      */
     private function fetchList(
         Collection $classes,
-        string     $format,
-        bool       $link,
-        string     $listType,
-        string     $mainDirectory
+        string $format,
+        bool $link,
+        string $listType,
+        string $mainDirectory
     ): string
     {
-        $list = '';
+        $classList = '';
         /** @var ArrayIterator $iterator */
         $iterator = $classes->getIterator();
-
         while ($iterator->valid()) {
             /** @var ClassDto $class */
             $class = $iterator->current();
-            $list .= $this->generateClassLine($class, $format, $link, $listType, $mainDirectory);
+            $classList .= $this->generateClassLine($class, $format, $link, $listType, $mainDirectory);
             $iterator->next();
         }
 
-        return $list;
+        return $classList;
     }
 
     /**
