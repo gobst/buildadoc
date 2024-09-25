@@ -22,6 +22,10 @@ use Illuminate\Support\Collection;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 
+/**
+ * @psalm-suppress all
+ * @SuppressWarnings(PHPMD)
+ */
 final readonly class ClassListGenerator implements ClassListGeneratorInterface
 {
     private const string LIST_TYPE = 'class_list';
@@ -39,8 +43,6 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
      * @psalm-param non-empty-string $listType
      * @param Collection<int, ClassDto> $classes
      * @throws InvalidArgumentException
-     * @psalm-suppress all
-     * @SuppressWarnings(PHPMD)
      */
     public function generate(
         Collection $classes,
