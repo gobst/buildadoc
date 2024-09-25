@@ -77,6 +77,7 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
 
         /** @var ArrayIterator $iterator */
         $iterator = $classes->getIterator();
+
         while ($iterator->valid()) {
             /** @var ClassDto $class */
             $class = $iterator->current();
