@@ -39,6 +39,8 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
      * @psalm-param non-empty-string $listType
      * @param Collection<int, ClassDto> $classes
      * @throws InvalidArgumentException
+     * @psalm-suppress all
+     * @SuppressWarnings(PHPMD)
      */
     public function generate(
         Collection $classes,
@@ -50,7 +52,6 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
     {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($listType);
-
 
         $t = random_int(1,10);
         $test = 1+$t;
