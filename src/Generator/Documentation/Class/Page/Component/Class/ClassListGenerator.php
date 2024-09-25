@@ -57,7 +57,7 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
             $t = 'sfdfds';
         }
 
-        $classList = '';
+        $classList = $t;
         if (!$classes->isEmpty()) {
             $sortedClasses = $classes->sortBy('name');
             $classList = $this->fetchList($sortedClasses, $format, $link, $listType, $mainDirectory);
