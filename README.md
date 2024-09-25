@@ -1,6 +1,6 @@
 [![Latest Stable Version](https://poser.pugx.org/gobst/buildadoc/version.svg)](https://packagist.org/packages/gobst/buildadoc)
 [![Latest Unstable Version](https://poser.pugx.org/gobst/buildadoc/v/unstable.svg)](https://packagist.org/packages/gobst/buildadoc)
-[![License](http://poser.pugx.org/gobst/buildadoc/license.svg)](https://packagist.org/packages/gobst/buildadoc)
+[![License](https://poser.pugx.org/gobst/buildadoc/license.svg)](https://packagist.org/packages/gobst/buildadoc)
 [![PHP Version Require](https://poser.pugx.org/gobst/buildadoc/require/php)](https://packagist.org/packages/gobst/buildadoc)
 [![Coverage Status](https://coveralls.io/repos/github/gobst/buildadoc/badge.svg?branch=main)](https://coveralls.io/github/gobst/buildadoc?branch=main)
 [![Mutation Score](https://img.shields.io/badge/Mutation_Score-35.87%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-35.87%25-brightgreen)
