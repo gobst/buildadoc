@@ -100,7 +100,6 @@ jobs:
             git fetch origin develop:develop
             docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc
             docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "chown -R root:root .git"
-            docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
           fi
 
       - name: Run mutation tests
