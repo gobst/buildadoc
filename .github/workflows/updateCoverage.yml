@@ -40,6 +40,7 @@ jobs:
         with:
           github-token: ${{ secrets.TOKEN }}
           path-to-lcov: bin/output/coverage.xml
+          debug: true
           repo_token: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
       - name: Stop container
