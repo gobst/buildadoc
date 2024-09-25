@@ -36,7 +36,7 @@ jobs:
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.xml bin/output
 
       - name: Coveralls
-        uses: coverallsapp/github-action@v1
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.TOKEN }}
           path-to-lcov: bin/output/coverage.xml
