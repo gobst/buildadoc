@@ -101,23 +101,25 @@ jobs:
           fi
 
       - name: Run mutation tests
-        run: |   
-          exitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHPMinMSI.sh"; echo $?)
-          echo $exitCode
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHPMinMSI.sh"
 
+      - name: Copy reports from mutation tests
+        if: always()
+        run: |
           mkdir -p artifacts/mutation
 
           if docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "test -f /var/www/html/BuildADoc/bin/output/mutation/infection.log"; then
             docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.log artifacts/mutation
           fi
-          
+
           if docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "test -f /var/www/html/BuildADoc/bin/output/mutation/infection.html"; then
             docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.html artifacts/mutation
           fi
-          
+
           if docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "test -f /var/www/html/BuildADoc/bin/output/mutation/summary.log"; then
             docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/summary.log artifacts/mutation
-          fi    
+          fi  
 
       - name: Upload artifacts from mutation tests
         if: always()
