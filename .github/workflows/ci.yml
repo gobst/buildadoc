@@ -5,9 +5,6 @@ on:
     branches:
       - "main"
       - "develop"
-  push:
-    branches:
-      - "develop"
 
 jobs:
   run-ci:
@@ -44,27 +41,28 @@ jobs:
           
           # Run PHP-CS-Fixer
           csfixerExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/csfixer.sh dry-run"; echo $?)
-          
+
           # Run Psalm
           psalmExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
 
           # Run CodeSniffer
           codesnifferExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/codesniffer.sh"; echo $?)
-          
+
           # Run Mess Detector
           messdetectorExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
-          
+
           if [[ $psalmExitCode -ne 0 || $messdetectorExitCode -ne 0 ]]; then
             mkdir -p artifacts
-          
-            #if [[ $psalmExitCode -ne 0 ]]; then
-             # docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts
-            #fi
 
-            #if [[ $messdetectorExitCode -ne 0 ]]; then
-             # docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpmd-report.log artifacts    
-            #fi
-            #exit 1
+            if [[ $psalmExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/psalm-report.log artifacts
+            fi
+
+            if [[ $messdetectorExitCode -ne 0 ]]; then
+              docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/phpmd-report.log artifacts    
+            fi
+
+            exit 1
           fi
           exit 0
 
