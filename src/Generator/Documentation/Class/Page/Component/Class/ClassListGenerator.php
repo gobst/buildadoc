@@ -74,7 +74,6 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
     ): string
     {
         $classList = '';
-
         /** @var ArrayIterator $iterator */
         $iterator = $classes->getIterator();
         while ($iterator->valid()) {
