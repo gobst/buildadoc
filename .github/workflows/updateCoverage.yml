@@ -11,21 +11,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
+      - name: Login to GitHub packages
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Install dependencies
-        run: composer install --no-progress --no-suggest --prefer-dist
+      - name: Pull image
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev pull
 
-      - name: Run tests
-        run: scripts/test/phpunit.sh
+      - name: Start container
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev up -d
+
+      - name: Run composer
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
+
+      - name: Run unit tests
+        run: |
+          mkdir -p bin/output
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run"
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.xml bin/output
 
       - name: Coveralls
         uses: coverallsapp/github-action@v1
         with:
           github-token: ${{ secrets.TOKEN }}
-          path-to-lcov: bin/output/unit/coverage.xml
+          path-to-lcov: bin/output/coverage.xml
