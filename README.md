@@ -1,5 +1,12 @@
+[![Latest Stable Version](http://poser.pugx.org/gobst/buildadoc/v)](https://packagist.org/packages/gobst/buildadoc)
+[![Latest Unstable Version](http://poser.pugx.org/gobst/buildadoc/v/unstable)](https://packagist.org/packages/gobst/buildadoc)
+[![License](http://poser.pugx.org/gobst/buildadoc/license)](https://packagist.org/packages/gobst/buildadoc)
+[![PHP Version Require](http://poser.pugx.org/gobst/buildadoc/require/php)](https://packagist.org/packages/gobst/buildadoc)
 [![Code Coverage](https://img.shields.io/badge/Code_Coverage-44.69%25-brightgreen)](https://img.shields.io/badge/Code_Coverage-44.69%25-brightgreen)
 [![Mutation Score](https://img.shields.io/badge/Mutation_Score-35.87%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-35.87%25-brightgreen)
+[![Total Downloads](http://poser.pugx.org/gobst/buildadoc/downloads)](https://packagist.org/packages/gobst/buildadoc)
+[![Monthly Downloads](http://poser.pugx.org/gobst/buildadoc/d/monthly)](https://packagist.org/packages/gobst/buildadoc)
+[![Daily Downloads](http://poser.pugx.org/gobst/buildadoc/d/daily)](https://packagist.org/packages/gobst/buildadoc)
 
 # BuildADoc
 
