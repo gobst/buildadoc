@@ -101,11 +101,11 @@ jobs:
           fi
 
       - name: Run mutation tests
-        run: |
+        run: |   
+          echo 'ddd8'
+          
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHPMinMSI.sh"
           mkdir -p artifacts/mutation
-
-          echo 'ddd8'
 
           if docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "test -f /var/www/html/BuildADoc/bin/output/mutation/infection.log"; then
             echo 'ddd'
