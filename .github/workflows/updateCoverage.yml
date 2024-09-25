@@ -40,7 +40,7 @@ jobs:
         with:
           github-token: ${{ secrets.TOKEN }}
           path-to-lcov: bin/output/coverage.xml
-          coveralls-repo-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          coveralls-repo-token: 8xwcuUUorU8QlbYJeoLFfyuq86ijiSbaj9pG
 
       - name: Stop container
         if: always()
