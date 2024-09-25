@@ -39,7 +39,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.TOKEN }}
-          path-to-lcov: bin/output/unit/coverage.xml
+          path-to-lcov: bin/output/coverage.xml
           coveralls-repo-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
       - name: Stop container
