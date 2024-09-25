@@ -5,8 +5,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/gobst/buildadoc/badge.svg?branch=main)](https://coveralls.io/github/gobst/buildadoc?branch=main)
 [![Mutation Score](https://img.shields.io/badge/Mutation_Score-35.87%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-35.87%25-brightgreen)
 [![Downloads](https://poser.pugx.org/gobst/buildadoc/d/total.svg)](https://packagist.org/packages/gobst/buildadoc)
-[![Monthly Downloads](http://poser.pugx.org/gobst/buildadoc/d/monthly.svg)](https://packagist.org/packages/gobst/buildadoc)
-[![Daily Downloads](http://poser.pugx.org/gobst/buildadoc/d/daily.svg)](https://packagist.org/packages/gobst/buildadoc)
+[![Monthly Downloads](https://poser.pugx.org/gobst/buildadoc/d/monthly.svg)](https://packagist.org/packages/gobst/buildadoc)
+[![Daily Downloads](https://poser.pugx.org/gobst/buildadoc/d/daily.svg)](https://packagist.org/packages/gobst/buildadoc)
 
 # BuildADoc
 
