@@ -40,4 +40,9 @@ jobs:
         with:
           github-token: ${{ secrets.TOKEN }}
           path-to-lcov: bin/output/coverage.xml
-          coveralls-repo-token: ${{ secrets.COVERALLS_REPO_TOKEN }}r
+          coveralls-repo-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+
+      - name: Stop container
+        if: always()
+        run: |
+          docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev down
