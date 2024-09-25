@@ -94,6 +94,19 @@ jobs:
           name: unit-test-artifacts
           path: ./artifacts/unit
 
+      - name: Prepare mutation tests
+        run: |
+          git fetch --all
+          if ! git show-ref --quiet refs/heads/develop; then
+            git stash --include-untracked
+            git checkout -b develop origin/develop
+            git checkout @{-1}
+            docker cp .git buildadoc-dev_container:/var/www/html/BuildADoc
+            docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "chown -R root:root .git"
+            docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "git checkout develop && git stash pop"
+            docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "composer install"
+          fi
+
       - name: Run mutation tests
         run: |
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHPMinMSI.sh"
