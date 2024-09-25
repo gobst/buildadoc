@@ -1,12 +1,12 @@
-[![Latest Stable Version](http://poser.pugx.org/gobst/buildadoc/v)](https://packagist.org/packages/gobst/buildadoc)
-[![Latest Unstable Version](http://poser.pugx.org/gobst/buildadoc/v/unstable)](https://packagist.org/packages/gobst/buildadoc)
-[![License](http://poser.pugx.org/gobst/buildadoc/license)](https://packagist.org/packages/gobst/buildadoc)
-[![PHP Version Require](http://poser.pugx.org/gobst/buildadoc/require/php)](https://packagist.org/packages/gobst/buildadoc)
+[![Latest Stable Version](https://poser.pugx.org/gobst/buildadoc/version.svg)](https://packagist.org/packages/gobst/buildadoc)
+[![Latest Unstable Version](https://poser.pugx.org/gobst/buildadoc/v/unstable.svg)](https://packagist.org/packages/gobst/buildadoc)
+[![License](https://poser.pugx.org/gobst/buildadoc/license.svg)](https://packagist.org/packages/gobst/buildadoc)
+[![PHP Version Require](https://poser.pugx.org/gobst/buildadoc/require/php)](https://packagist.org/packages/gobst/buildadoc)
 [![Coverage Status](https://coveralls.io/repos/github/gobst/buildadoc/badge.svg?branch=main)](https://coveralls.io/github/gobst/buildadoc?branch=main)
 [![Mutation Score](https://img.shields.io/badge/Mutation_Score-35.87%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-35.87%25-brightgreen)
-[![Total Downloads](http://poser.pugx.org/gobst/buildadoc/downloads)](https://packagist.org/packages/gobst/buildadoc)
-[![Monthly Downloads](http://poser.pugx.org/gobst/buildadoc/d/monthly)](https://packagist.org/packages/gobst/buildadoc)
-[![Daily Downloads](http://poser.pugx.org/gobst/buildadoc/d/daily)](https://packagist.org/packages/gobst/buildadoc)
+[![Downloads](https://poser.pugx.org/gobst/buildadoc/d/total.svg)](https://packagist.org/packages/gobst/buildadoc)
+[![Monthly Downloads](https://poser.pugx.org/gobst/buildadoc/d/monthly.svg)](https://packagist.org/packages/gobst/buildadoc)
+[![Daily Downloads](https://poser.pugx.org/gobst/buildadoc/d/daily.svg)](https://packagist.org/packages/gobst/buildadoc)
 
 # BuildADoc
 
