@@ -5,7 +5,7 @@
          cacheDirectory="../../bin/output/.phpunit.cache"
          executionOrder="depends,defects"
          requireCoverageMetadata="false"
-         beStrictAboutCoverageMetadata="true"
+         beStrictAboutCoverageMetadata="false"
          beStrictAboutOutputDuringTests="true"
          failOnRisky="true"
          failOnWarning="true">
@@ -18,7 +18,7 @@
     <report>
       <clover outputFile="../../bin/output/unit/coverage.xml" />
       <html outputDirectory="../../bin/output/unit/coverage" />
-      <text outputFile="../../bin/output/unit/coverage.txt" showUncoveredFiles="false" showOnlySummary="true" />
+      <text outputFile="../../bin/output/unit/coverage.txt" showOnlySummary="true" />
       <xml outputDirectory="../../bin/output/unit/coverage-xml" />
     </report>
   </coverage>

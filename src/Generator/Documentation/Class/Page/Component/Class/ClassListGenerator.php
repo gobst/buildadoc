@@ -51,6 +51,11 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($listType);
 
+        $test = 'tt';
+        if($test === 'test'){
+            $t = 'sfdfds';
+        }
+
         $classList = '';
         if (!$classes->isEmpty()) {
             $sortedClasses = $classes->sortBy('name');
