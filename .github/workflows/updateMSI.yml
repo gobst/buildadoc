@@ -1,4 +1,4 @@
-name: Update msi
+name: Update MSI
 
 on:
   workflow_dispatch:
@@ -34,6 +34,8 @@ jobs:
           mkdir -p bin/output/mutation
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.json bin/output/mutation
+          cd bin/output/mutation
+          dir -ls
 
       - name: Upload MSI to Stryker Dashboard
         run: |
