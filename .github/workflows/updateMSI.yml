@@ -37,8 +37,11 @@ jobs:
 
       - name: Upload MSI to Stryker Dashboard
         run: |
-          curl -X POST "https://dashboard.stryker-mutator.io/api/reports/github.com/gobst/buildadoc" \
-          -H "Content-Type: application/json" \
+          curl -X PUT \
+          "https://dashboard.stryker-mutator.io/api/reports/github.com/gobst/buildadoc/main" \
+          -H 'Content-Type: application/json' \
+          -H 'Host: dashboard.stryker-mutator.io' \
+          -H "X-Api-Key: ${{ secrets.STRYKER_API_TOKEN }}" \
           -d "@bin/output/mutation/infection.json"
 
       - name: Stop container
