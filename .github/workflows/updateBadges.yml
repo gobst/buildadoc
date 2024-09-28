@@ -1,12 +1,18 @@
-name: "Update badges"
+name: Update badges
 
 on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Build and publish docker images"]
+    types:
+      - completed
+
   push:
     branches:
       - "main"
 
 jobs:
-  update-badges:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,67 +38,40 @@ jobs:
         run: |
           mkdir -p bin/output
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/phpunit.sh run"
-          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.txt bin/output
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/unit/coverage.xml bin/output
+
+      - name: Upload coverage report to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: bin/output/coverage.xml
 
       - name: Run mutation tests
         run: |
           mkdir -p bin/output/mutation
+
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
-          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/summary.log bin/output/mutation
+          docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.json bin/output/mutation
+          cd bin/output/mutation
 
-      - name: Update code coverage badge in README file
-        run: |
-          # Extract the coverage percentage from the coverage.txt file
-          COVERAGE=$(grep -oP 'Lines:\s+\K[0-9.]+%' bin/output/coverage.txt)
-          # Generate the badge link
-          BADGE="[![Code Coverage](https://img.shields.io/badge/Code_Coverage-${COVERAGE}25-brightgreen)](https://img.shields.io/badge/Code_Coverage-${COVERAGE}25-brightgreen)"
-          # Update README file
-          if [ ! -s README.md ]; then
-            echo "$BADGE" >> README.md
-          else
-            sed -i "s|\[!\[Code Coverage\].*](.*)|$BADGE|g" README.md || echo "$BADGE" >> README.md
+          if [ ! -f "infection.json" ]; then
+            echo "The infection.json file doesn't exist!"
+            exit 1
           fi
 
-      - name: Update MSI badge in README file
-        run: |
-          # Extract values from summary.log file
-          TOTAL=$(grep -E 'Total' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
-          KILLED=$(grep -E 'Killed' bin/output/mutation/summary.log | grep -Eo '[0-9]+')
-          
-          # Calculate MSI
-          MSI=$(echo "scale=4; $KILLED / $TOTAL * 100" | bc)
-          MSI=$(printf "%.2f\n" $MSI)
-          
-          # Generate badge link
-          BADGE="[![Mutation Score](https://img.shields.io/badge/Mutation_Score-${MSI}%25-brightgreen)](https://img.shields.io/badge/Mutation_Score-${MSI}%25-brightgreen)"
-          
-          # Update README file
-          if [ ! -s README.md ]; then
-            echo "$BADGE" >> README.md
-          else
-            sed -i "s|\[!\[Mutation Score\].*](.*)|$BADGE|g" README.md || echo "$BADGE" >> README.md
-          fi
+          mutationScore=$(jq '.stats.msi' "infection.json")
+          echo "{\"mutationScore\": $mutationScore}" > mutationScore.json
 
-      - name: Commit and push changes
+      - name: Upload MSI to Stryker Dashboard
         run: |
-          if git log -1 --pretty=format:'' --name-only | grep -q README.md; then
-            git config --global user.email "github@sourcegate.de"
-            git config --global user.name "gobst"
-            git add README.md
-            git commit -m "Update badges. This commit was created automatically."
-            git push
-          fi
+          cat bin/output/mutation/mutationScore.json
 
-      - name: Create pull request
-        env:
-          GH_TOKEN: ${{ secrets.TOKEN }}
-        run: |
-          if git log -1 --pretty=format:'' --name-only | grep -q README.md; then
-            gh pr create --title "Merge main into develop" \
-                         --body "Automatically created pull request to merge changes from main into develop." \
-                         --base develop \
-                         --head main
-          fi
+          curl -X PUT \
+          "https://dashboard.stryker-mutator.io/api/reports/github.com/gobst/buildadoc/main" \
+          -H 'Content-Type: application/json' \
+          -H 'Host: dashboard.stryker-mutator.io' \
+          -H "X-Api-Key: ${{ secrets.STRYKER_API_TOKEN }}" \
+          -d "@bin/output/mutation/mutationScore.json"
 
       - name: Stop container
         if: always()
