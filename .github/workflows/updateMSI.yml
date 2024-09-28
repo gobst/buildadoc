@@ -41,6 +41,8 @@ jobs:
             exit 1
           fi
           
+          cat infection.json
+          
           mutationScore=$(jq '.summary.mutationScore' "infection.json")
           echo "{\"mutationScore\": $mutationScore}" > mutationScore.json
           cat mutationScore.json
