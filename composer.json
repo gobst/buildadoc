@@ -1,6 +1,8 @@
 {
   "name": "gobst/buildadoc",
   "description": "BuildADoc is a PHP documentation generator designed specifically for DokuWiki.",
+  "keywords": ["php", "documentation", "generator", "dokuwiki"],
+  "minimum-stability": "stable",
   "type": "library",
   "license": "BSD-3-Clause",
   "authors": [
