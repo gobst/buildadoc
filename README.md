@@ -1,12 +1,12 @@
-[![Latest Stable Version](https://poser.pugx.org/gobst/buildadoc/version.svg)](https://packagist.org/packages/gobst/buildadoc)
-[![Latest Unstable Version](https://poser.pugx.org/gobst/buildadoc/v/unstable.svg)](https://packagist.org/packages/gobst/buildadoc)
-[![License](https://poser.pugx.org/gobst/buildadoc/license.svg)](https://packagist.org/packages/gobst/buildadoc)
-[![PHP Version Require](https://poser.pugx.org/gobst/buildadoc/require/php)](https://packagist.org/packages/gobst/buildadoc)
+[![Latest Stable Version](http://poser.pugx.org/gobst/buildadoc/v)](https://packagist.org/packages/gobst/buildadoc)
+[![Latest Unstable Version](http://poser.pugx.org/gobst/buildadoc/v/unstable)](https://packagist.org/packages/gobst/buildadoc)
+[![License](http://poser.pugx.org/gobst/buildadoc/license)](https://packagist.org/packages/gobst/buildadoc)
+[![PHP Version Require](http://poser.pugx.org/gobst/buildadoc/require/php)](https://packagist.org/packages/gobst/buildadoc)
 [![Coverage Status](https://coveralls.io/repos/github/gobst/buildadoc/badge.svg?branch=main)](https://coveralls.io/github/gobst/buildadoc?branch=main)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fgobst%2Fbuildadoc%2Fmain)](https://dashboard.stryker-mutator.io/api/reports/github.com/gobst/buildadoc/main)
-[![Downloads](https://poser.pugx.org/gobst/buildadoc/d/total.svg)](https://packagist.org/packages/gobst/buildadoc)
-[![Monthly Downloads](https://poser.pugx.org/gobst/buildadoc/d/monthly.svg)](https://packagist.org/packages/gobst/buildadoc)
-[![Daily Downloads](https://poser.pugx.org/gobst/buildadoc/d/daily.svg)](https://packagist.org/packages/gobst/buildadoc)
+[![Total Downloads](http://poser.pugx.org/gobst/buildadoc/downloads)](https://packagist.org/packages/gobst/buildadoc)
+[![Monthly Downloads](http://poser.pugx.org/gobst/buildadoc/d/monthly)](https://packagist.org/packages/gobst/buildadoc)
+[![Daily Downloads](http://poser.pugx.org/gobst/buildadoc/d/daily)](https://packagist.org/packages/gobst/buildadoc)
 
 # BuildADoc
 
