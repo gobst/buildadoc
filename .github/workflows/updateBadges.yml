@@ -7,10 +7,6 @@ on:
     types:
       - completed
 
-  push:
-    branches:
-      - "main"
-
 jobs:
   build:
     runs-on: ubuntu-latest
