@@ -39,7 +39,7 @@ jobs:
         run: |
           curl -X POST "https://dashboard.stryker-mutator.io/api/reports/github.com/gobst/buildadoc" \
           -H "Content-Type: application/json" \
-          -d bin/output/mutation/infection.json
+          -d "@bin/output/mutation/infection.json"
 
       - name: Stop container
         if: always()
