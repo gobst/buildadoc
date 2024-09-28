@@ -35,8 +35,7 @@ jobs:
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.json bin/output/mutation
           cd bin/output/mutation
-          dir -ls
-          cat infection.json
+          jq '.schemaVersion = "1.0"' infection.json > tmp.json && mv tmp.json infection.json
 
       - name: Upload MSI to Stryker Dashboard
         run: |
