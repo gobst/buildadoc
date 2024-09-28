@@ -42,13 +42,14 @@ jobs:
           fi
           
           cat infection.json
-          
-          mutationScore=$(jq '.msi' "infection.json")
+
+          mutationScore=$(jq 'msi' "infection.json")
           echo "{\"mutationScore\": $mutationScore}" > mutationScore.json
-          cat mutationScore.json
 
       - name: Upload MSI to Stryker Dashboard
         run: |
+          cat bin/output/mutation/mutationScore.json
+
           curl -X PUT \
           "https://dashboard.stryker-mutator.io/api/reports/github.com/gobst/buildadoc/main" \
           -H 'Content-Type: application/json' \
