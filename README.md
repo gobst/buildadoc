@@ -3,7 +3,7 @@
 [![License](https://poser.pugx.org/gobst/buildadoc/license.svg)](https://packagist.org/packages/gobst/buildadoc)
 [![PHP Version Require](https://poser.pugx.org/gobst/buildadoc/require/php)](https://packagist.org/packages/gobst/buildadoc)
 [![Coverage Status](https://coveralls.io/repos/github/gobst/buildadoc/badge.svg?branch=main)](https://coveralls.io/github/gobst/buildadoc?branch=main)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fbuildadoc)](https://dashboard.stryker-mutator.io/api/reports/github.com/gobst/buildadoc/main)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fgobst%2Fbuildadoc%2Fmain)](https://dashboard.stryker-mutator.io/api/reports/github.com/gobst/buildadoc/main)
 [![Downloads](https://poser.pugx.org/gobst/buildadoc/d/total.svg)](https://packagist.org/packages/gobst/buildadoc)
 [![Monthly Downloads](https://poser.pugx.org/gobst/buildadoc/d/monthly.svg)](https://packagist.org/packages/gobst/buildadoc)
 [![Daily Downloads](https://poser.pugx.org/gobst/buildadoc/d/daily.svg)](https://packagist.org/packages/gobst/buildadoc)
