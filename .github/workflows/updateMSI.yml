@@ -36,6 +36,7 @@ jobs:
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.json bin/output/mutation
           cd bin/output/mutation
           dir -ls
+          cat infection.json
 
       - name: Upload MSI to Stryker Dashboard
         run: |
