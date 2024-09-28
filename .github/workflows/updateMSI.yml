@@ -43,7 +43,7 @@ jobs:
           
           cat infection.json
 
-          mutationScore=$(jq 'msi' "infection.json")
+          mutationScore=$(jq '.stats.msi' "infection.json")
           echo "{\"mutationScore\": $mutationScore}" > mutationScore.json
 
       - name: Upload MSI to Stryker Dashboard
