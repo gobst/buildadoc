@@ -1,5 +1,5 @@
 ![Latest Stable Version](https://img.shields.io/packagist/v/gobst/buildadoc?label=latest%20stable)
-[![Latest Unstable Version](https://img.shields.io/packagist/v/gobst/buildadoc/unstable?label=latest%20unstable&color=orange)]
+![Unstable Version](https://img.shields.io/packagist/v/gobst/buildadoc/unstable?label=latest%20unstable&color=orange)
 ![License](https://img.shields.io/packagist/l/gobst/buildadoc?label=license&color=green)
 ![PHP Version Required](https://img.shields.io/packagist/php-v/gobst/buildadoc?label=PHP%20required&color=yellow)
 [![Coverage Status](https://coveralls.io/repos/github/gobst/buildadoc/badge.svg?branch=main)](https://coveralls.io/github/gobst/buildadoc?branch=main)
