@@ -12,4 +12,4 @@
 ############################################################################
 
 # Run mutation tests
-bin/infection --threads=4 --configuration=cfg/dev/infection.json5
+bin/infection --threads=4 --configuration=cfg/dev/infection.json5 --coverage=../../bin/output/unit
