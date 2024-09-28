@@ -36,7 +36,7 @@ jobs:
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.json bin/output/mutation
           cd bin/output/mutation
 
-          if [ ! -f "$report_file" ]; then
+          if [ ! -f "infection.json" ]; then
             echo "The infection.json file doesn't exist!"
             exit 1
           fi
