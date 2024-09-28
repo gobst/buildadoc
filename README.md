@@ -1,5 +1,4 @@
-[![Latest Stable Version](https://poser.pugx.org/gobst/buildadoc/v)](https://packagist.org/packages/gobst/buildadoc)
-![Latest Stable Version](https://img.shields.io/packagist/v/gobst/buildadoc)
+![Latest Stable Version](https://img.shields.io/packagist/v/gobst/buildadoc?label=latest%20stable%20version)
 [![Latest Unstable Version](https://poser.pugx.org/gobst/buildadoc/v/unstable.svg)](https://packagist.org/packages/gobst/buildadoc)
 [![License](https://poser.pugx.org/gobst/buildadoc/license.svg)](https://packagist.org/packages/gobst/buildadoc)
 [![PHP Version Require](https://poser.pugx.org/gobst/buildadoc/require/php)](https://packagist.org/packages/gobst/buildadoc)
