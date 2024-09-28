@@ -35,7 +35,16 @@ jobs:
           docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "XDEBUG_MODE=coverage ./scripts/test/infectionPHP.sh"
           docker cp buildadoc-dev_container:/var/www/html/BuildADoc/bin/output/mutation/infection.json bin/output/mutation
           cd bin/output/mutation
-          jq '.schemaVersion = "1.0"' infection.json > tmp.json && mv tmp.json infection.json
+
+          if [ ! -f "$report_file" ]; then
+            echo "The infection.json file doesn't exist!"
+            exit 1
+          fi
+          
+          mutationScore=$(jq '.summary.mutationScore' "infection.json")
+          echo "{\"mutationScore\": $mutationScore}" > mutationScore.json
+          cat mutationScore.json
+          
 
       - name: Upload MSI to Stryker Dashboard
         run: |
@@ -44,7 +53,7 @@ jobs:
           -H 'Content-Type: application/json' \
           -H 'Host: dashboard.stryker-mutator.io' \
           -H "X-Api-Key: ${{ secrets.STRYKER_API_TOKEN }}" \
-          -d "@bin/output/mutation/infection.json"
+          -d "@bin/output/mutation/mutationScore.json"
 
       - name: Stop container
         if: always()
