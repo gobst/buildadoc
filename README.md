@@ -1,11 +1,11 @@
 ![Latest Stable Version](https://img.shields.io/packagist/v/gobst/buildadoc?label=latest%20stable&color=darkgreen)
-![Latest Unstable Version](https://img.shields.io/packagist/v/gobst/buildadoc/unstable?label=latest%20unstable&color=blue)
+![Latest Unstable Version](https://img.shields.io/packagist/v/gobst/buildadoc/unstable?label=latest%20unstable&color=darkgreen)
 ![License](https://img.shields.io/packagist/l/gobst/buildadoc?label=license&color=darkgreen)
-![PHP Version Required](https://img.shields.io/packagist/php-v/gobst/buildadoc?label=PHP%20required&color=blue)
+![PHP Version Required](https://img.shields.io/packagist/php-v/gobst/buildadoc?label=PHP%20required&color=darkgreen)
 [![Coverage Status](https://coveralls.io/repos/github/gobst/buildadoc/badge.svg?branch=main)](https://coveralls.io/github/gobst/buildadoc?branch=main)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fgobst%2Fbuildadoc%2Fmain)](https://dashboard.stryker-mutator.io/api/reports/github.com/gobst/buildadoc/main)
 ![Total Downloads](https://img.shields.io/packagist/dt/gobst/buildadoc?label=downloads&color=blue)
-![Monthly Downloads](https://img.shields.io/packagist/dm/gobst/buildadoc?label=downloads&color=darkgreen)
+![Monthly Downloads](https://img.shields.io/packagist/dm/gobst/buildadoc?label=downloads&color=blue)
 ![Daily Downloads](https://img.shields.io/packagist/dd/gobst/buildadoc?label=downloads&color=blue)
 
 # BuildADoc
