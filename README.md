@@ -1,5 +1,4 @@
 [![Latest Stable Version](http://poser.pugx.org/gobst/buildadoc/v)](https://packagist.org/packages/gobst/buildadoc)
-[![Latest Stable Version](https://poser.pugx.org/phpunit/phpunit/v)](https://packagist.org/packages/phpunit/phpunit)
 [![Latest Unstable Version](http://poser.pugx.org/gobst/buildadoc/v/unstable)](https://packagist.org/packages/gobst/buildadoc)
 [![License](http://poser.pugx.org/gobst/buildadoc/license)](https://packagist.org/packages/gobst/buildadoc)
 [![PHP Version Require](http://poser.pugx.org/gobst/buildadoc/require/php)](https://packagist.org/packages/gobst/buildadoc)
