@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Pipeline\Page;
@@ -29,8 +31,7 @@ final readonly class MethodPageMarkerPipeline implements MethodPageMarkerPipelin
     public function __construct(
         private MethodPageFetcherProviderInterface $fetcherProvider,
         private Pipeline                           $pipeline
-    )
-    {
+    ) {
     }
 
     public function handlePipeline(Method $method, string $format, string $lang): Collection

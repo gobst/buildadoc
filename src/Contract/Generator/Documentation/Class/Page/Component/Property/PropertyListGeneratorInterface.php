@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -9,7 +10,7 @@
  *
  */
  
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Contract\Generator\Documentation\Class\Page\Component\Property;
 

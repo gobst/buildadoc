@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Service\Class\Documentation\Page;
@@ -35,8 +37,7 @@ final readonly class ClassPageService implements ClassPageServiceInterface, File
         private MethodPageServiceInterface       $methodPageService,
         private ClassPageMarkerPipelineInterface $classPageMPipeline,
         private TemplateServiceProviderInterface $tmplServiceProvider
-    )
-    {
+    ) {
     }
 
     /**
@@ -49,8 +50,7 @@ final readonly class ClassPageService implements ClassPageServiceInterface, File
         string $format,
         string $lang,
         string $mainDirectory
-    ): Collection
-    {
+    ): Collection {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 

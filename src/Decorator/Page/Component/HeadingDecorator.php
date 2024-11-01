@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Decorator\Page\Component;
@@ -29,8 +31,7 @@ final readonly class HeadingDecorator implements TextDecoratorInterface, DokuWik
     public function __construct(
         private DecoratorInterface $decorator,
         private int $level
-    )
-    {
+    ) {
         Assert::positiveInteger($level);
     }
 

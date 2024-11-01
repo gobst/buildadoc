@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,7 +9,8 @@
  * file that was distributed with this source code.
  *
  */
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Class\Marker;
 
@@ -30,7 +32,8 @@ final readonly class ConstructorMarkerGenerator implements ConstructorMarkerGene
         private TranslationServiceInterface $translationService,
         private HeadingGeneratorInterface $headingGenerator,
         private MethodLineGeneratorInterface $methodLineGenerator
-    ) {}
+    ) {
+    }
 
     /**
      * @throws InvalidArgumentException

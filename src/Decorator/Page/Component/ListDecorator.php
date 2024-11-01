@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Decorator\Page\Component;
@@ -29,8 +31,7 @@ final readonly class ListDecorator implements TextDecoratorInterface, DokuWikiFo
         private DecoratorInterface $formatter,
         private string $listType,
         private string $listItemType = 'ordered'
-    )
-    {
+    ) {
         Assert::stringNotEmpty($this->listType);
         Assert::stringNotEmpty($this->listItemType);
     }
@@ -61,8 +62,7 @@ final readonly class ListDecorator implements TextDecoratorInterface, DokuWikiFo
     private function formatListItemToDokuWiki(
         string $format,
         array  $textParts
-    ): string
-    {
+    ): string {
         $type = $this->listItemType === 'ordered' ? '-' : '*';
         $formatStr = $this->formatter->getFormat($format, $this->listType);
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Service\File;
@@ -46,8 +48,7 @@ final readonly class FileService implements FileServiceInterface
         Collection $files,
         array      $excludeFiles = [],
         string     $extension = 'php'
-    ): Collection
-    {
+    ): Collection {
         Assert::stringNotEmpty($directory);
         Assert::stringNotEmpty($extension);
         if (is_dir($directory)) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,7 +9,8 @@
  * file that was distributed with this source code.
  *
  */
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Service\File\Template;
 
@@ -20,7 +22,7 @@ use ReflectionException;
 
 final readonly class TableOfContentsPageTemplateService implements PageTemplateServiceInterface
 {
-    private const string TEMPLATE_FILE = __DIR__.'/../../../../res/templates/dokuwiki/tableOfContentsTmpl.txt';
+    private const string TEMPLATE_FILE = __DIR__ . '/../../../../res/templates/dokuwiki/tableOfContentsTmpl.txt';
 
     public function __construct(private TemplateServiceInterface $templateService)
     {

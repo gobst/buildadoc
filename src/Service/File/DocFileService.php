@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Service\File;
@@ -25,8 +27,7 @@ final readonly class DocFileService implements DocFileServiceInterface, FileExte
 {
     public function __construct(
         private FileServiceInterface $fileService
-    )
-    {
+    ) {
     }
 
     /**
@@ -62,7 +63,7 @@ final readonly class DocFileService implements DocFileServiceInterface, FileExte
                 $page->getFileExtension()
             );
 
-            if(!$this->fileService->directoryExists($pageFile)){
+            if (!$this->fileService->directoryExists($pageFile)) {
                 $this->fileService->dumpFile(
                     $pageFile,
                     $page->getContent()
