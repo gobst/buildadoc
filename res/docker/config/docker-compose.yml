@@ -9,18 +9,16 @@
 #
 ############################################################################
 
-version: "3"
-
 services:
   buildadoc:
     build:
       context: ../../..
       dockerfile: res/docker/images/Dockerfile
-    image: gobst/buildadoc/buildadoc:1.0.0
+    image: gobst/buildadoc:1.0.0
     container_name: buildadoc_container
   buildadoc-dev:
     build:
       context: ../../..
       dockerfile: res/docker/images/Dockerfile-dev
-    image: gobst/buildadoc/buildadoc-dev:1.0.0
+    image: gobst/buildadoc-dev:1.0.0
     container_name: buildadoc-dev_container
