@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,7 +9,8 @@
  * file that was distributed with this source code.
  *
  */
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Service\Class\Data;
 
@@ -130,7 +132,6 @@ final class ClassDataService implements ClassDataServiceInterface
         $properties = Collection::make();
         $propertiesAst = $this->nodeFinder->findInstanceOf($ast, Node\Stmt\Property::class);
         foreach ($propertiesAst as $prop) {
-
             $modifiers = $this->modifierDataService->getModifiers($prop);
             $type = !empty($prop->type->name) ? $prop->type->name : '';
 
@@ -258,7 +259,7 @@ final class ClassDataService implements ClassDataServiceInterface
         $parentClassName = $class->getParentClassName();
         if (!empty($parentClassName)) {
             $parentClass = $this->getSingleClass($parentClassName, $classes);
-            if($parentClass !== null){
+            if ($parentClass !== null) {
                 $parentClasses->push($parentClass);
                 if (!empty($parentClass->getParentClassName())) {
                     $this->getAllParentClassesByClass($parentClass, $classes, $parentClasses);
@@ -279,16 +280,15 @@ final class ClassDataService implements ClassDataServiceInterface
         ClassDto $class,
         Collection $parentClasses,
         Collection $files
-    ): Collection
-    {
+    ): Collection {
         /** @var Collection<int, File> $fileCollection */
         $fileCollection = Collection::make();
         $file = $this->fileService->getSingleFile($class->getFilepath(), $files);
-        if($file !== null){
+        if ($file !== null) {
             $fileCollection->push($file);
             foreach ($parentClasses as $parentClass) {
                 $file = $this->fileService->getSingleFile($parentClass->getFilepath(), $files);
-                if($file !== null) {
+                if ($file !== null) {
                     $fileCollection->push($file);
                 }
             }

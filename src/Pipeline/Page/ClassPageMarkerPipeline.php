@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Pipeline\Page;
@@ -36,8 +38,7 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
     public function __construct(
         private ClassPageFetcherProviderInterface $fetcherProvider,
         private Pipeline                          $pipeline
-    )
-    {
+    ) {
     }
 
     /**
@@ -50,8 +51,7 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
         string $format,
         string $lang,
         string $mainDirectory
-    ): Collection
-    {
+    ): Collection {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 
@@ -73,8 +73,7 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
         string $format,
         string $lang,
         string $mainDirectory
-    ): array
-    {
+    ): array {
         $fetchers = [
             self::CLASS_HEADING_KEY_FETCHER,
             self::FILES_TABLE_KEY_FETCHER,
@@ -89,7 +88,7 @@ final readonly class ClassPageMarkerPipeline implements ClassPageMarkerPipelineI
 
         $closures = [];
 
-        foreach($fetchers as $fetcher){
+        foreach ($fetchers as $fetcher) {
             $closure = function ($passable, $next) use ($class, $format, $lang, $fetcher, $mainDirectory) {
                 $passable = $this->fetcherProvider
                     ->getFetcher($fetcher)

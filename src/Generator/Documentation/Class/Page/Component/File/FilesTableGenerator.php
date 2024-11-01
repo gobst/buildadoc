@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -9,7 +10,7 @@
  *
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Component\File;
 
@@ -24,7 +25,8 @@ final readonly class FilesTableGenerator implements FilesTableGeneratorInterface
 {
     public function __construct(
         private TableDecoratorInterface $tableFormatter
-    ) {}
+    ) {
+    }
 
     /**
      * @throws InvalidArgumentException

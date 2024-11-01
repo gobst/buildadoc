@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Decorator;
@@ -32,23 +34,20 @@ final readonly class TextDecoratorFactory implements TextDecoratorFactoryInterfa
     public function __construct(
         private DecoratorInterface $decorator,
         private DocFileServiceInterface $docFileService
-    )
-    {
+    ) {
     }
 
     public function createListDecorator(
         string $listType,
         string $listItemType
-    ): TextDecoratorInterface
-    {
+    ): TextDecoratorInterface {
         return new ListDecorator($this->decorator, $listType, $listItemType);
     }
 
     public function createClassLinkDestinationDecorator(
         ClassDto $classDto,
         string $mainDirectory
-    ): LinkDestinationDecoratorInterface
-    {
+    ): LinkDestinationDecoratorInterface {
         return new ClassLinkDestinationDecorator(
             $this->docFileService,
             $classDto,
@@ -69,8 +68,7 @@ final readonly class TextDecoratorFactory implements TextDecoratorFactoryInterfa
     public function createMethodLinkDestinationDecorator(
         Method $method,
         string $mainDirectory
-    ): LinkDestinationDecoratorInterface
-    {
+    ): LinkDestinationDecoratorInterface {
         return new MethodLinkDestinationDecorator(
             $this->docFileService,
             $method,

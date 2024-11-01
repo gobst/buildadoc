@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Decorator\Page\Component;
@@ -26,8 +28,7 @@ final readonly class ClassLinkDestinationDecorator implements LinkDestinationDec
         private DocFileServiceInterface $docFileService,
         private ClassDto $classDto,
         private string $mainDirectory
-    )
-    {
+    ) {
     }
 
     /**
@@ -38,7 +39,7 @@ final readonly class ClassLinkDestinationDecorator implements LinkDestinationDec
     public function format(string $format): string
     {
         Assert::stringNotEmpty($format);
-        $destination =$this->fetchClassDestination($format);
+        $destination = $this->fetchClassDestination($format);
         assert::stringNotEmpty($destination);
         return $destination;
     }

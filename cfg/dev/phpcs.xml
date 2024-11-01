@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="pcsg-generated-ruleset">
-    <description>Created with the PHP Coding Standard Generator. http://edorian.github.com/php-coding-standard-generator/
-    </description>
     <exclude-pattern>*/vendor/*</exclude-pattern>
-    <exclude-pattern>*/src/Common/Resources/i18n/*</exclude-pattern>
-    <exclude-pattern>*/src/Accounting/Component/Hungary/Nav/*</exclude-pattern>
+    <rule ref="PSR1"/>
+    <rule ref="PSR2"/>
+    <rule ref="PSR12"/>
     <rule ref="Generic.Classes.DuplicateClassName"/>
     <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
     <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement"/>
     <rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier"/>
-    <!-- Disabled as PHPMD UnusedFormalParameter does the same but sort of works with interface/inherited params -->
-    <!-- The annotation "@inheritdoc" is used to mark a method as implementing/overriding -->
-    <!-- <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/> -->
     <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
-    <!-- Disabled so we are not forced to do all the todos of a file e.g. when a hotfix is done -->
-    <!-- <rule ref="Generic.Commenting.Todo"/> -->
     <rule ref="Generic.Commenting.Fixme"/>
     <rule ref="Generic.ControlStructures.InlineControlStructure"/>
     <rule ref="Generic.Formatting.DisallowMultipleStatements"/>
@@ -33,27 +27,12 @@
     <rule ref="Generic.PHP.LowerCaseConstant"/>
     <rule ref="Generic.PHP.NoSilencedErrors"/>
     <rule ref="Generic.WhiteSpace.ScopeIndent"/>
-    <rule ref="MySource.PHP.EvalObjectFactory"/>
-    <rule ref="MySource.PHP.GetRequestData"/>
+    <rule ref="Generic.NamingConventions.UpperCaseConstantName">
+        <exclude name="Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase"/>
+    </rule>
     <rule ref="PEAR.Classes.ClassDeclaration"/>
     <rule ref="PEAR.NamingConventions.ValidClassName"/>
     <rule ref="PEAR.WhiteSpace.ScopeClosingBrace"/>
-    <!-- Disabled as it does handle switch/case incorrectly -->
-    <!--<rule ref="PEAR.WhiteSpace.ScopeIndent">-->
-        <!--<properties>-->
-            <!--<property name="exact" value="false" />-->
-        <!--</properties>-->
-    <!--</rule>-->
-    <rule ref="PSR1.Classes.ClassDeclaration"/>
-    <rule ref="PSR1.Files.SideEffects"/>
-    <rule ref="PSR2.Classes.ClassDeclaration"/>
-    <rule ref="PSR2.Classes.PropertyDeclaration"/>
-    <rule ref="PSR2.ControlStructures.ElseIfDeclaration"/>
-    <rule ref="PSR2.ControlStructures.SwitchDeclaration"/>
-    <rule ref="PSR2.Files.EndFileNewline"/>
-    <rule ref="PSR2.Methods.MethodDeclaration"/>
-    <rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
-    <rule ref="PSR2.Namespaces.UseDeclaration"/>
     <rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
     <rule ref="Squiz.PHP.DiscouragedFunctions"/>
     <rule ref="Squiz.PHP.EmbeddedPhp"/>

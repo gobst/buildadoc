@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Service\Class\Documentation;
@@ -32,8 +34,7 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
         private DocFileServiceInterface             $docFileService,
         private FileServiceInterface                $fileService,
         private TableOfContentsPageServiceInterface $tableOfContPageS
-    )
-    {
+    ) {
     }
 
     public function buildDocumentation(
@@ -42,8 +43,7 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
         string $name,
         string $lang,
         string $format
-    ): void
-    {
+    ): void {
         Assert::stringNotEmpty($sourceDir);
         Assert::stringNotEmpty($destDir);
         Assert::stringNotEmpty($name);
@@ -83,7 +83,7 @@ final readonly class ClassDocumentationService implements ClassDocumentationServ
             $tableOfContents->getFileName(),
             $tableOfContents->getFileExtension()
         );
-        if(!$this->fileService->directoryExists($filename)){
+        if (!$this->fileService->directoryExists($filename)) {
             $this->fileService->dumpFile(
                 $filename,
                 $tableOfContents->getContent()

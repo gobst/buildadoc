@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Service\Class\Documentation\Page;
@@ -31,8 +33,7 @@ final readonly class TableOfContentsPageService implements TableOfContentsPageSe
         private DocFileServiceInterface                    $docFileService,
         private TableOfContentsPageMarkerPipelineInterface $tableOfContPMPipe,
         private TemplateServiceProviderInterface           $tmplServiceProvider
-    )
-    {
+    ) {
     }
 
     /**
@@ -45,8 +46,7 @@ final readonly class TableOfContentsPageService implements TableOfContentsPageSe
         string $format,
         string $lang,
         string $mainDirectory
-    ): DocPage
-    {
+    ): DocPage {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 

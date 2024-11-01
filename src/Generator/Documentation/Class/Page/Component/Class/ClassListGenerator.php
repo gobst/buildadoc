@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Component\Class;
@@ -30,8 +32,7 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
         private LinkGeneratorInterface        $linkGenerator,
         private TextDecoratorFactoryInterface $textDecoratorFactory,
         private ClassLineGeneratorInterface   $classLineGenerator
-    )
-    {
+    ) {
     }
 
     /**
@@ -46,8 +47,7 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
         bool       $link = true,
         string     $listType = 'ordered',
         string     $mainDirectory = ''
-    ): string
-    {
+    ): string {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($listType);
 
@@ -71,8 +71,7 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
         bool $link,
         string $listType,
         string $mainDirectory
-    ): string
-    {
+    ): string {
         $classList = '';
         /** @var ArrayIterator $iterator */
         $iterator = $classes->getIterator();
@@ -97,8 +96,7 @@ final readonly class ClassListGenerator implements ClassListGeneratorInterface
         bool     $link,
         string   $listType,
         string   $mainDirectory
-    ): string
-    {
+    ): string {
         $line = $this->classLineGenerator->generate($class);
 
         if ($link) {

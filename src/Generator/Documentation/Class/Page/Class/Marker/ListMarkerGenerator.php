@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Class\Marker;
@@ -35,8 +37,7 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         private InterfaceListGeneratorInterface   $interListGenerator,
         private HeadingGeneratorInterface         $headingGenerator,
         private UsedByClassListGeneratorInterface $usedByClassListGen,
-    )
-    {
+    ) {
     }
 
     /**
@@ -116,15 +117,15 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
             Assert::stringNotEmpty($text);
 
             $marker[self::PROPERTIES_LIST_HEADING_MARKER] = $lineBreak . $this->headingGenerator->generate(
-                    $text,
-                    2,
-                    $format
-                ) . $lineBreak;
+                $text,
+                2,
+                $format
+            ) . $lineBreak;
             $marker[self::PROPERTIES_LIST_MARKER] = $this->propListGenerator->generate(
-                    $class,
-                    $format,
-                    $listType
-                ) . $lineBreak;
+                $class,
+                $format,
+                $listType
+            ) . $lineBreak;
         }
 
         return $marker;
@@ -166,8 +167,7 @@ final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface
         string $listType,
         string $lang,
         string $mainDirectory
-    ): array
-    {
+    ): array {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($listType);
         Assert::stringNotEmpty($lang);

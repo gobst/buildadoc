@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Pipeline\Page\Fetcher\Class;
@@ -36,8 +38,7 @@ final readonly class MethodListFetcher implements ClassPagePipelineStepInterface
         string     $format,
         string     $lang,
         string     $mainDirectory
-    ): Collection
-    {
+    ): Collection {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 

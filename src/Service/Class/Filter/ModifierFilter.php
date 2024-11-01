@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Service\Class\Filter;
@@ -37,13 +39,12 @@ final readonly class ModifierFilter
         $hasModifier = !($this->where === 'or');
 
         foreach ($this->modifiers as $checkedModifier) {
-            if ($this->where === 'or'
-                && $this->containsModifier($checkedModifier, $modifiers))
-            {
+            if (            $this->where === 'or'
+                && $this->containsModifier($checkedModifier, $modifiers)
+            ) {
                 return true;
             }
-            if (!$this->containsModifier($checkedModifier, $modifiers))
-            {
+            if (!$this->containsModifier($checkedModifier, $modifiers)) {
                 return false;
             }
         }
