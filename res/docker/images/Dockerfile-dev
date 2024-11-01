@@ -9,7 +9,7 @@
 #
 ############################################################################
 
-FROM ghcr.io/gobst/buildadoc/buildadoc:1.0.0
+FROM gobst/buildadoc/buildadoc:1.0.0
 
 LABEL maintainer="Guido Obst" \
 	  description="BuildADoc develop image" \
