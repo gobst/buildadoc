@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Pipeline\Page\Fetcher\Class;
@@ -25,8 +27,7 @@ final readonly class HeadingFetcher implements ClassPagePipelineStepInterface, C
 {
     public function __construct(
         private HeadingGeneratorInterface $headingGenerator
-    )
-    {
+    ) {
     }
 
     /**
@@ -38,8 +39,7 @@ final readonly class HeadingFetcher implements ClassPagePipelineStepInterface, C
         string     $format,
         string     $lang,
         string     $mainDirectory
-    ): Collection
-    {
+    ): Collection {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 
@@ -48,7 +48,8 @@ final readonly class HeadingFetcher implements ClassPagePipelineStepInterface, C
             ->withValue(
                 $this->headingGenerator->generate(
                     $class->getName(),
-                    1, $format
+                    1,
+                    $format
                 ) . $lineBreak
             );
 

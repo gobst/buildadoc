@@ -3,9 +3,6 @@
 ![PHP Version Required](https://img.shields.io/packagist/php-v/gobst/buildadoc?label=PHP%20required&color=darkgreen)
 [![Coverage Status](https://coveralls.io/repos/github/gobst/buildadoc/badge.svg?branch=main)](https://coveralls.io/github/gobst/buildadoc?branch=main)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fgobst%2Fbuildadoc%2Fmain)](https://dashboard.stryker-mutator.io/api/reports/github.com/gobst/buildadoc/main)
-![Total Downloads](https://img.shields.io/packagist/dt/gobst/buildadoc?label=downloads&color=blue)
-![Monthly Downloads](https://img.shields.io/packagist/dm/gobst/buildadoc?label=downloads&color=blue)
-![Daily Downloads](https://img.shields.io/packagist/dd/gobst/buildadoc?label=downloads&color=blue)
 
 # BuildADoc
 
@@ -24,30 +21,19 @@ It parses your PHP classes and converts them into DokuWiki-compatible syntax for
 
 ## Requirements
 - PHP 8.3 or higher
-- [Composer](https://getcomposer.org/)
 - [Docker](https://www.docker.com/) (optional)
 
 ## Installation
 
-You can install BuildADoc using either Composer or Docker, depending on your preference.
-
-### 1. With Composer
-
-To install BuildADoc directly into your project using [Composer](https://getcomposer.org/), run:
+To install BuildADoc directly into your project you can use [Composer](https://getcomposer.org/) with the command:
 
 ```bash
 composer require gobst/buildadoc
 ```
 
-### 2. With Docker
-
-You can also use the [gobst/buildadoc](https://hub.docker.com/r/gobst/buildadoc) Docker image to avoid setting up PHP dependencies directly on your system:
-
-```bash
-docker pull gobst/buildadoc
-```
-
 ## Usage
+
+### 1. Within your project
 
 To generate class documentation for DokuWiki, use the following command:
 
@@ -60,6 +46,14 @@ For more options and information run:
 
 ```bash 
 php bin/console.php DokuWiki:create-doc -help
+```
+
+### 2. With Docker
+
+You can also use the gobst/buildadoc Docker image to avoid setting up PHP dependencies directly on your system:
+
+```bash
+docker run --rm --tty --volume "$PWD:$PWD" --workdir "$PWD" gobst/buildadoc php bin/console.php DokuWiki:create-doc src/ /path/to/destination/dir/ projectname
 ```
 
 ## Support

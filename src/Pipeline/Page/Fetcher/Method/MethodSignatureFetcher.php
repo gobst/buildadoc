@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Pipeline\Page\Fetcher\Method;
@@ -25,8 +27,7 @@ final readonly class MethodSignatureFetcher implements MethodPagePipelineStepInt
 {
     public function __construct(
         private MethodLineGeneratorInterface $methodLineGenerator
-    )
-    {
+    ) {
     }
 
     /**
@@ -37,8 +38,7 @@ final readonly class MethodSignatureFetcher implements MethodPagePipelineStepInt
         Method     $method,
         string     $format,
         string     $lang
-    ): Collection
-    {
+    ): Collection {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 

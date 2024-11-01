@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,7 +9,8 @@
  * file that was distributed with this source code.
  *
  */
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Service\Class\Data;
 
@@ -22,7 +24,9 @@ use PhpParser\Node;
  */
 final class ModifierDataService implements ModifierDataServiceInterface
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * @return Collection<int, Modifier>

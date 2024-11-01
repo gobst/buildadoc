@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Class\Marker;
@@ -27,8 +29,7 @@ final readonly class ClassPathMarkerGenerator implements ClassPathMarkerGenerato
         private TranslationServiceInterface $translationService,
         private HeadingGeneratorInterface   $headingGenerator,
         private ClassPathGeneratorInterface $classPathGenerator
-    )
-    {
+    ) {
     }
 
     /**
@@ -48,14 +49,14 @@ final readonly class ClassPathMarkerGenerator implements ClassPathMarkerGenerato
             Assert::stringNotEmpty($text);
 
             $marker[self::CLASS_PATH_HEADING_MARKER] = $this->headingGenerator->generate(
-                    $text,
-                    2,
-                    $format
-                ) . $lineBreak;
+                $text,
+                2,
+                $format
+            ) . $lineBreak;
             $marker[self::CLASS_PATH_MARKER] = $this->classPathGenerator->generate(
-                    $class,
-                    $format
-                ) . $lineBreak . $lineBreak;
+                $class,
+                $format
+            ) . $lineBreak . $lineBreak;
         }
 
         return $marker;

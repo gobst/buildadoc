@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,7 +9,8 @@
  * file that was distributed with this source code.
  *
  */
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Component\Link;
 
@@ -19,7 +21,9 @@ use Webmozart\Assert\InvalidArgumentException;
 
 final readonly class LinkGenerator implements LinkGeneratorInterface
 {
-    public function __construct(private TextDecoratorFactoryInterface $textDecoratorFactory) {}
+    public function __construct(private TextDecoratorFactoryInterface $textDecoratorFactory)
+    {
+    }
 
     /**
      * @throws InvalidArgumentException
@@ -28,8 +32,7 @@ final readonly class LinkGenerator implements LinkGeneratorInterface
         string $format,
         string $dest,
         string $text = ''
-    ): string
-    {
+    ): string {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($dest);
 

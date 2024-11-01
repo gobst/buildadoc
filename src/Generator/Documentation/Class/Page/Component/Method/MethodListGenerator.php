@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Component\Method;
@@ -32,8 +34,7 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
         private LinkGeneratorInterface $linkGenerator,
         private MethodLineGeneratorInterface $methodLineGenerator,
         private TextDecoratorFactoryInterface $textDecoratorFactory
-    )
-    {
+    ) {
     }
 
     /**
@@ -46,8 +47,7 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
         string   $listType = 'ordered',
         bool     $withInheritedMethods = false,
         string   $mainDirectory = ''
-    ): string
-    {
+    ): string {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($listType);
 
@@ -78,8 +78,7 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
         bool       $link,
         string     $listType,
         string     $mainDirectory
-    ): string
-    {
+    ): string {
         Assert::stringNotEmpty($format);
 
         $methods = $methods->filter(function ($value) {
@@ -112,8 +111,7 @@ final readonly class MethodListGenerator implements MethodListGeneratorInterface
         bool   $link,
         string $listType,
         string $mainDirectory
-    ): string
-    {
+    ): string {
         $line = $this->methodLineGenerator->generate($method);
 
         if ($link) {

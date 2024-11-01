@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,7 +9,8 @@
  * file that was distributed with this source code.
  *
  */
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Service\File\Template;
 
@@ -26,7 +28,9 @@ final readonly class TemplateService implements TemplateServiceInterface
 {
     private const string MARKER_IDENTIFIER = '###';
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * @throws InvalidArgumentException
@@ -84,13 +88,12 @@ final readonly class TemplateService implements TemplateServiceInterface
         $interfaceReflection = new ReflectionClass($interface);
         $definedMarkers = $interfaceReflection->getConstants();
 
-        foreach($definedMarkers as $markerKey) {
-
+        foreach ($definedMarkers as $markerKey) {
             $foundMarker = $markers->filter(function ($marker) use ($markerKey) {
                 return (new MarkerNameFilter($markerKey))->hasName($marker);
             });
 
-            if($foundMarker->isEmpty()){
+            if ($foundMarker->isEmpty()) {
                 $markers->push(Marker::create($markerKey)->withValue(''));
             }
         }

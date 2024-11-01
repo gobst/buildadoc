@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Pipeline\Page\Fetcher\TableOfContents;
@@ -26,8 +28,7 @@ final readonly class TextFetcher implements TableOfContentsPagePipelineStepInter
 
     public function __construct(
         private TranslationServiceInterface $translationService
-    )
-    {
+    ) {
     }
 
     /**
@@ -39,8 +40,7 @@ final readonly class TextFetcher implements TableOfContentsPagePipelineStepInter
         string     $format,
         string     $lang,
         string     $mainDirectory
-    ): Collection
-    {
+    ): Collection {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 

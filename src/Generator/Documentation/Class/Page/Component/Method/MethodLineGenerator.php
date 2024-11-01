@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -9,7 +10,7 @@
  *
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Generator\Documentation\Class\Page\Component\Method;
 
@@ -21,7 +22,8 @@ final readonly class MethodLineGenerator implements MethodLineGeneratorInterface
 {
     public function __construct(
         private MethodDataServiceInterface $methodDataService,
-    ) {}
+    ) {
+    }
 
     public function generate(Method $method, bool $withModifiers = true, bool $bold = true): string
     {

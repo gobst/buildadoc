@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Pipeline\Page\Fetcher\Method;
@@ -32,8 +34,7 @@ final readonly class MethodTableFetcher implements MethodPagePipelineStepInterfa
     public function __construct(
         private MethodTableGeneratorInterface $methodTableGenerator,
         private TranslationServiceInterface   $translationService
-    )
-    {
+    ) {
     }
 
     /**
@@ -44,8 +45,7 @@ final readonly class MethodTableFetcher implements MethodPagePipelineStepInterfa
         Method $method,
         string $format,
         string $lang
-    ): Collection
-    {
+    ): Collection {
         Assert::stringNotEmpty($format);
         Assert::stringNotEmpty($lang);
 

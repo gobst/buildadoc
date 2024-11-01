@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of BuildADoc.
  *
@@ -8,6 +9,7 @@
  * file that was distributed with this source code.
  *
  */
+
 declare(strict_types=1);
 
 namespace Decorator\Page\Component;
@@ -25,8 +27,7 @@ final readonly class MethodLinkDestinationDecorator implements LinkDestinationDe
         private DocFileServiceInterface $docFileService,
         private Method $method,
         private string $mainDirectory
-    )
-    {
+    ) {
     }
 
     /**
