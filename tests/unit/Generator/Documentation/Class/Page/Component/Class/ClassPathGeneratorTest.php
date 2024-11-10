@@ -15,7 +15,6 @@ namespace unit\Generator\Documentation\Class\Page\Component\Class;
 use Contract\Decorator\Component\Link\LinkDestinationDecoratorInterface;
 use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
-use Decorator\Page\Component\ClassLinkDestinationDecorator;
 use Dto\Class\ClassDto;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
@@ -39,7 +38,7 @@ class ClassPathGeneratorTest extends TestCase
 {
     private LinkGeneratorInterface&MockObject $linkGenerator;
     private TextDecoratorFactoryInterface&MockObject $textDecoratorFactory;
-    private LinkDestinationDecoratorInterface&MockObject $classLinkDestDecorator;
+    private LinkDestinationDecoratorInterface&MockObject $classLinkDestDec;
     private ClassPathGenerator $classPathGenerator;
 
     public function setUp(): void
@@ -48,7 +47,7 @@ class ClassPathGeneratorTest extends TestCase
             ->getMock();
         $this->textDecoratorFactory = $this->getMockBuilder(TextDecoratorFactoryInterface::class)
             ->getMock();
-        $this->classLinkDestDecorator = $this->getMockBuilder(LinkDestinationDecoratorInterface::class)
+        $this->classLinkDestDec = $this->getMockBuilder(LinkDestinationDecoratorInterface::class)
             ->getMock();
 
         $this->classPathGenerator = new ClassPathGenerator($this->linkGenerator, $this->textDecoratorFactory);
@@ -61,9 +60,9 @@ class ClassPathGeneratorTest extends TestCase
 
         $this->textDecoratorFactory->expects(self::once())
             ->method('createClassLinkDestinationDecorator')
-            ->willReturn($this->classLinkDestDecorator);
+            ->willReturn($this->classLinkDestDec);
 
-        $this->classLinkDestDecorator->expects(self::once())
+        $this->classLinkDestDec->expects(self::once())
             ->method('format')
             ->willReturn('parenttestclass');
 
@@ -85,7 +84,7 @@ class ClassPathGeneratorTest extends TestCase
 
         $this->textDecoratorFactory->expects(self::never())
             ->method('createClassLinkDestinationDecorator')
-            ->willReturn($this->classLinkDestDecorator);
+            ->willReturn($this->classLinkDestDec);
 
         $this->linkGenerator->expects(self::never())
             ->method('generate');
