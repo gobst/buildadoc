@@ -36,6 +36,9 @@ jobs:
 
       - name: Check code
         run: |
+          git config --global user.name "${{ secrets.DOCKER_HUB_USER }}"
+          git config --global user.email "github@sourcegate.de"
+
           mkdir -p artifacts
           
           # Run PHP-CS-Fixer
