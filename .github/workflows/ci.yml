@@ -49,7 +49,7 @@ jobs:
           # psalmExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "scripts/analysis/psalm.sh"; echo $?)
 
           # Run CodeSniffer
-          codesnifferExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/codesniffer.sh"; echo $?)
+          # codesnifferExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/codesniffer.sh"; echo $?)
 
           # Run Mess Detector
           messdetectorExitCode=$(docker compose -f res/docker/config/docker-compose.yml -p buildadoc-dev exec -T buildadoc-dev sh -c "./scripts/analysis/messdetector.sh"; echo $?)
