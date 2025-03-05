@@ -12,14 +12,14 @@ declare(strict_types = 1);
 
 namespace unit\Generator\Documentation\Class\Page\Class\Marker;
 
-use Contract\Generator\Documentation\Class\Page\Component\Class\ClassPathGeneratorInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\ClassD\ClassPathGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Heading\HeadingGeneratorInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
-use Generator\Documentation\Class\Page\Class\Marker\ClassPathMarkerGenerator;
+use Generator\Documentation\ClassD\Page\ClassD\Marker\ClassPathMarkerGenerator;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;

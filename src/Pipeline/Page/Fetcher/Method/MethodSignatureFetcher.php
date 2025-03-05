@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Pipeline\Page\Fetcher\Method;
 
-use Contract\Generator\Documentation\Class\Page\Class\Marker\MethodPageMarkerInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\ClassD\Marker\MethodPageMarkerInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Method\MethodLineGeneratorInterface;
 use Contract\Pipeline\MethodPagePipelineStepInterface;
 use Dto\Common\Marker;
 use Dto\Method\Method;

@@ -12,15 +12,15 @@ declare(strict_types = 1);
 
 namespace unit\Service\Class\Data;
 
-use Contract\Service\Class\Data\MethodDataServiceInterface;
-use Contract\Service\Class\Data\ModifierDataServiceInterface;
+use Contract\Service\ClassD\Data\MethodDataServiceInterface;
+use Contract\Service\ClassD\Data\ModifierDataServiceInterface;
 use Contract\Service\File\FileServiceInterface;
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Service\Class\Data\ClassDataService;
+use Service\ClassD\Data\ClassDataService;
 use Webmozart\Assert\InvalidArgumentException;
 
 /**

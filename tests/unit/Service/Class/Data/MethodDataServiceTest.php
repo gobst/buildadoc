@@ -12,8 +12,8 @@ declare(strict_types = 1);
 
 namespace unit\Service\Class\Data;
 
-use Contract\Service\Class\Data\DescriptionDataServiceInterface;
-use Contract\Service\Class\Data\ModifierDataServiceInterface;
+use Contract\Service\ClassD\Data\DescriptionDataServiceInterface;
+use Contract\Service\ClassD\Data\ModifierDataServiceInterface;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
@@ -22,7 +22,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Service\Class\Data\MethodDataService;
+use Service\ClassD\Data\MethodDataService;
 
 final class MethodDataServiceTest extends TestCase
 {

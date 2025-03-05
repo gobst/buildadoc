@@ -16,7 +16,7 @@ namespace Contract\Decorator;
 
 use Contract\Decorator\Component\Link\LinkDestinationDecoratorInterface;
 use Contract\Decorator\Component\TableDecoratorInterface;
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Dto\Method\Method;
 
 interface TextDecoratorFactoryInterface

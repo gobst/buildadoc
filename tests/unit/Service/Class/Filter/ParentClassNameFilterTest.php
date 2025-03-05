@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace unit\Service\Class\Filter;
 
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use Service\Class\Filter\ParentClassNameFilter;
+use Service\ClassD\Filter\ParentClassNameFilter;
 
 #[CoversClass(ParentClassNameFilter::class)]
 #[UsesClass(ClassDto::class)]

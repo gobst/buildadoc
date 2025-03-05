@@ -18,7 +18,7 @@ use Contract\Decorator\Component\Link\LinkDestinationDecoratorInterface;
 use Contract\Decorator\Component\Link\LinkDestinationFormatInterface;
 use Contract\Decorator\DokuWikiFormatInterface;
 use Contract\Service\File\DocFileServiceInterface;
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Webmozart\Assert\Assert;
 use Webmozart\Assert\InvalidArgumentException;
 

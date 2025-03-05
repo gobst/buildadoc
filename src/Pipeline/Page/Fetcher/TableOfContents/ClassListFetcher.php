@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Pipeline\Page\Fetcher\TableOfContents;
 
-use Contract\Generator\Documentation\Class\Page\Class\Marker\TableOfContentsPageMarkerInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Class\ClassListGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\ClassD\Marker\TableOfContentsPageMarkerInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\ClassD\ClassListGeneratorInterface;
 use Contract\Pipeline\TableOfContentsPagePipelineStepInterface;
 use Dto\Common\Marker;
 use Illuminate\Support\Collection;

@@ -12,7 +12,7 @@ declare(strict_types = 1);
 
 namespace unit\Service\File;
 
-use Contract\Generator\Documentation\Class\Page\Class\Marker\MethodPageMarkerInterface;
+use Contract\Generator\Documentation\ClassD\Page\ClassD\Marker\MethodPageMarkerInterface;
 use Dto\Common\Marker;
 use Exception\TemplateNotFoundException;
 use Illuminate\Support\Collection;

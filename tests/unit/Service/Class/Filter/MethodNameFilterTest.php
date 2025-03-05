@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use Service\Class\Filter\MethodNameFilter;
+use Service\ClassD\Filter\MethodNameFilter;
 
 #[CoversClass(MethodNameFilter::class)]
 #[UsesClass(Modifier::class)]

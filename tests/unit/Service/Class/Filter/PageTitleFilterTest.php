@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace unit\Service\Class\Filter;
 
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Dto\Documentation\DocPage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use Service\Class\Filter\PageTitleFilter;
+use Service\ClassD\Filter\PageTitleFilter;
 
 #[CoversClass(PageTitleFilter::class)]
 #[UsesClass(ClassDto::class)]

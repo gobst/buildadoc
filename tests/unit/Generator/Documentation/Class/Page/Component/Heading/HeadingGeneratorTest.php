@@ -14,7 +14,7 @@ namespace unit\Generator\Documentation\Class\Page\Component\Heading;
 
 use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Decorator\TextDecoratorInterface;
-use Generator\Documentation\Class\Page\Component\Heading\HeadingGenerator;
+use Generator\Documentation\ClassD\Page\Component\Heading\HeadingGenerator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
