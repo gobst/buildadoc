@@ -14,11 +14,11 @@ namespace unit\Generator\Documentation\Class\Page\Component\Property;
 
 use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Decorator\TextDecoratorInterface;
-use Contract\Service\Class\Data\ModifierDataServiceInterface;
-use Dto\Class\ClassDto;
+use Contract\Service\ClassD\Data\ModifierDataServiceInterface;
+use Dto\ClassD\ClassDto;
 use Dto\Common\Modifier;
 use Dto\Common\Property;
-use Generator\Documentation\Class\Page\Component\Property\PropertyListGenerator;
+use Generator\Documentation\ClassD\Page\Component\Property\PropertyListGenerator;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;

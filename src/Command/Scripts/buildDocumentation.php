@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 require_once(__DIR__ . '/../../../vendor/autoload.php');
 
-use Contract\Service\Class\Data\ClassDataServiceInterface;
-use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
-use Contract\Service\Class\Documentation\Page\TableOfContentsPageServiceInterface;
+use Contract\Service\ClassD\Data\ClassDataServiceInterface;
+use Contract\Service\ClassD\Documentation\Page\ClassPageServiceInterface;
+use Contract\Service\ClassD\Documentation\Page\TableOfContentsPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
 use Contract\Service\File\FileServiceInterface;
-use Service\Class\Documentation\ClassDocumentationService;
+use Service\ClassD\Documentation\ClassDocumentationService;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;

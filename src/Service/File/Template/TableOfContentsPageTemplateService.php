@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Service\File\Template;
 
-use Contract\Generator\Documentation\Class\Page\Class\Marker\TableOfContentsPageMarkerInterface;
+use Contract\Generator\Documentation\ClassD\Page\ClassD\Marker\TableOfContentsPageMarkerInterface;
 use Contract\Service\File\Template\PageTemplateServiceInterface;
 use Contract\Service\File\Template\TemplateServiceInterface;
 use Illuminate\Support\Collection;

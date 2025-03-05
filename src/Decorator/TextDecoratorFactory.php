@@ -26,7 +26,7 @@ use Decorator\Page\Component\LinkDecorator;
 use Decorator\Page\Component\ListDecorator;
 use Decorator\Page\Component\MethodLinkDestinationDecorator;
 use Decorator\Page\Component\TableDecorator;
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Dto\Method\Method;
 
 final readonly class TextDecoratorFactory implements TextDecoratorFactoryInterface

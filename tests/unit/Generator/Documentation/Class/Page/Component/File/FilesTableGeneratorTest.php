@@ -13,11 +13,11 @@ declare(strict_types = 1);
 namespace unit\Generator\Documentation\Class\Page\Component\File;
 
 use Contract\Decorator\Component\TableDecoratorInterface;
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
-use Generator\Documentation\Class\Page\Component\File\FilesTableGenerator;
+use Generator\Documentation\ClassD\Page\Component\File\FilesTableGenerator;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;

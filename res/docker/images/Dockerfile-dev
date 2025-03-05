@@ -43,6 +43,9 @@ COPY ../../../.git .git
 COPY ../../../cfg/dev/phpunit.xml .
 COPY ../../../cfg/dev/infection.json5 .
 
+RUN git config --global user.name "phpcbf"
+RUN git config --global user.email "github@sourcegate.de"
+
 EXPOSE 8081
 
 CMD tail -f /dev/null

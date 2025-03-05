@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use Service\Class\Filter\ModifierFilter;
+use Service\ClassD\Filter\ModifierFilter;
 
 #[CoversClass(ModifierFilter::class)]
 #[UsesClass(MethodParameter::class)]

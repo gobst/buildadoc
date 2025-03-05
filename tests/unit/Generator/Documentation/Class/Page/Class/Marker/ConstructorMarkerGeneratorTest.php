@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace unit\Generator\Documentation\Class\Page\Class\Marker;
 
-use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Method\MethodLineGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Heading\HeadingGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Method\MethodLineGeneratorInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
-use Generator\Documentation\Class\Page\Class\Marker\ConstructorMarkerGenerator;
+use Generator\Documentation\ClassD\Page\ClassD\Marker\ConstructorMarkerGenerator;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -27,7 +27,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Service\Class\Filter\MethodNameFilter;
+use Service\ClassD\Filter\MethodNameFilter;
 use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(ConstructorMarkerGenerator::class)]

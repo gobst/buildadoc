@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Contract\Pipeline;
 
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Dto\Common\Marker;
 use Illuminate\Support\Collection;
 

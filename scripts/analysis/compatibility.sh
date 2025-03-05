@@ -13,7 +13,7 @@
 
 # Check files with PHP CodeSniffer and PHPCompatibility
 echo "Checking code with: PHP CodeSniffer and PHPCompatibility"
-echo "Checking PHP Version 8.3"
-bin/phpcs -p src --standard=PSR2 --runtime-set testVersion 8.3 --report-full=bin/output/php-compatibility.log
+echo "Checking PHP Version 8.4"
+bin/phpcs -p src --standard=PHPCompatibility --runtime-set testVersion 8.4 --report-full=bin/output/php-compatibility.log
 phpcs_status=$?
 exit $((phpcs_status))
