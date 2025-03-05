@@ -10,7 +10,6 @@
 # file that was distributed with this source code.
 #
 ############################################################################
-
 # Check files with PHP CodeSniffer and fix the issues if possible
 bin/phpcbf --standard=cfg/dev/phpcs.xml src > bin/output/phpcbf-report.log
 if [ -n "$(git status --porcelain)" ]; then
