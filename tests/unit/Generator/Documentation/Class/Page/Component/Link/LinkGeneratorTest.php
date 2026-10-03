@@ -14,7 +14,7 @@ namespace unit\Generator\Documentation\Class\Page\Component\Link;
 
 use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Decorator\TextDecoratorInterface;
-use Generator\Documentation\Class\Page\Component\Link\LinkGenerator;
+use Generator\Documentation\ClassD\Page\Component\Link\LinkGenerator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

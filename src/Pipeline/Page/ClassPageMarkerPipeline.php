@@ -17,7 +17,7 @@ namespace Pipeline\Page;
 use Closure;
 use Contract\Pipeline\ClassPageMarkerPipelineInterface;
 use Contract\Pipeline\Fetcher\ClassPageFetcherProviderInterface;
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Dto\Common\Marker;
 use Illuminate\Contracts\Pipeline\Pipeline;
 use Illuminate\Support\Collection;

@@ -14,10 +14,10 @@ namespace unit\Generator\Documentation\Class\Page\Component\Constant;
 
 use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Decorator\TextDecoratorInterface;
-use Contract\Service\Class\Data\ModifierDataServiceInterface;
-use Dto\Class\Constant;
+use Contract\Service\ClassD\Data\ModifierDataServiceInterface;
+use Dto\ClassD\Constant;
 use Dto\Common\Modifier;
-use Generator\Documentation\Class\Page\Component\Constant\ConstantListGenerator;
+use Generator\Documentation\ClassD\Page\Component\Constant\ConstantListGenerator;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

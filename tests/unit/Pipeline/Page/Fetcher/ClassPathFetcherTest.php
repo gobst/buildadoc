@@ -12,16 +12,16 @@ declare(strict_types = 1);
 
 namespace unit\Pipeline\Page\Fetcher;
 
-use Contract\Generator\Documentation\Class\Page\Class\Marker\ClassPageMarkerInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Class\ClassPathGeneratorInterface;
-use Dto\Class\ClassDto;
+use Contract\Generator\Documentation\ClassD\Page\ClassD\Marker\ClassPageMarkerInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\ClassD\ClassPathGeneratorInterface;
+use Dto\ClassD\ClassDto;
 use Dto\Common\Marker;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use Pipeline\Page\Fetcher\Class\ClassPathFetcher;
+use Pipeline\Page\Fetcher\ClassD\ClassPathFetcher;
 use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(ClassPathFetcher::class)]

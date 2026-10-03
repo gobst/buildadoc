@@ -17,7 +17,7 @@ use Dto\Common\File;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Service\Class\Filter\TagFilter;
+use Service\ClassD\Filter\TagFilter;
 use Service\File\Filter\FileNameFilter;
 
 #[CoversClass(FileNameFilter::class)]

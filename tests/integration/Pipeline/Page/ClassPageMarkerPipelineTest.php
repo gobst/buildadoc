@@ -14,7 +14,7 @@ namespace integration\Pipeline\Page;
 
 use Contract\Pipeline\ClassPagePipelineStepInterface;
 use Contract\Pipeline\Fetcher\ClassPageFetcherProviderInterface;
-use Dto\Class\ClassDto;
+use Dto\ClassD\ClassDto;
 use Dto\Common\Marker;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Collection;

@@ -16,7 +16,7 @@ namespace unit\Service\Class\Filter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Service\Class\Filter\TagFilter;
+use Service\ClassD\Filter\TagFilter;
 
 #[CoversClass(TagFilter::class)]
 final class TagFilterTest extends TestCase

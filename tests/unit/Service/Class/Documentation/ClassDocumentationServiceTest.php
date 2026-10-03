@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace unit\Service\Class\Documentation;
 
-use Contract\Service\Class\Data\ClassDataServiceInterface;
-use Contract\Service\Class\Documentation\Page\ClassPageServiceInterface;
-use Contract\Service\Class\Documentation\Page\TableOfContentsPageServiceInterface;
+use Contract\Service\ClassD\Data\ClassDataServiceInterface;
+use Contract\Service\ClassD\Documentation\Page\ClassPageServiceInterface;
+use Contract\Service\ClassD\Documentation\Page\TableOfContentsPageServiceInterface;
 use Contract\Service\File\DocFileServiceInterface;
 use Contract\Service\File\FileServiceInterface;
 use Dto\Documentation\DocPage;
@@ -25,7 +25,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Service\Class\Documentation\ClassDocumentationService;
+use Service\ClassD\Documentation\ClassDocumentationService;
 use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(ClassDocumentationService::class)]

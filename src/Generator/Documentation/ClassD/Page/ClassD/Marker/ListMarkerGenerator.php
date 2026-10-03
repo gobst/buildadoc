@@ -1,0 +1,204 @@
+<?php
+
+/**
+ * This file is part of BuildADoc.
+ *
+ * (c) Guido Obst
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
+
+declare(strict_types=1);
+
+namespace Generator\Documentation\ClassD\Page\ClassD\Marker;
+
+use Contract\Generator\Documentation\ClassD\Page\ClassD\Marker\ListMarkerGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\ClassD\Marker\ClassPageMarkerInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\ClassD\UsedByClassListGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Constant\ConstantListGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Heading\HeadingGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\InterfaceD\InterfaceListGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Method\MethodListGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Property\PropertyListGeneratorInterface;
+use Contract\Service\Translation\TranslationServiceInterface;
+use Dto\ClassD\ClassDto;
+use Webmozart\Assert\Assert;
+use Webmozart\Assert\InvalidArgumentException;
+
+final readonly class ListMarkerGenerator implements ListMarkerGeneratorInterface, ClassPageMarkerInterface
+{
+    public function __construct(
+        private TranslationServiceInterface       $translationService,
+        private MethodListGeneratorInterface      $methodListGenerator,
+        private ConstantListGeneratorInterface    $constListGenerator,
+        private PropertyListGeneratorInterface    $propListGenerator,
+        private InterfaceListGeneratorInterface   $interListGenerator,
+        private HeadingGeneratorInterface         $headingGenerator,
+        private UsedByClassListGeneratorInterface $usedByClassListGen,
+    ) {
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @todo: there is anywhere a bug (maybe in usedByClassListGen?). The formatter has an issue with $contentParts.
+     * @SuppressWarnings(PHPMD)
+     */
+    public function generateUsedByClassList(ClassDto $class, string $format, string $listType, string $lang): array
+    {
+        Assert::stringNotEmpty($format);
+        Assert::stringNotEmpty($listType);
+        Assert::stringNotEmpty($lang);
+
+        $marker = [];
+        #$lineBreak = chr(13) . chr(13);
+        $this->translationService->setLanguage($lang);
+
+        $marker[self::CLASS_USEDBYCLASSES_HEADING_MARKER] = '';
+        $marker[self::CLASS_USEDBYCLASSES_LIST_MARKER] = '';
+
+        if ($class->getChildClasses() !== null && !$class->getChildClasses()->isEmpty()) {
+            $text = $this->translationService->translate('class.usedbyclasses');
+            Assert::stringNotEmpty($text);
+
+            #$marker[self::CLASS_USEDBYCLASSES_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
+            #$marker[self::CLASS_USEDBYCLASSES_LIST_MARKER] = $this->usedByClassListGen->generate($class, $format, true, $listType) . $lineBreak;
+        }
+
+        return $marker;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function generateConstantList(ClassDto $class, string $format, string $listType, string $lang): array
+    {
+        Assert::stringNotEmpty($format);
+        Assert::stringNotEmpty($listType);
+        Assert::stringNotEmpty($lang);
+
+        $marker = [];
+        $lineBreak = chr(13) . chr(13);
+        $this->translationService->setLanguage($lang);
+
+        $marker[self::CONSTANTS_LIST_HEADING_MARKER] = '';
+        $marker[self::CONSTANTS_LIST_MARKER] = '';
+
+        if ($class->getConstants() !== null && !$class->getConstants()->isEmpty()) {
+            $text = $this->translationService->translate('class.const');
+            Assert::stringNotEmpty($text);
+
+            $marker[self::CONSTANTS_LIST_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
+            $marker[self::CONSTANTS_LIST_MARKER] = $this->constListGenerator->generate($class->getConstants(), $format, $listType) . $lineBreak;
+        }
+
+        return $marker;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function generatePropertiesList(ClassDto $class, string $format, string $listType, string $lang): array
+    {
+        Assert::stringNotEmpty($format);
+        Assert::stringNotEmpty($listType);
+        Assert::stringNotEmpty($lang);
+
+        $marker = [];
+        $lineBreak = chr(13) . chr(13);
+        $this->translationService->setLanguage($lang);
+
+        $marker[self::PROPERTIES_LIST_HEADING_MARKER] = '';
+        $marker[self::PROPERTIES_LIST_MARKER] = '';
+
+        if ($class->getProperties() !== null && !$class->getProperties()->isEmpty()) {
+            $text = $this->translationService->translate('class.properties');
+            Assert::stringNotEmpty($text);
+
+            $marker[self::PROPERTIES_LIST_HEADING_MARKER] = $lineBreak . $this->headingGenerator->generate(
+                $text,
+                2,
+                $format
+            ) . $lineBreak;
+            $marker[self::PROPERTIES_LIST_MARKER] = $this->propListGenerator->generate(
+                $class,
+                $format,
+                $listType
+            ) . $lineBreak;
+        }
+
+        return $marker;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function generateInterfacesList(ClassDto $class, string $format, string $listType, string $lang): array
+    {
+        Assert::stringNotEmpty($format);
+        Assert::stringNotEmpty($listType);
+        Assert::stringNotEmpty($lang);
+
+        $marker = [];
+        $lineBreak = chr(13) . chr(13);
+        $this->translationService->setLanguage($lang);
+
+        $marker[self::INTERFACES_LIST_HEADING_MARKER] = '';
+        $marker[self::INTERFACES_LIST_MARKER] = '';
+
+        if ($class->getInterfaces() !== null && !$class->getInterfaces()->isEmpty()) {
+            $text = $this->translationService->translate('class.interfaces');
+            Assert::stringNotEmpty($text);
+
+            $marker[self::INTERFACES_LIST_HEADING_MARKER] = $this->headingGenerator->generate($text, 2, $format) . $lineBreak;
+            $marker[self::INTERFACES_LIST_MARKER] = $this->interListGenerator->generate($class->getInterfaces(), $format, $listType) . $lineBreak;
+        }
+
+        return $marker;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function generateMethodList(
+        ClassDto $class,
+        string $format,
+        string $listType,
+        string $lang,
+        string $mainDirectory
+    ): array {
+        Assert::stringNotEmpty($format);
+        Assert::stringNotEmpty($listType);
+        Assert::stringNotEmpty($lang);
+
+        $marker = [];
+        $lineBreak = chr(13) . chr(13);
+        $this->translationService->setLanguage($lang);
+
+        $marker[self::METHODS_LIST_HEADING_MARKER] = '';
+        $marker[self::METHODS_LIST_MARKER] = '';
+
+        if (!$class->getMethods()->isEmpty()) {
+            $text = $this->translationService->translate('class.methods');
+            Assert::stringNotEmpty($text);
+
+            $marker[self::METHODS_LIST_HEADING_MARKER] = $this->headingGenerator->generate(
+                $text,
+                2,
+                $format
+            ) . $lineBreak;
+
+            $marker[self::METHODS_LIST_MARKER] = $this->methodListGenerator->generate(
+                $class,
+                $format,
+                true,
+                $listType,
+                true,
+                $mainDirectory
+            ) . $lineBreak;
+        }
+
+        return $marker;
+    }
+}

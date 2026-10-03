@@ -15,7 +15,7 @@ namespace unit\Generator\Documentation\Class\Page\Component\Method;
 use Contract\Decorator\Component\TableDecoratorInterface;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
-use Generator\Documentation\Class\Page\Component\Method\MethodTableGenerator;
+use Generator\Documentation\ClassD\Page\Component\Method\MethodTableGenerator;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;

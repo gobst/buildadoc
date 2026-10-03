@@ -14,12 +14,12 @@ namespace unit\Generator\Documentation\Class\Page\Component\Class;
 
 use Contract\Decorator\Component\Link\LinkDestinationDecoratorInterface;
 use Contract\Decorator\TextDecoratorFactoryInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
-use Dto\Class\ClassDto;
+use Contract\Generator\Documentation\ClassD\Page\Component\Link\LinkGeneratorInterface;
+use Dto\ClassD\ClassDto;
 use Dto\Common\Modifier;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
-use Generator\Documentation\Class\Page\Component\Class\ClassPathGenerator;
+use Generator\Documentation\ClassD\Page\Component\ClassD\ClassPathGenerator;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;

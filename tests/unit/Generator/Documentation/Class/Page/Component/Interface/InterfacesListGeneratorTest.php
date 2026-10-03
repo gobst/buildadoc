@@ -14,9 +14,9 @@ namespace unit\Generator\Documentation\Class\Page\Component\Interface;
 
 use Contract\Decorator\TextDecoratorFactoryInterface;
 use Contract\Decorator\TextDecoratorInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Link\LinkGeneratorInterface;
-use Dto\Class\InterfaceDto;
-use Generator\Documentation\Class\Page\Component\Interface\InterfaceListGenerator;
+use Contract\Generator\Documentation\ClassD\Page\Component\Link\LinkGeneratorInterface;
+use Dto\ClassD\InterfaceDto;
+use Generator\Documentation\ClassD\Page\Component\InterfaceD\InterfaceListGenerator;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;

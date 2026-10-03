@@ -12,21 +12,21 @@ declare(strict_types=1);
 
 namespace unit\Generator\Documentation\Class\Page\Class\Marker;
 
-use Contract\Generator\Documentation\Class\Page\Component\Class\UsedByClassListGeneratorInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Constant\ConstantListGeneratorInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Heading\HeadingGeneratorInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Interface\InterfaceListGeneratorInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Method\MethodListGeneratorInterface;
-use Contract\Generator\Documentation\Class\Page\Component\Property\PropertyListGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\ClassD\UsedByClassListGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Constant\ConstantListGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Heading\HeadingGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\InterfaceD\InterfaceListGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Method\MethodListGeneratorInterface;
+use Contract\Generator\Documentation\ClassD\Page\Component\Property\PropertyListGeneratorInterface;
 use Contract\Service\Translation\TranslationServiceInterface;
-use Dto\Class\ClassDto;
-use Dto\Class\Constant;
-use Dto\Class\InterfaceDto;
+use Dto\ClassD\ClassDto;
+use Dto\ClassD\Constant;
+use Dto\ClassD\InterfaceDto;
 use Dto\Common\Modifier;
 use Dto\Common\Property;
 use Dto\Method\Method;
 use Dto\Method\MethodParameter;
-use Generator\Documentation\Class\Page\Class\Marker\ListMarkerGenerator;
+use Generator\Documentation\ClassD\Page\ClassD\Marker\ListMarkerGenerator;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -34,7 +34,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Service\Class\Filter\MethodNameFilter;
+use Service\ClassD\Filter\MethodNameFilter;
 use Webmozart\Assert\InvalidArgumentException;
 
 #[CoversClass(ListMarkerGenerator::class)]
